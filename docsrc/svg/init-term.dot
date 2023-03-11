@@ -1,0 +1,89 @@
+digraph {
+  node [width=0.5 height=0.3]
+
+  subgraph cluster1 {
+    label="NEEDED Lists"
+    margin=18
+    color=white
+    subgraph n1 {
+      a1 [label="a.out" shape=rect]
+      b1 [label=b]
+      d1 [label=d]
+      e1 [label=e]
+      a1 -> b1 -> d1 -> e1
+    }
+    subgraph n2 {
+      b2 [label=b shape="rect"]
+      d2 [label=d]
+      f2 [label=f]
+      b2 -> d2 -> f2
+    }
+    subgraph n3 {
+      d3 [label=d shape=rect]
+      e3 [label=e]
+      g3 [label=g]
+      d3 -> e3 -> g3
+    }
+    /* Force left-to-right ordering of the subgraphs */
+    { rank=same; a1 -> b2 -> d3 [style=invis] }
+  }
+
+  /* Dummy subgraph for a little extra space */
+  subgraph {
+    "dummy" [width=0.125 label="" style=invis]
+  }
+
+  subgraph cluster2 {
+    label="Dependency Graph"
+    margin=18
+    color=white
+    "a.out" [shape=rect]
+    "a.out" -> b
+    "a.out" -> d
+    "a.out" -> e
+    b -> d
+    b -> f
+    d -> e
+    d -> g
+    /* Force b, d, and e to the same rank */
+    { rank=same; b; d; e; }
+  }
+}
+
+digraph {
+  label="Example Orderings"
+  labelloc="t"
+  rankdir="LR"
+
+  node [width=0.5 height=0.3]
+
+  /* Dummy subgraph for a little extra space */
+  subgraph
+    {
+      a0 [height=0 label="" style=invis]
+    }
+
+  subgraph
+    {
+      a1 [label="a.out"]
+      b1 [label=b]
+      d1 [label=d]
+      e1 [label=e]
+      f1 [label=f]
+      g1 [label=g]
+      e1 -> g1 -> d1 -> f1 -> b1 -> a1
+    }
+  subgraph
+    {
+      a2 [label="a.out"]
+      b2 [label=b]
+      d2 [label=d]
+      e2 [label=e]
+      f2 [label=f]
+      g2 [label=g]
+      g2 -> f2 -> e2 -> d2 -> b2 -> a2
+    }
+
+  /* Force top-to-bottom ordering of the subgraphs */
+  { rank=same; a0 -> e1 -> g2 [style="invis"] }
+}

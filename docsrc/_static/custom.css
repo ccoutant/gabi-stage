@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+div.body p, div.body dd, div.body li, div.body blockquote {
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    -webkit-hyphens: none;
+    hyphens: none;
+}
+
+div.code-block-caption {
+    font-size: inherit;
+}
+
+table caption span.caption-number,
+div.figure p.caption span.caption-number,
+figcaption span.caption-number {
+    padding-right: 0.5em;
+}
+
+.highlight .w {
+    text-decoration: none;
+}
+
+div.admonition p.admonition-title {
+    font-size: 20px;
+    font-style: italic;
+}
+
+tt, code {
+    background-color: inherit;
+    padding: 0;
+}
+
+table.docutils {
+    border: none;;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    min-width: 50%;
+}
+
+table.docutils caption {
+    margin-bottom: 10px;
+}
+
+table.docutils tr {
+    vertical-align: top;
+}
+
+table.docutils td, table.docutils th {
+    border: none;
+    border-bottom: 1px solid #aaa;
+}
