@@ -1,5 +1,45 @@
 {% extends '!layout.html' %}
 
+{% block header %}
+<div class="pageheader">
+  <a href="{{ pathto('index') }}">
+    <img class="logo" src="{{ pathto('_static/Xinuos_Logo__Black.svg', 1) }}" alt="Xinuos" />
+  </a>
+</div>
+{% endblock %}
+
+{%- block content %}
+<div class="document">
+  {%- block document %}
+  <div class="documentwrapper">
+    <div class="bodywrapper">
+      <div class="related top">
+	&nbsp;
+	{{- rellink_markup () }}
+      </div>
+      <div class="body" role="main">
+      {% block body %}{% endblock %}
+      </div>
+      <div class="related bottom">
+	&nbsp;
+	{{- rellink_markup () }}
+      </div>
+    </div>
+  </div>
+  {%- endblock %}
+  <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+    <div class="sphinxsidebarwrapper">
+      <div class="sphinxsidebar-navigation__pages">
+	<h3>{{ _('Site navigation') }}</h3>
+	{{ toctree(includehidden=False, maxdepth=3, titles_only=True) }}
+      </div>
+      {%- include "searchbox.html" %}
+    </div>
+  </div>
+  <div class="clearer"></div>
+</div>
+{%- endblock %}
+
 {% block footer %}
 <div class="footer">
 <p>© 1997, 1998, 1999, 2000, 2001 The Santa Cruz Operation, Inc.  All rights reserved.

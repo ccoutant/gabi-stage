@@ -49,6 +49,10 @@ html_theme_options = {
     'show_relbars': True,
     'font_family': '"Open Sans", sans-serif',
 }
+# html_sidebars = {
+#    '**': ['globaltoc.html', 'searchbox.html'],
+# }
+html_copy_source = False;
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
