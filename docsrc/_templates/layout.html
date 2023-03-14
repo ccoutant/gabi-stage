@@ -2,7 +2,7 @@
 
 {% block header %}
 <div class="pageheader">
-  <a href="{{ pathto('index') }}">
+  <a href="https://xinuos.com">
     <img class="logo" src="{{ pathto('_static/Xinuos_Logo__Black.svg', 1) }}" alt="Xinuos" />
   </a>
 </div>
@@ -30,8 +30,8 @@
   <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
     <div class="sphinxsidebarwrapper">
       <div class="sphinxsidebar-navigation__pages">
-	<h3>{{ _('Site navigation') }}</h3>
-	{{ toctree(includehidden=False, maxdepth=3, titles_only=True) }}
+	<h3><a href="{{ pathto(root_doc)|e }}">{{ _('Contents') }}</a></h3>
+	{{ toctree(includehidden=False, collapse=False, maxdepth=3, titles_only=True) }}
       </div>
       {%- include "searchbox.html" %}
     </div>

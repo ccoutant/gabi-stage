@@ -45,13 +45,9 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 #
 html_theme = 'alabaster'
 html_theme_options = {
-    'logo': 'Xinuos_Logo__Black.svg',
     'show_relbars': True,
     'font_family': '"Open Sans", sans-serif',
 }
-# html_sidebars = {
-#    '**': ['globaltoc.html', 'searchbox.html'],
-# }
 html_copy_source = False;
 
 # Add any paths that contain custom static files (such as style sheets) here,
