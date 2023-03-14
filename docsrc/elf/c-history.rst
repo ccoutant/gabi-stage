@@ -64,7 +64,7 @@ Published July 21, 1999.
 * The language describing the order of execution for termination functions
   has been revised.
 * A new pre-initialization mechanism has been added.
-* It is now up to the processor supplement for each processor
+* It is now up to the psABI supplement for each processor
   to specify whether the dynamic linker must invoke the executable file’s
   init and fini routines.
 
@@ -165,9 +165,11 @@ Published 23 July 2015.
   allow usage with any symbol table section.
 * Added ``DT_SYMTAB_SHNDX`` to the Dynamic Array Tags.
 
-Version 1.0
+Version 4.2
 ===========
 
 Published 2023.
 
 * Converted to ReStructuredText.
+* ELF specification is now separate from the gABI document.
+* Removed empty placeholders for psABI sections.

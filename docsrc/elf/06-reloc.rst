@@ -15,9 +15,6 @@ describes how to modify their section contents, thus allowing
 executable and shared object files to hold
 the right information for a process’s program image.
 
-Relocation Entry
-================
-
 .. code-block:: c
    :caption: Relocation Entries
 
@@ -62,7 +59,7 @@ Relocation Entry
     the undefined symbol index,
     the relocation uses 0 as the “symbol value”.
     Relocation types are processor-specific;
-    descriptions of their behavior appear in the processor supplement.
+    descriptions of their behavior appear in the psABI supplement.
     When the text below refers to a relocation entry’s
     relocation type or symbol table index, it means the result of applying
     ``ELF32_R_TYPE`` (or ``ELF64_R_TYPE``\ ) or ``ELF32_R_SYM`` (or ``ELF64_R_SYM``\ ),
@@ -138,7 +135,7 @@ as follows:
   the result of the relocation expression is retained, rather
   than having part extracted and placed in the relocated field.
   The result is retained at full pointer precision of the
-  applicable processor supplement.
+  applicable psABI supplement.
 
 * In all but the first relocation operation of a composed sequence,
   the addend used is the retained result of the previous relocation
@@ -152,13 +149,5 @@ last element, where the location determines where the relocated value
 will be placed.  For all other relocation operands in a composed
 sequence, the location specified is ignored.
 
-A processor supplement may specify individual relocation types
+A psABI supplement may specify individual relocation types
 that always stop a composition sequence, or always start a new one.
-
-Relocation Type (Processor-Specific)
-====================================
-
-.. note::
-
-   This section requires processor-specific information.  The
-   supplement for the desired processor describes the details.

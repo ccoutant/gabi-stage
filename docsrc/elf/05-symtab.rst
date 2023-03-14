@@ -154,7 +154,7 @@ and behavior.
 ``STB_LOPROC`` through \ ``STB_HIPROC``
     Values in this inclusive range
     are reserved for processor-specific semantics.  If meanings are
-    specified, the processor supplement explains them.
+    specified, the psABI supplement explains them.
 
 Global and weak symbols differ in two major ways.
 
@@ -266,7 +266,7 @@ the associated entity.
 ``STT_LOPROC`` through \ ``STT_HIPROC``
     Values in this inclusive range
     are reserved for processor-specific semantics.
-    If meanings are specified, the processor supplement explains them.
+    If meanings are specified, the psABI supplement explains them.
 
 Function symbols (those with type
 ``STT_FUNC``\ ) in shared object files have special significance.
@@ -371,8 +371,8 @@ become part of an executable or shared object.
     executable file or shared object.
 
 ``STV_INTERNAL``
-    The meaning of this visibility attribute may be defined by processor
-    supplements to further constrain hidden symbols.  A processor
+    The meaning of this visibility attribute may be defined by psABI
+    supplements to further constrain hidden symbols.  A psABI
     supplement’s definition should be such that generic tools
     can safely treat internal symbols as hidden.
 

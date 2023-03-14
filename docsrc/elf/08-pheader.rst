@@ -78,8 +78,7 @@ Program Header Entry
     below.
 
 ``p_align``
-    As “Program Loading” describes in the processor supplement,
-    loadable process segments must have congruent values for
+    Loadable process segments must have congruent values for
     ``p_vaddr`` and ``p_offset``, modulo the page size.
     This member gives the value to which the
     segments are aligned in memory and in the file.
@@ -93,8 +92,7 @@ Some entries describe process segments; others
 give supplementary information and do not contribute to
 the process image.
 Segment entries may appear in any order, except as
-explicitly noted
-below.
+explicitly noted below.
 
 Segment Types
 =============
@@ -183,8 +181,7 @@ other values are reserved for future use.
 ``PT_LOPROC`` through ``PT_HIPROC``
     Values in this inclusive range
     are reserved for processor-specific semantics.
-    If meanings are specified, the processor supplement explains
-    them.
+    If meanings are specified, the psABI supplement explains them.
 
 .. note::
 
@@ -196,8 +193,7 @@ other values are reserved for future use.
 Base Address
 ============
 
-As “Program Loading” in the processor supplement
-describes, the virtual addresses in the program headers might not
+The virtual addresses in the program headers might not
 represent the actual virtual addresses of the program’s memory
 image.  Executable files typically contain absolute code.  To let
 the process execute correctly, the segments must reside at the
@@ -234,10 +230,7 @@ the maximum page size.  The base address is the difference
 between the truncated memory address and the truncated
 ``p_vaddr`` value.
 
-See the processor supplement for more information
-and examples.  “Operating System Interface”
-in the processor supplement contains more information about the
-virtual address space and page size.
+See the psABI supplement for more information and examples.
 
 Segment Permissions
 ===================
@@ -265,7 +258,7 @@ mask are reserved for operating system-specific semantics.
 
 All bits included in the ``PF_MASKPROC``
 mask are reserved for processor-specific semantics.
-If meanings are specified, the processor supplement explains them.
+If meanings are specified, the psABI supplement explains them.
 
 If a permission bit is 0, that type of access is denied.
 Actual memory permissions depend on the memory management unit,
@@ -310,7 +303,7 @@ execution, dynamic linking, and so on.
 The diagrams below illustrate segment contents in general terms.
 The order and membership of sections within a segment may vary;
 moreover, processor-specific constraints may alter the
-examples below.  See the processor supplement for details.
+examples below.  See the psABI supplement for details.
 
 Text segments contain read-only instructions and data,
 typically including the following sections (see :ref:`Special-Sections`\ ):
@@ -346,7 +339,7 @@ appears in a text segment in the previous table, it
 may reside in a text or a data segment,
 depending on the processor.
 See “Global Offset Table” and “Procedure Linkage Table”
-in the processor supplement for details.
+in the psABI supplement for details.
 
 As :ref:`Sections` describes,
 the ``.bss`` section has the type ``SHT_NOBITS``.

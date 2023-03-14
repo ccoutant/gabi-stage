@@ -532,7 +532,7 @@ Undefined attributes are set to zero.
 ``SHF_MASKPROC``
     All bits included in this mask
     are reserved for processor-specific semantics.
-    If meanings are specified, the processor supplement explains them.
+    If meanings are specified, the psABI supplement explains them.
 
 The sh_link and sh_info Fields
 ==============================
@@ -785,7 +785,7 @@ The following flags are currently defined:
 ``GRP_MASKPROC``
     All bits included in this mask
     are reserved for processor-specific semantics.
-    If meanings are specified, the processor supplement explains them.
+    If meanings are specified, the psABI supplement explains them.
 
 The section header indices in the ``SHT_GROUP`` section
 identify the sections that make up the group.  Each such section
@@ -933,8 +933,7 @@ and have the indicated types and attributes.
 
 ``.got``
     This section holds the global offset table.
-    See “Global Offset Table” in the
-    processor supplement for more information.
+    See the psABI supplement for more information.
 
 ``.hash``
     This section holds a symbol hash table.
@@ -971,8 +970,7 @@ and have the indicated types and attributes.
 
 ``.plt``
     This section holds the procedure linkage table.
-    See “Procedure Linkage Table” the processor supplement
-    for more information.
+    See the psABI supplement for more information.
 
 ``.preinit_array``
     This section holds an array of function pointers that contributes
@@ -1074,7 +1072,7 @@ Existing extensions are called by their historical names.
 .. note::
 
    For information on processor-specific sections,
-   see the supplement for the desired processor.
+   see the psABI supplement for the desired processor.
 
 .. |br| raw:: html
 

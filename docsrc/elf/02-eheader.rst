@@ -88,7 +88,7 @@ Contents of the ELF Header
     Values from ``ET_LOPROC``
     through ``ET_HIPROC``
     (inclusive) are reserved for processor-specific semantics. If meanings
-    are specified, the processor supplement explains them. Other values are
+    are specified, the psABI supplement explains them. Other values are
     reserved and will be assigned to new object file types as necessary.
 
 ``e_machine``
@@ -264,7 +264,7 @@ These indexes access bytes that hold the following values.
     smallest.  The class of the file defines the basic types
     used by the data structures
     of the object file container itself. The data contained in object file
-    sections may follow a different programming model. If so, the processor
+    sections may follow a different programming model. If so, the psABI
     supplement describes the model used.
 
     Class ``ELFCLASS32`` supports machines with
@@ -320,9 +320,9 @@ These indexes access bytes that hold the following values.
     it is recommended that this byte be set to ``0``.
     If the value for this byte is ``64`` through ``255``,
     its meaning depends on the value of the ``e_machine`` header member.
-    The processor supplement for an architecture
+    The psABI supplement for an architecture
     can define its own associated set of values for this byte in this range.
-    If the processor supplement does not specify a set of values,
+    If the psABI supplement does not specify a set of values,
     one of the following values shall be used,
     where ``0`` can also be taken to mean *unspecified*.
 
@@ -335,7 +335,7 @@ These indexes access bytes that hold the following values.
     of an ABI.  The interpretation of this version number
     is dependent on the ABI identified by the ``EI_OSABI``
     field.  If no values are specified for the ``EI_OSABI``
-    field by the processor supplement or no version values are
+    field by the psABI supplement or no version values are
     specified for the ABI determined by a particular value of the
     ``EI_OSABI`` byte, the value ``0`` shall
     be used for the ``EI_ABIVERSION`` byte; it
@@ -369,11 +369,3 @@ See Figure 2 for examples.
    :width: 702pt
 
    Example Data Encodings for 8-, 16-, 32-, and 64-bit Values
-
-Machine Information (Processor-Specific)
-========================================
-
-.. note::
-
-   This section requires processor-specific information.
-   The supplement for the desired processor describes the details.

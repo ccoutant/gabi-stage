@@ -13,15 +13,12 @@ There are three main types of object files.
 
 * An *executable file*
   holds a program suitable for execution;
-  the file specifies how
-  ``exec``\ (BA_OS)
+  the file specifies how the system (e.g., ``exec``)
   creates a program’s process image.
 
 * A *shared object file*
-  holds code and data suitable for linking
-  in two contexts.
-  First, the link editor (see ``ld``\ (BA_OS))
-  processes the shared object file with other relocatable
+  holds code and data suitable for linking in two contexts.
+  First, the link editor processes the shared object file with other relocatable
   and shared object files to create another object file.
   Second, the dynamic linker combines it with an executable file and other
   shared objects to create a process image.
@@ -33,7 +30,7 @@ as shell scripts, are excluded.
 
 Sections 2–6 focus on the file format
 and how it pertains to building programs.
-Sections 7–10 also describe parts of the object file,
+Sections 7–9 also describe parts of the object file,
 concentrating on the information necessary to execute a program.
 
 .. toctree::
@@ -48,8 +45,7 @@ concentrating on the information necessary to execute a program.
    06-reloc
    07-loading-intro
    08-pheader
-   09-prog-loading
-   10-dynamic
+   09-dynamic
 
 .. toctree::
    :maxdepth: 1

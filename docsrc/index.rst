@@ -1,12 +1,8 @@
-.. gABI documentation master file, created by
-   sphinx-quickstart on Wed Dec  1 02:32:17 2021.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+========
+SVR4 ABI
+========
 
-The SVR4 ABI
-============
-
-.. rubric:: Version 1.0 (2023)
+.. rubric:: Version 4.2 (2023)
 
 The System V Release 4 (SVR4) Application Binary Interface (ABI)
 is composed of several components, ranging from

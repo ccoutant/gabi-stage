@@ -12,7 +12,7 @@ Executable and shared object files statically represent programs.
 To execute such programs, the system uses the files to create
 dynamic program representations, or process images.
 A process image has segments that hold its text, data, stack, and so on.
-This is described by the psABI document for the specific machine.
+This is described by the psABI supplement for the specific machine.
 
 The next sections discuss the following:
 
@@ -34,13 +34,11 @@ The next sections discuss the following:
 
 .. note::
 
-   The processor supplement defines a naming convention for ELF constants
-   that have processor ranges specified.  Names such as ``DT_``,
-   ``PT_``,
+   The psABI supplement defines a naming convention for ELF constants
+   that have processor ranges specified.  Names such as ``DT_``, ``PT_``,
    for processor specific extensions, incorporate the name of the
    processor: ``DT_M32_SPECIAL``, for example.
-   Pre-existing processor
-   extensions not using this convention will be supported.
+   Pre-existing processor extensions not using this convention will be supported.
 
    .. table::
 

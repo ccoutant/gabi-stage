@@ -12,8 +12,7 @@ Program Interpreter
 An executable file that participates in
 dynamic linking shall have one
 ``PT_INTERP`` program header element.
-During
-``exec``\ (BA_OS),
+During process startup (e.g., ``exec``),
 the system retrieves a path name from the ``PT_INTERP``
 segment and creates the initial process image from
 the interpreter file’s segments. That is,
@@ -24,8 +23,7 @@ It then is the interpreter’s responsibility to
 receive control from the system and provide an
 environment for the application program.
 
-As “Process Initialization” in the processor supplement mentions,
-the interpreter receives control in one of two ways.
+The interpreter typically receives control in one of two ways.
 First, it may receive a file descriptor
 to read the executable file, positioned at the beginning.
 It can use this file descriptor to read and/or map the executable
@@ -39,23 +37,23 @@ what the executable file would have received.
 The interpreter itself may not require a second interpreter.
 An interpreter may be either a shared object
 or an executable file.
+See the psABI supplement for additional information.
 
-* A shared object (the normal case) is loaded as
-  position-independent, with addresses that may vary
-  from one process to another; the system creates its segments
-  in the dynamic segment area used by ``mmap``\ (KE_OS) and related services
-  (See “Virtual Address Space” in the processor supplement).
-  Consequently, a shared object interpreter typically will
-  not conflict with the original executable file’s
-  original segment addresses.
+A shared object (the normal case) is loaded as
+position-independent, with addresses that may vary
+from one process to another; the system creates its segments
+in the dynamic segment area used by ``mmap`` and related services.
+Consequently, a shared object interpreter typically will
+not conflict with the original executable file’s
+original segment addresses.
 
-* An executable file may be loaded at fixed addresses;
-  if so, the system creates its segments
-  using the virtual addresses from the program header table.
-  Consequently, an executable file interpreter’s
-  virtual addresses may collide with the
-  first executable file; the interpreter is responsible
-  for resolving conflicts.
+An executable file may be loaded at fixed addresses;
+if so, the system creates its segments
+using the virtual addresses from the program header table.
+Consequently, an executable file interpreter’s
+virtual addresses may collide with the
+first executable file; the interpreter is responsible
+for resolving conflicts.
 
 Dynamic Linker
 ==============
@@ -70,8 +68,7 @@ the dynamic linker as the program interpreter.
    The locations of the system provided dynamic
    linkers are processor specific.
 
-``exec``\ (BA_OS)
-and the dynamic linker cooperate to
+The system loader (e.g., ``exec``) and the dynamic linker cooperate to
 create the process image for the program, which entails
 the following actions:
 
@@ -86,8 +83,7 @@ the following actions:
   if one was given to the dynamic linker;
 
 * Transferring control to the program, making it look as if
-  the program had received control directly from
-  ``exec``\ (BA_OS).
+  the program had received control directly from the system loader.
 
 The link editor also constructs various data
 that assist the dynamic linker
@@ -95,7 +91,7 @@ for executable and shared object files.
 As shown in :ref:`Program-Header`, this data resides
 in loadable segments, making them available during execution.
 (Once again, recall the exact segment contents are processor-specific.
-See the processor supplement for complete information).
+See the psABI supplement for complete information).
 
 * A ``.dynamic`` section with type ``SHT_DYNAMIC``
   holds various data.
@@ -110,7 +106,7 @@ See the processor supplement for complete information).
   ``SHT_PROGBITS``
   hold two separate tables:
   the global offset table and the procedure linkage table.
-  The processor supplement discusses how programs use the global offset table
+  The psABI supplement discusses how programs use the global offset table
   for position-independent code.
   Sections below explain how the dynamic linker uses
   and changes the tables to create memory images for object files.
@@ -119,8 +115,7 @@ Because every ABI-conforming program imports the basic system
 services from a shared object library,
 the dynamic linker participates in every ABI-conforming program execution.
 
-As “Program Loading” explains in the processor supplement,
-shared objects may occupy
+Shared objects may occupy
 virtual memory addresses that are different from the addresses recorded
 in the file’s program header table.
 The dynamic linker relocates the memory image, updating
@@ -130,8 +125,7 @@ if the library were loaded at
 the addresses specified in the program header table, this normally
 is not the case.
 
-If the process environment (see ``exec``\ (BA_OS))
-contains a variable named ``LD_BIND_NOW``
+If the process environment contains a variable named ``LD_BIND_NOW``
 with a non-null value, the dynamic linker processes
 all relocations before transferring control to the program.
 For example, all the following environment entries
@@ -148,8 +142,7 @@ does not occur in the environment or has a null value.
 The dynamic linker is permitted to evaluate procedure linkage table
 entries lazily, thus avoiding symbol resolution and relocation
 overhead for functions that are not called.
-See “Procedure Linkage Table” in the processor
-supplement for more information.
+See the psABI supplement for more information.
 
 .. _Dynamic-Section:
 
@@ -297,7 +290,7 @@ but is not required.
 ``DT_PLTGOT``
     This element holds an address associated with the procedure linkage table
     and/or the global offset table.
-    See the processor supplement for details.
+    See the psABI supplement for details.
 
 ``DT_HASH``
     This element holds the address of the symbol hash table,
@@ -444,7 +437,7 @@ but is not required.
     control to the program.
     The presence of this entry takes
     precedence over a directive to use lazy binding for this object when
-    specified through the environment or via ``dlopen``\ (BA_LIB).
+    specified through the environment or via ``dlopen``.
     This entry is deprecated; its use has been superseded
     by the ``DF_BIND_NOW`` flag.
 
@@ -515,7 +508,7 @@ but is not required.
 ``DT_LOPROC`` through ``DT_HIPROC``
     Values in this inclusive range
     are reserved for processor-specific semantics. If meanings
-    are specified, the processor supplement explains them.
+    are specified, the psABI supplement explains them.
     All such values follow the rules for the interpretation of the
     ``d_un`` union described above.
 
@@ -569,7 +562,7 @@ Tag values not appearing in the table are reserved.
     control to the program.
     The presence of this entry takes
     precedence over a directive to use lazy binding for this object when
-    specified through the environment or via ``dlopen``\ (BA_LIB).
+    specified through the environment or via ``dlopen``.
 
 ``DF_STATIC_TLS``
     If set in a shared object or executable,
@@ -649,8 +642,7 @@ three facilities specify shared object path searching.
   One object’s ``DT_RUNPATH`` entry does not affect the search
   for any other object’s dependencies.
 
-* A variable called ``LD_LIBRARY_PATH``
-  in the process environment (see ``exec``\ (BA_OS))
+* A variable called ``LD_LIBRARY_PATH`` in the process environment
   may hold a list of directories as above, optionally
   followed by a semicolon (\ ``;``\ ) and
   another directory list.
@@ -674,8 +666,7 @@ three facilities specify shared object path searching.
 * Finally, if the other two groups of directories
   fail to locate the desired library, the dynamic linker searches
   the default directories, ``/usr/lib`` or such other
-  directories as may be specified by the supplement for a
-  given processor.
+  directories as may be specified by the psABI supplement.
 
 When the dynamic linker is searching for shared objects, it is
 not a fatal error if an ELF file with the wrong attributes
@@ -778,26 +769,6 @@ use ``$ORIGIN`` within its dynamic array.
    minimal privileges on systems with installed extended security
    mechanisms.
 
-.. _Global-Offset-Table:
-
-Global Offset Table
-===================
-
-.. note::
-
-   This section requires processor-specific information.
-   The supplement for the desired processor describes the details.
-
-.. _Procedure-Linkage-Table:
-
-Procedure Linkage Table
-=======================
-
-.. note::
-
-   This section requires processor-specific information.
-   The supplement for the desired processor describes the details.
-
 .. _Hash-Table:
 
 Hash Table
@@ -883,7 +854,7 @@ needed objects is unspecified.
 
 .. note::
 
-   Each processor supplement may optionally further restrict
+   Each psABI supplement may optionally further restrict
    the algorithm used to determine the order of initialization.
    Any such restriction, however, may not conflict with
    the rules described by this specification.
@@ -905,9 +876,8 @@ specified initialization orderings (among others).
    Initialization Ordering Example
 
 Similarly, shared objects and executable files may have termination
-functions, which are executed with the
-``atexit``\ (BA_OS) mechanism after the base process begins its
-termination sequence.
+functions, which are executed with the ``atexit`` mechanism after
+the base process begins its termination sequence.
 The termination functions for any object A must be called before
 the termination functions for any other objects that object A depends
 on.  For these purposes, an object A depends on another object B,
@@ -942,7 +912,7 @@ described in :ref:`Dynamic-Section`.
 
    Note that the address of a function
    need not be the same as a pointer to a function
-   as defined by the processor supplement.
+   as defined by the psABI supplement.
 
 Shared objects may also (or instead) specify the address and size of
 an array of function pointers.  Each element of this
@@ -962,7 +932,7 @@ entries.
 .. note::
 
    The addresses contained in the initialization and termination arrays
-   are function pointers as defined by the processor supplement for
+   are function pointers as defined by the psABI supplement for
    each processor.  On some architectures, a function pointer may not
    contain the actual address of the function.
 
@@ -984,21 +954,15 @@ referenced by the ``DT_FINI`` entry for that object.
 
 .. note::
 
-   Although the
-   ``atexit``\ (BA_OS)
-   termination processing normally will be done,
+   Although the ``atexit`` termination processing normally will be done,
    it is not guaranteed to have executed upon process death.
    In particular, the process will not execute the termination processing
-   if it calls ``_exit`` (see ``exit``\ (BA_OS))
-   or if the process dies because it received a signal
+   if it calls ``_exit`` or if the process dies because it received a signal
    that it neither caught nor ignored.
 
-The processor supplement for each processor specifies whether the
+The psABI supplement for each processor specifies whether the
 dynamic linker is responsible for calling the executable file’s
 initialization function or registering the executable file’s
-termination function with
-``atexit``\ (BA_OS).
-Termination functions specified by users via the
-``atexit``\ (BA_OS)
-mechanism
+termination function with ``atexit``.
+Termination functions specified by users via the ``atexit`` mechanism
 must be executed before any termination functions of shared objects.
