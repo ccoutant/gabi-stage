@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="261" height="234" viewBox="0 0 261 234">
+  <defs>
+    <style>
+      .cls-1, .cls-5 {
+        fill: none;
+        stroke: #231f20;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2, .cls-3 {
+        font-size: 10px;
+      }
+
+      .cls-2, .cls-3, .cls-4 {
+        fill: #231f20;
+      }
+
+      .cls-2 {
+        font-family: Helvetica;
+      }
+
+      .cls-3, .cls-4 {
+        font-family: Helvetica-Oblique, Helvetica;
+        font-style: oblique;
+      }
+
+      .cls-4 {
+        font-size: 8px;
+      }
+
+      .cls-5 {
+        stroke-width: 0.5px;
+      }
+    </style>
+  </defs>
+  <g id="Drawing">
+    <rect class="cls-1" x="63" y="9" width="108" height="18"/>
+    <rect class="cls-1" x="63" y="27" width="108" height="18"/>
+    <rect class="cls-1" x="63" y="45" width="108" height="18"/>
+    <rect class="cls-1" x="63" y="63" width="27" height="18"/>
+    <rect class="cls-1" x="90" y="63" width="27" height="18"/>
+    <rect class="cls-1" x="117" y="63" width="27" height="18"/>
+    <rect class="cls-1" x="144" y="63" width="27" height="18"/>
+    <rect class="cls-1" x="63" y="81" width="27" height="18"/>
+    <rect class="cls-1" x="90" y="81" width="27" height="18"/>
+    <rect class="cls-1" x="117" y="81" width="27" height="18"/>
+    <rect class="cls-1" x="144" y="81" width="27" height="18"/>
+    <rect class="cls-1" x="63" y="99" width="108" height="18"/>
+    <rect class="cls-1" x="63" y="117" width="108" height="18"/>
+    <rect class="cls-1" x="63" y="135" width="108" height="18"/>
+    <rect class="cls-1" x="63" y="153" width="27" height="18"/>
+    <rect class="cls-1" x="90" y="153" width="27" height="18"/>
+    <rect class="cls-1" x="117" y="153" width="27" height="18"/>
+    <rect class="cls-1" x="144" y="153" width="27" height="18"/>
+    <rect class="cls-1" x="63" y="171" width="27" height="18"/>
+    <rect class="cls-1" x="90" y="171" width="27" height="18"/>
+    <rect class="cls-1" x="117" y="171" width="27" height="18"/>
+    <rect class="cls-1" x="144" y="171" width="27" height="18"/>
+    <rect class="cls-1" x="63" y="189" width="27" height="18"/>
+    <rect class="cls-1" x="90" y="189" width="27" height="18"/>
+    <rect class="cls-1" x="117" y="189" width="27" height="18"/>
+    <rect class="cls-1" x="144" y="189" width="27" height="18"/>
+    <rect class="cls-1" x="63" y="207" width="27" height="18"/>
+    <rect class="cls-1" x="90" y="207" width="27" height="18"/>
+    <rect class="cls-1" x="117" y="207" width="27" height="18"/>
+    <rect class="cls-1" x="144" y="207" width="27" height="18"/>
+  </g>
+  <g id="Text">
+    <text class="cls-2" transform="translate(18.99 22.29)">namesz</text>
+    <text class="cls-2" transform="translate(22.88 40.29)">descsz</text>
+    <text class="cls-3" transform="translate(180 40.29)">(No descriptor)</text>
+    <text class="cls-2" transform="translate(35.1 58.29)">type</text>
+    <text class="cls-2" transform="translate(28.99 76.29)">name</text>
+    <text class="cls-2" transform="translate(18.99 112.29)">namesz</text>
+    <text class="cls-2" transform="translate(22.88 130.29)">descsz</text>
+    <text class="cls-2" transform="translate(35.1 148.29)">type</text>
+    <text class="cls-2" transform="translate(28.99 166.29)">name</text>
+    <text class="cls-2" transform="translate(32.88 202.29)">desc</text>
+    <text class="cls-2" transform="translate(156.44 21.59)">7</text>
+    <text class="cls-2" transform="translate(156.44 39.59)">0</text>
+    <text class="cls-2" transform="translate(156.44 57.59)">1</text>
+    <text class="cls-2" transform="translate(74 75.59)">x</text>
+    <text class="cls-2" transform="translate(101 75.59)">y</text>
+    <text class="cls-2" transform="translate(128 75.59)">z</text>
+    <text class="cls-2" transform="translate(74 93.59)">c</text>
+    <text class="cls-2" transform="translate(100.72 93.59)">o</text>
+    <text class="cls-2" transform="translate(126.33 93.59)">\0</text>
+    <text class="cls-4" transform="translate(150.83 92.88)">pad</text>
+    <polyline class="cls-5" points="153 75 153 76.5 163 76.5 163 75"/>
+    <text class="cls-2" transform="translate(156.44 111.59)">7</text>
+    <text class="cls-2" transform="translate(156.44 129.59)">8</text>
+    <text class="cls-2" transform="translate(156.44 147.59)">3</text>
+    <text class="cls-2" transform="translate(74 165.59)">x</text>
+    <text class="cls-2" transform="translate(101 165.59)">y</text>
+    <text class="cls-2" transform="translate(128 165.59)">z</text>
+    <text class="cls-2" transform="translate(74 183.59)">c</text>
+    <text class="cls-2" transform="translate(100.72 183.59)">o</text>
+    <text class="cls-2" transform="translate(126.33 183.59)">\0</text>
+    <text class="cls-4" transform="translate(150.83 182.88)">pad</text>
+    <polyline class="cls-5" points="153 165 153 166.5 163 166.5 163 165"/>
+  </g>
+</svg>

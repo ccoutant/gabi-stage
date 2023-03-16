@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="162" viewBox="0 0 180 162">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #231f20;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2 {
+        font-size: 10px;
+        fill: #231f20;
+        font-family: Helvetica;
+      }
+    </style>
+  </defs>
+  <g id="Drawing">
+    <rect class="cls-1" x="9" y="9" width="162" height="18"/>
+    <rect class="cls-1" x="9" y="27" width="162" height="18"/>
+    <polyline class="cls-1" points="171 74 171 99 9 99 9 74"/>
+    <polyline class="cls-1" points="9 70 9 45 171 45 171 70"/>
+    <polyline class="cls-1" points="171 128 171 153 9 153 9 128"/>
+    <polyline class="cls-1" points="9 124 9 99 171 99 171 124"/>
+    <path class="cls-1" d="M168.73,70.07a1.4,1.4,0,0,1,2.25,0,1.43,1.43,0,0,0,2.2,0"/>
+    <path class="cls-1" d="M168.73,74.07a1.4,1.4,0,0,1,2.25,0,1.43,1.43,0,0,0,2.2,0"/>
+    <path class="cls-1" d="M6.73,70.07a1.4,1.4,0,0,1,2.25,0,1.43,1.43,0,0,0,2.2,0"/>
+    <path class="cls-1" d="M6.73,74.07a1.4,1.4,0,0,1,2.25,0,1.43,1.43,0,0,0,2.2,0"/>
+    <path class="cls-1" d="M6.73,124.07a1.4,1.4,0,0,1,2.25,0,1.43,1.43,0,0,0,2.2,0"/>
+    <path class="cls-1" d="M6.73,128.07a1.4,1.4,0,0,1,2.25,0,1.43,1.43,0,0,0,2.2,0"/>
+    <path class="cls-1" d="M168.73,124.07a1.4,1.4,0,0,1,2.25,0,1.43,1.43,0,0,0,2.2,0"/>
+    <path class="cls-1" d="M168.73,128.07a1.4,1.4,0,0,1,2.25,0,1.43,1.43,0,0,0,2.2,0"/>
+  </g>
+  <g id="Text">
+    <text class="cls-2" transform="translate(18 22.29)">nbucket</text>
+    <text class="cls-2" transform="translate(18 58.29)">bucket[0]</text>
+    <text class="cls-2" transform="translate(18 94.29)">bucket[nbucket – 1]</text>
+    <text class="cls-2" transform="translate(18 76.29)">…</text>
+    <text class="cls-2" transform="translate(18 112.29)">chain[0]</text>
+    <text class="cls-2" transform="translate(18 148.29)">chain[nchain – 1]</text>
+    <text class="cls-2" transform="translate(18 130.29)">…</text>
+    <text class="cls-2" transform="translate(18 40.29)">nchain</text>
+  </g>
+</svg>
