@@ -48,7 +48,7 @@ and the strings associated with various indexes.
 
 As the example shows, a string table index may refer
 to any byte in the section.
-A string may appear more than once;
-references to substrings may exist;
+A string may appear more than once,
+references to substrings may exist,
 and a single string may be referenced multiple times.
 Unreferenced strings also are allowed.
