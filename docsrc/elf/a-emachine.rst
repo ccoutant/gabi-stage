@@ -130,8 +130,6 @@ Appendix A: Assigned Machine Values
    ``EM_TI_ARP32``       ``143``        Texas Instruments Application Specific RISC Processor, 32bit fetch
    ``EM_TI_PRU``         ``144``        Texas Instruments Programmable Realtime Unit
    reserved              ``145–159``    Reserved for future use
-   ``EM_MMDSP_PLUS``     ``160``
-   reserved              ``145–159``    Reserved for future use
    ``EM_MMDSP_PLUS``     ``160``        STMicroelectronics 64bit VLIW Data Signal Processor
    ``EM_CYPRESS_M8C``    ``161``        Cypress M8C microprocessor
    ``EM_R32C``           ``162``        Renesas R32C series microprocessors
