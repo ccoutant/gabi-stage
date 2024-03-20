@@ -362,7 +362,9 @@ Encoding ``ELFDATA2LSB`` specifies 2’s complement values,
 with the least significant byte occupying the lowest address.
 Encoding ``ELFDATA2MSB`` specifies 2’s complement values,
 with the most significant byte occupying the lowest address.
-See Figure 2 for examples.
+See :numref:`data-encoding` for examples.
+
+.. _data-encoding:
 
 .. figure:: /svg/figure-2.svg
    :alt: Data Encoding
