@@ -488,19 +488,26 @@ Undefined attributes are set to zero.
     header table index.
 
 ``SHF_LINK_ORDER``
-    This flag adds special ordering requirements for link editors.
-    The requirements apply if the
-    ``sh_link`` field of this section’s header references
-    another section (the linked-to section).
-    If this section is combined with other
-    sections in the output file, it must appear in the same
-    relative order with respect to those sections, as the linked-to section
-    appears with respect to sections the linked-to section is combined with.
+    This flag adds special ordering requirements for link editors. The
+    requirements apply to the referenced section identified by the
+    ``sh_link`` field of this section's header. If this section is combined
+    with other sections in the output file, the section must appear in
+    the same relative order with respect to those sections, as the
+    referenced section appears with respect to sections the referenced
+    section is combined with.
 
     .. note::
 
        A typical use of this flag is to build a table that references text or
        data sections in address order.
+
+    In addition to adding ordering requirements, ``SHF_LINK_ORDER``
+    indicates that the section contains metadata describing the
+    referenced section. When performing unused section elimination, the
+    link editor should ensure that both the section and the referenced
+    section are retained or discarded together. Furthermore, relocations
+    from this section into the referenced section should not be taken as
+    evidence that the referenced section should be retained.
 
 ``SHF_OS_NONCONFORMING``
     This section requires special OS-specific processing

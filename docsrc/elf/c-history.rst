@@ -173,3 +173,8 @@ Published 2023.
 * Converted to ReStructuredText.
 * ELF specification is now separate from the gABI document.
 * Removed empty placeholders for psABI sections.
+
+Version 4.3 (in progress)
+=========================
+
+* Added extra requirements for ``SHF_LINKORDER`` flag.
