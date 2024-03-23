@@ -227,7 +227,7 @@ but is not required.
    ``DT_NEEDED``           ``1``           ``d_val``    optional        optional
    ``DT_PLTRELSZ``         ``2``           ``d_val``    optional        optional
    ``DT_PLTGOT``           ``3``           ``d_ptr``    optional        optional
-   ``DT_HASH``             ``4``           ``d_ptr``    mandatory       mandatory
+   ``DT_HASH``             ``4``           ``d_ptr``    mandatory†      mandatory†
    ``DT_STRTAB``           ``5``           ``d_ptr``    mandatory       mandatory
    ``DT_SYMTAB``           ``6``           ``d_ptr``    mandatory       mandatory
    ``DT_RELA``             ``7``           ``d_ptr``    mandatory       optional
@@ -261,13 +261,15 @@ but is not required.
    ``DT_RELRSZ``           ``35``          ``d_val``    optional        optional
    ``DT_RELR``             ``36``          ``d_ptr``    optional        optional
    ``DT_RELRENT``          ``37``          ``d_val``    optional        optional
+   ``DT_SYMTABSZ``         ``39``          ``d_val``    optional†       optional†
    ``DT_LOOS``             ``0x6000000D``  unspecified  unspecified     unspecified
    ``DT_HIOS``             ``0x6ffff000``  unspecified  unspecified     unspecified
    ``DT_LOPROC``           ``0x70000000``  unspecified  unspecified     unspecified
    ``DT_HIPROC``           ``0x7fffffff``  unspecified  unspecified     unspecified
    ======================  ==============  ===========  ==============  =================
 
-\* Signifies an entry that has been deprecated.
+| \* Signifies an entry that has been deprecated.
+| † ``DT_HASH`` is optional if ``DT_SYMTABSZ`` is provided.
 
 ``DT_NULL``
     An entry with a ``DT_NULL`` tag marks the end of the
@@ -512,6 +514,11 @@ but is not required.
 ``DT_RELRENT``
     This element holds the size, in bytes, of the ``DT_RELR`` relocation
     entry.
+
+``DT_SYMTABSZ``
+    This element holds the size, in bytes, of the ``DT_SYMTAB`` dynamic
+    linking symbol table. It must be provided if the ``DT_HASH`` symbol
+    hash table is omitted.
 
 ``DT_ENCODING``
     Values greater than or equal to ``DT_ENCODING``
