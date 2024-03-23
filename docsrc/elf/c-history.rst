@@ -174,10 +174,12 @@ Published 2023.
 * ELF specification is now separate from the gABI document.
 * Removed empty placeholders for psABI sections.
 
-Version 4.3 (in progress)
-=========================
+Version 4.3 (DRAFT)
+===================
 
 * Added extra requirements for ``SHF_LINKORDER`` flag.
 * Added relative relocation table (``Elf32_Relr`` and ``Elf64_Relr``).
 * Changed the symbol visibility attribute to use the lower 3 bits
   of ``st_other`` (instead of 2 bits).
+* Added ``DT_SYMTABSZ`` entry, and made ``DT_HASH`` optional if
+  ``DT_SYMTABSZ`` is provided.
