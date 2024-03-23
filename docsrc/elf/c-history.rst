@@ -134,3 +134,5 @@ Version 4.3 (DRAFT)
 
 * Added extra requirements for ``SHF_LINKORDER`` flag.
 * Added relative relocation table (``Elf32_Relr`` and ``Elf64_Relr``).
+* Changed the symbol visibility attribute to use the lower 3 bits
+  of ``st_other`` (instead of 2 bits).

@@ -98,8 +98,8 @@ A symbol table entry has the following format.
 
     .. code-block:: c
 
-       #define ELF32_ST_VISIBILITY(o) ((o)&0x3)
-       #define ELF64_ST_VISIBILITY(o) ((o)&0x3)
+       #define ELF32_ST_VISIBILITY(o) ((o)&0x7)
+       #define ELF64_ST_VISIBILITY(o) ((o)&0x7)
 
 ``st_shndx``
     Every symbol table entry is *defined* in relation
@@ -323,6 +323,9 @@ become part of an executable or shared object.
    ``STV_INTERNAL``   ``1``
    ``STV_HIDDEN``     ``2``
    ``STV_PROTECTED``  ``3``
+   ``STV_EXPORTED``   ``4``
+   ``STV_SINGLETON``  ``5``
+   ``STV_ELIMINATE``  ``6``
    =================  =====
 
 ``STV_DEFAULT``
@@ -388,6 +391,24 @@ become part of an executable or shared object.
     by the link-editor when the relocatable object is included in an
     executable file or shared object.
 
+``STV_EXPORTED``
+    This visibility attribute ensures that a symbol remains global.
+    Unlike ``STV_DEFAULT`` symbols, whose visibility can be affected by
+    other visibility requests, the ``STV_EXPORTED`` attribute ensures
+    that the visibility of the symbol is not reduced by any other
+    visibility request.
+
+``STV_SINGLETON``
+    This visibility attribute is reserved to the psABI supplements.
+    If implemented, it ensures that all references within a process
+    bind to a single instance of the symbol definition.
+
+``STV_ELIMINATE``
+    This visibility attribute is reserved to the psABI supplements.
+    If implemented, it prevents the symbol from being written to
+    the dynamic symbol table. Otherwise, it can be treated the
+    same as ``STV_HIDDEN``.
+
 None of the visibility attributes affects resolution of symbols
 within an executable or shared object during link-editing -- such
 resolution is controlled by the binding type.  Once the link-editor
@@ -410,7 +431,7 @@ have been optimized to take advantage of the attributes.
   visibility attribute must be propagated to the resolving symbol
   in the linked object.  The attributes, ordered from least
   to most constraining, are: ``STV_PROTECTED``,
-  ``STV_HIDDEN`` and ``STV_INTERNAL``.
+  ``STV_HIDDEN``, ``STV_INTERNAL``, and ``STV_EXPORTED``.
 
 Section Index
 =============
