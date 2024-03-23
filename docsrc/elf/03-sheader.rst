@@ -555,11 +555,11 @@ Undefined attributes are set to zero.
     Implementations need not support this flag.
 
 ``SHF_COMPRESSED``
-    This flag identifies a section containing compressed data.  SHF_COMPRESSED
-    applies only to non-allocable sections, and cannot be used in
-    conjunction with SHF_ALLOC.  In addition, SHF_COMPRESSED cannot
-    be applied to sections of type SHT_NOBITS.
-    See "Compressed Sections," below.
+    This flag identifies a section containing compressed data. In
+    ET_EXEC and ET_DYN files, SHF_COMPRESSED cannot be used in
+    conjunction with SHF_ALLOC.  In addition, SHF_COMPRESSED cannot be
+    applied to sections of type SHT_NOBITS. See
+    :ref:`Compressed-Sections`, below.
 
 ``SHF_MASKOS``
     All bits included in this mask
@@ -639,8 +639,13 @@ This entry holds the following.
    ``sh_entsize``    ``0``         No entries
    ================  ============  =================================================================
 
+.. _Compressed-Sections:
+
 Compressed Sections
 ===================
+
+The ``SHF_COMPRESSED`` section header flag indicates a section
+that has been compressed to save space in the object file.
 
 All relocations to a compressed section specify offsets to the
 uncompressed section data.  It is therefore necessary to decompress

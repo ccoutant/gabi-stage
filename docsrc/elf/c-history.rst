@@ -138,3 +138,5 @@ Version 4.3 (DRAFT)
   of ``st_other`` (instead of 2 bits).
 * Added ``DT_SYMTABSZ`` entry, and made ``DT_HASH`` optional if
   ``DT_SYMTABSZ`` is provided.
+* Changed ``SHF_COMPRESSED`` to allow with ``SHF_ALLOC`` sections
+  in ``ET_REL`` objects.
