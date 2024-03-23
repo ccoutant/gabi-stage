@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="369" height="225" viewBox="0 0 369 225">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #231f20;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2 {
+        font-size: 10px;
+        fill: #231f20;
+        font-family: Helvetica;
+      }
+
+      .cls-3 {
+        letter-spacing: 0.22em;
+      }
+
+      .cls-4 {
+        font-size: 8px;
+        font-family: Helvetica-LightOblique, Helvetica;
+        font-weight: 300;
+        font-style: oblique;
+      }
+    </style>
+  </defs>
+  <g id="Drawing">
+    <rect class="cls-1" x="9" y="9" width="162" height="189"/>
+    <line class="cls-1" x1="9" y1="36" x2="171" y2="36"/>
+    <line class="cls-1" x1="9" y1="63" x2="171" y2="63"/>
+    <line class="cls-1" x1="9" y1="90" x2="171" y2="90"/>
+    <line class="cls-1" x1="9" y1="117" x2="171" y2="117"/>
+    <line class="cls-1" x1="9" y1="144" x2="171" y2="144"/>
+    <line class="cls-1" x1="9" y1="171" x2="171" y2="171"/>
+    <rect class="cls-1" x="198" y="9" width="162" height="189"/>
+    <line class="cls-1" x1="198" y1="36" x2="360" y2="36"/>
+    <line class="cls-1" x1="198" y1="63" x2="360" y2="63"/>
+    <line class="cls-1" x1="198" y1="90" x2="360" y2="90"/>
+    <line class="cls-1" x1="198" y1="117" x2="360" y2="117"/>
+    <line class="cls-1" x1="198" y1="144" x2="360" y2="144"/>
+    <line class="cls-1" x1="198" y1="171" x2="360" y2="171"/>
+  </g>
+  <g id="Text">
+    <text class="cls-2" transform="translate(17.08 27)">ELF Header</text>
+    <text class="cls-2" transform="translate(17.08 54)">Program Header Table<tspan class="cls-3" x="101.71" y="0"> </tspan><tspan class="cls-4" x="106.71" y="0">optional</tspan></text>
+    <text class="cls-2" transform="translate(17.08 189)">Section Header Table<tspan class="cls-3" x="96.72" y="0"> </tspan><tspan class="cls-4" x="101.72" y="0">required</tspan></text>
+    <text class="cls-2" transform="translate(17.08 81)">Section 1</text>
+    <text class="cls-2" transform="translate(17.08 108)">Section 2</text>
+    <text class="cls-2" transform="translate(17.08 135)">Section 3</text>
+    <text class="cls-2" transform="translate(17.08 162)">…</text>
+    <text class="cls-2" transform="translate(207 27)">ELF Header</text>
+    <text class="cls-2" transform="translate(207 54)">Program Header Table<tspan class="cls-3" x="101.71" y="0"> </tspan><tspan class="cls-4" x="106.71" y="0">required</tspan></text>
+    <text class="cls-2" transform="translate(207 189)">Section Header Table<tspan class="cls-3" x="96.72" y="0"> </tspan><tspan class="cls-4" x="101.72" y="0">optional</tspan></text>
+    <text class="cls-2" transform="translate(207 81)">Segment 1</text>
+    <text class="cls-2" transform="translate(207 108)">Segment 2</text>
+    <text class="cls-2" transform="translate(207 135)">Segment 3</text>
+    <text class="cls-2" transform="translate(207 162)">…</text>
+    <text class="cls-2" transform="translate(54.43 216)">(a) Linking View</text>
+    <text class="cls-2" transform="translate(237.32 216)">(b) Execution View</text>
+  </g>
+</svg>
