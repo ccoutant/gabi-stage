@@ -14,6 +14,27 @@ which describe how to modify the section contents, thus allowing
 executable and shared object files to hold
 the right information for a process’s program image.
 
+Executable files may also have relocation entries,
+which are necessary when the code has unbound references
+to a shared object, or when the code is position-independent.
+
+Most relocations are *symbolic,* computing the value of an
+expression involving a symbol and an offset (called the *addend*),
+applying the result to a location in the object code.
+A *relocation type* encodes an *operation* (how the expression is computed)
+and a *format* (how the result is to be applied at the location).
+
+In executable files, some relocations are *relative.*
+A relative relocation marks a location that holds a 32-bit or 64-bit address
+that must be relocated when a program segment is loaded at a runtime
+address that is different from its link-time address.
+These relocations do not require a symbol or an addend.
+
+Relocation Entry
+================
+
+Relocation entries have the following formats.
+
 .. code-block:: c
    :caption: Relocation Entries
 
@@ -66,13 +87,13 @@ the right information for a process’s program image.
 
     .. code-block:: c
 
-       #define ELF32_R_SYM(i)  ((i)>>8)
-       #define ELF32_R_TYPE(i)   ((unsigned char)(i))
-       #define ELF32_R_INFO(s,t) (((s)<<8)+(unsigned char)(t))
+       #define ELF32_R_SYM(i)     ((i)>>8)
+       #define ELF32_R_TYPE(i)    ((unsigned char)(i))
+       #define ELF32_R_INFO(s,t)  (((s)<<8)+(unsigned char)(t))
 
-       #define ELF64_R_SYM(i)    ((i)>>32)
-       #define ELF64_R_TYPE(i)   ((i)&0xffffffffL)
-       #define ELF64_R_INFO(s,t) (((s)<<32)+((t)&0xffffffffL))
+       #define ELF64_R_SYM(i)     ((i)>>32)
+       #define ELF64_R_TYPE(i)    ((i)&0xffffffffL)
+       #define ELF64_R_INFO(s,t)  (((s)<<32)+((t)&0xffffffffL))
 
 ``r_addend``
     This member specifies a constant addend used to
@@ -151,3 +172,63 @@ sequence, the location specified is ignored.
 
 A psABI supplement may specify individual relocation types
 that always stop a composition sequence, or always start a new one.
+
+Relative Relocation Table
+=========================
+
+.. code-block:: c
+   :caption: Relative Relocation Table Entries
+
+   typedef Elf32_Word Elf32_Relr;
+   typedef Elf64_Xword Elf64_Relr;
+
+Relative relocations are used to identify virtual-address-sized storage
+units within the object whose contents are independent of any dynamic
+binding, but must still be relocated at load time to support position
+independence. Before the program can begin execution, these locations
+must be relocated by reading their contents and adding a relocation
+factor, which is computed as the difference between the object's actual
+load-time virtual address and its link-time virtual address. If the
+object is loaded at the address for which it was linked, the relocation
+factor is 0, and relative relocations may be ignored.
+
+A relative relocation table is encoded as a sequence of ``Elf32_Relr``
+entries for ``ELFCLASS32`` objects or ``Elf64_Relr`` entries for
+``ELFCLASS64`` objects. The relative relocation table entries decode to
+a list of virtual addresses that refer to storage units within the
+object. Each of these storage units is the size of an ``Elf32_Addr`` (in
+the case of ``ELFCLASS32`` objects) or an ``Elf64_Addr`` (in the case of
+``ELFCLASS64`` objects).
+
+.. note::
+
+   Relative relocations could be represented simply as a list of virtual
+   addresses that require relocation, which would be considerably more
+   compact than using ``Elf32_Rel`` or ``Elf32_rela`` relocations.
+   Because many such relocations occur in clusters, however, we can use a
+   simple encoding scheme to compress the relative relocation table even
+   further.
+
+   A relative relocation table cannot describe relocations at odd
+   addresses. For such relocations, a ``Rel``- or ``Rela``-style
+   relocation must be used.
+
+The encoded sequence of ``Elf32_Relr`` or ``Elf64_Relr`` entries starts
+with an address entry (which must have a 0 in the least-significant
+bit). This encodes one relative relocation at that address. This address
+entry may be followed by zero or more bitmap entries, each of which has
+a 1 in the least-significant bit.
+
+Bitmap entries describe a block of ``Elf32_Addr`` or ``Elf64_Addr``
+consecutive storage units immediately following the one to which the
+address entry applied. Each bitmap entry covers 31 (for ``Elf32_Relr``)
+or 63 (for ``Elf64_Relr``) storage units. Each bit in the bitmap entry,
+excluding the least-significant bit, corresponds to a storage unit in
+the block, the second-least-significant bit corresponding to the first,
+and the most-significant bit corresponding to the last. For each 1 in
+the bitmap entry, the corresponding storage unit is relocatable.
+
+.. note::
+
+   This encoding scheme has the property that a simple list of (even)
+   addresses is a valid encoding.

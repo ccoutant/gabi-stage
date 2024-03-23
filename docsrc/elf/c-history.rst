@@ -133,3 +133,4 @@ Version 4.2 (Published 2025)
 Version 4.3 (DRAFT)
 
 * Added extra requirements for ``SHF_LINKORDER`` flag.
+* Added relative relocation table (``Elf32_Relr`` and ``Elf64_Relr``).
