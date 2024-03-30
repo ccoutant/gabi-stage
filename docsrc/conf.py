@@ -49,6 +49,7 @@ html_theme_options = {
     'font_family': '"Open Sans", sans-serif',
 }
 html_copy_source = False;
+html_scaled_image_link = False;
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
