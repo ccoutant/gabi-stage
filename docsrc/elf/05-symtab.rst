@@ -29,21 +29,21 @@ A symbol table entry has the following format.
    :caption: Symbol Table Entry
 
    typedef struct {
-       Elf32_Word  st_name;
-       Elf32_Addr  st_value;
-       Elf32_Word  st_size;
-       unsigned char   st_info;
-       unsigned char   st_other;
-       Elf32_Half  st_shndx;
+       Elf32_Word     st_name;
+       Elf32_Addr     st_value;
+       Elf32_Word     st_size;
+       unsigned char  st_info;
+       unsigned char  st_other;
+       Elf32_Half     st_shndx;
    } Elf32_Sym;
 
    typedef struct {
-       Elf64_Word  st_name;
-       unsigned char   st_info;
-       unsigned char   st_other;
-       Elf64_Half  st_shndx;
-       Elf64_Addr  st_value;
-       Elf64_Xword st_size;
+       Elf64_Word     st_name;
+       unsigned char  st_info;
+       unsigned char  st_other;
+       Elf64_Half     st_shndx;
+       Elf64_Addr     st_value;
+       Elf64_Xword    st_size;
    } Elf64_Sym;
 
 ``st_name``
@@ -76,15 +76,15 @@ A symbol table entry has the following format.
     The following code shows how to manipulate the values for
     both 32 and 64-bit objects.
 
-    .. code::
+    .. code-block:: c
 
-           #define ELF32_ST_BIND(i)   ((i)>>4)
-           #define ELF32_ST_TYPE(i)   ((i)&0xf)
-           #define ELF32_ST_INFO(b,t) (((b)<<4)+((t)&0xf))
+       #define ELF32_ST_BIND(i)   ((i)>>4)
+       #define ELF32_ST_TYPE(i)   ((i)&0xf)
+       #define ELF32_ST_INFO(b,t) (((b)<<4)+((t)&0xf))
 
-           #define ELF64_ST_BIND(i)   ((i)>>4)
-           #define ELF64_ST_TYPE(i)   ((i)&0xf)
-           #define ELF64_ST_INFO(b,t) (((b)<<4)+((t)&0xf))
+       #define ELF64_ST_BIND(i)   ((i)>>4)
+       #define ELF64_ST_TYPE(i)   ((i)&0xf)
+       #define ELF64_ST_INFO(b,t) (((b)<<4)+((t)&0xf))
 
 ``st_other``
     This member currently specifies a symbol’s visibility.
@@ -93,10 +93,10 @@ A symbol table entry has the following format.
     both 32 and 64-bit objects.  Other bits contain 0 and have
     no defined meaning.
 
-    .. code::
+    .. code-block:: c
 
-           #define ELF32_ST_VISIBILITY(o) ((o)&0x3)
-           #define ELF64_ST_VISIBILITY(o) ((o)&0x3)
+       #define ELF32_ST_VISIBILITY(o) ((o)&0x3)
+       #define ELF64_ST_VISIBILITY(o) ((o)&0x3)
 
 ``st_shndx``
     Every symbol table entry is *defined* in relation
@@ -257,7 +257,7 @@ the associated entity.
     by only special thread-local storage relocations
     and thread-local storage relocations can only reference
     symbols with type ``STT_TLS``.
-    Implementation need not support thread-local storage.
+    Implementations need not support thread-local storage.
 
 ``STT_LOOS`` through \ ``STT_HIOS``
     Values in this inclusive range

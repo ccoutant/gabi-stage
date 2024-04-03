@@ -572,7 +572,7 @@ hold special information, depending on section type.
 Compressed Sections
 ===================
 
-All relocations to a compressed section specifiy offsets to the
+All relocations to a compressed section specify offsets to the
 uncompressed section data.  It is therefore necessary to decompress
 the section data before relocations can be applied.  Each compressed section
 specifies the algorithm independently.  It is permissible for
@@ -625,7 +625,7 @@ is specific to each algorithm, and is defined below for each value of
 and alignment padding in addition to compressed data bytes.
 
 A compression header’s ``ch_type`` member specifies the
-compression algoritm employed, as shown in the following table.
+compression algorithm employed, as shown in the following table.
 
 .. table:: ELF Compression Types, ``ch_type``
    :width: 50%
@@ -641,7 +641,7 @@ compression algoritm employed, as shown in the following table.
    ======================  ==============
 
 ``ELFCOMPRESS_ZLIB``
-    The section data is compressed with the ZLIB algoritm.  The compressed
+    The section data is compressed with the ZLIB algorithm.  The compressed
     ZLIB data bytes begin with the byte immediately following the compression
     header, and extend to the end of the section.  Additional documentation
     for ZLIB may be found at http://zlib.net.

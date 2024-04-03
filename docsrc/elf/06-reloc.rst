@@ -19,25 +19,25 @@ the right information for a process’s program image.
    :caption: Relocation Entries
 
    typedef struct {
-       Elf32_Addr  r_offset;
-       Elf32_Word  r_info;
+       Elf32_Addr   r_offset;
+       Elf32_Word   r_info;
    } Elf32_Rel;
 
    typedef struct {
-       Elf32_Addr  r_offset;
-       Elf32_Word  r_info;
-       Elf32_Sword r_addend;
+       Elf32_Addr   r_offset;
+       Elf32_Word   r_info;
+       Elf32_Sword  r_addend;
    } Elf32_Rela;
 
    typedef struct {
-       Elf64_Addr  r_offset;
-       Elf64_Xword r_info;
+       Elf64_Addr   r_offset;
+       Elf64_Xword  r_info;
    } Elf64_Rel;
 
    typedef struct {
-       Elf64_Addr  r_offset;
-       Elf64_Xword r_info;
-       Elf64_Sxword    r_addend;
+       Elf64_Addr   r_offset;
+       Elf64_Xword  r_info;
+       Elf64_Sxword r_addend;
    } Elf64_Rela;
 
 ``r_offset``
@@ -65,7 +65,7 @@ the right information for a process’s program image.
     ``ELF32_R_TYPE`` (or ``ELF64_R_TYPE``\ ) or ``ELF32_R_SYM`` (or ``ELF64_R_SYM``\ ),
     respectively, to the entry’s ``r_info`` member.
 
-    .. code::
+    .. code-block:: c
 
        #define ELF32_R_SYM(i)  ((i)>>8)
        #define ELF32_R_TYPE(i)   ((unsigned char)(i))

@@ -319,7 +319,7 @@ but is not required.
     An object file may have multiple relocation sections.
     When building the relocation table for an
     executable or shared object file, the link editor
-    catenates those sections to form a single table.
+    concatenates those sections to form a single table.
     Although the sections remain independent in the object file,
     the dynamic linker sees a single table.
     When the dynamic linker creates the process image for
