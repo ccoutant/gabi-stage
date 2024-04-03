@@ -220,4 +220,5 @@ Appendix A: Assigned Machine Values
    ``EM_SBF``               ``263``        Solana Bytecode Format
    ``EM_AIENGINE``          ``264``        AMD/Xilinx AIEngine architecture
    ``EM_SIMA_MLA``          ``265``        SiMa MLA
+   ``EM_BANG``              ``266``        Cambricon BANG
    ======================== ============== ===============================================================================
