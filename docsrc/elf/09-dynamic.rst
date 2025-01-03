@@ -12,7 +12,7 @@ Program Interpreter
 An executable file that participates in
 dynamic linking shall have one
 ``PT_INTERP`` program header element.
-During process startup (e.g., ``exec``),
+During process startup (e.g., ``exec()``),
 the system retrieves a path name from the ``PT_INTERP``
 segment and creates the initial process image from
 the interpreter file’s segments. That is,
@@ -68,7 +68,7 @@ the dynamic linker as the program interpreter.
    The locations of the system provided dynamic
    linkers are processor specific.
 
-The system loader (e.g., ``exec``) and the dynamic linker cooperate to
+The system loader (e.g., ``exec()``) and the dynamic linker cooperate to
 create the process image for the program, which entails
 the following actions:
 
@@ -437,7 +437,7 @@ but is not required.
     control to the program.
     The presence of this entry takes
     precedence over a directive to use lazy binding for this object when
-    specified through the environment or via ``dlopen``.
+    specified through the environment or via ``dlopen()``.
     This entry is deprecated; its use has been superseded
     by the ``DF_BIND_NOW`` flag.
 
@@ -562,7 +562,7 @@ Tag values not appearing in the table are reserved.
     control to the program.
     The presence of this entry takes
     precedence over a directive to use lazy binding for this object when
-    specified through the environment or via ``dlopen``.
+    specified through the environment or via ``dlopen()``.
 
 ``DF_STATIC_TLS``
     If set in a shared object or executable,
@@ -876,7 +876,7 @@ specified initialization orderings (among others).
    Initialization Ordering Example
 
 Similarly, shared objects and executable files may have termination
-functions, which are executed with the ``atexit`` mechanism after
+functions, which are executed with the ``atexit()`` mechanism after
 the base process begins its termination sequence.
 The termination functions for any object A must be called before
 the termination functions for any other objects that object A depends
@@ -954,15 +954,15 @@ referenced by the ``DT_FINI`` entry for that object.
 
 .. note::
 
-   Although the ``atexit`` termination processing normally will be done,
+   Although the ``atexit()`` termination processing normally will be done,
    it is not guaranteed to have executed upon process death.
    In particular, the process will not execute the termination processing
-   if it calls ``_exit`` or if the process dies because it received a signal
+   if it calls ``_exit()`` or if the process dies because it received a signal
    that it neither caught nor ignored.
 
 The psABI supplement for each processor specifies whether the
 dynamic linker is responsible for calling the executable file’s
 initialization function or registering the executable file’s
-termination function with ``atexit``.
-Termination functions specified by users via the ``atexit`` mechanism
+termination function with ``atexit()``.
+Termination functions specified by users via the ``atexit()`` mechanism
 must be executed before any termination functions of shared objects.

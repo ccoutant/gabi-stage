@@ -13,7 +13,7 @@ There are three main types of object files.
 
 * An *executable file*
   holds a program suitable for execution;
-  the file specifies how the system (e.g., ``exec``)
+  the file specifies how the system (e.g., ``exec()``)
   creates a program’s process image.
 
 * A *shared object file*
