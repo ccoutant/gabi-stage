@@ -313,9 +313,9 @@ but is not required.
 ``DT_RELA``
     This element holds the address of a relocation table,
     described in :ref:`Relocation`.
-    Entries in the table have explicit addends, such as
-    ``Elf32_Rela`` for the 32-bit file class
-    or ``Elf64_Rela`` for the 64-bit file class.
+    Entries in the table have explicit addends
+    (``Elf32_Rela`` for the 32-bit file class
+    or ``Elf64_Rela`` for the 64-bit file class).
     An object file may have multiple relocation sections.
     When building the relocation table for an
     executable or shared object file, the link editor
@@ -382,9 +382,9 @@ but is not required.
 
 ``DT_REL``
     This element is similar to ``DT_RELA``,
-    except its table has implicit addends, such as
-    ``Elf32_Rel`` for the 32-bit file class
-    or ``Elf64_Rel`` for the 64-bit file class.
+    except its table has implicit addends
+    (``Elf32_Rel`` for the 32-bit file class
+    or ``Elf64_Rel`` for the 64-bit file class).
     If this element is present, the dynamic structure must also have
     ``DT_RELSZ`` and ``DT_RELENT`` elements.
 

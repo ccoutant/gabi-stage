@@ -415,13 +415,13 @@ organization, but they are not part of the specification.
     Types currently must be non-negative.
     The ABI does not define what descriptors mean.
 
-To illustrate, the following note segment holds two entries.
+To illustrate, the following (``ELFCLASS32``) note segment holds two entries.
 
 .. figure:: /svg/figure-5.svg
-   :alt: Example Note Segment
+   :alt: Example ELFCLASS32 Note Segment
    :width: 392pt
 
-   Example Note Segment
+   Example ``ELFCLASS32`` Note Segment
 
 .. note::
 
