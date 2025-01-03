@@ -376,14 +376,14 @@ A section header’s ``sh_type`` member specifies the section’s semantics.
     This section is associated with a symbol table section
     and is required if any of the section header indexes referenced
     by that symbol table contain the escape value ``SHN_XINDEX``.
-    The section is an array of ``Elf32_Word`` values.
+    The section is an array of ``Elf32_Word/Elf64_Word`` values.
     Each value corresponds one to one with a symbol table entry
     and appear in the same order as those entries.
     The values represent the section header indexes against which
     the symbol table entries are defined.
     Only if the corresponding symbol table entry’s ``st_shndx`` field
     contains the escape value ``SHN_XINDEX``
-    will the matching ``Elf32_Word`` hold the actual section header index;
+    will the matching word hold the actual section header index;
     otherwise, the entry must be ``SHN_UNDEF`` (\ ``0``\ ).
 
 ``SHT_LOOS`` through \ ``SHT_HIOS``
@@ -762,7 +762,7 @@ Its containing symbol table section need not be a member of the group,
 for example.
 
 The section data of a ``SHT_GROUP`` section is an array
-of ``Elf32_Word`` entries.  The first entry is a flag word.
+of ``Elf32_Word/Elf64_Word`` entries.  The first entry is a flag word.
 The remaining entries are a sequence of section header indices.
 
 The following flags are currently defined:
