@@ -63,6 +63,8 @@ Remaining data in an object file
 use the encoding of the target processor, regardless of
 the machine on which the file was created.
 
+.. _32-bit-data-types:
+
 .. table:: 32-Bit Data Types
 
    =================  =====  =========  ========================
@@ -75,6 +77,8 @@ the machine on which the file was created.
    ``Elf32_Sword``    ``4``  ``4``      Signed integer
    ``unsigned char``  ``1``  ``1``      Unsigned small integer
    =================  =====  =========  ========================
+
+.. _64-bit-data-types:
 
 .. table:: 64-Bit Data Types
 
@@ -103,3 +107,48 @@ Thus, for example, a structure containing an ``Elf32_Addr``
 member will be aligned on a 4-byte boundary within the file.
 
 For portability reasons, ELF uses no bit-fields.
+
+Extensibility
+=============
+
+The ELF header contains a version number, which can be incremented for
+major changes to the object file format. ELF has been designed, however,
+so that such major changes are rare, and the file format can be extended
+in several ways that do not require a version number change.
+
+Most object file structures are contained within sections
+(see :numref:`sections`), and are designated with special section types.
+Additional control structures can be defined by defining new section types.
+
+Many control structures have fields with enumerated values, and the
+standard sets aside certain ranges of values for these fields for
+implementation-specific uses. These extensions can fall into one of two
+classes: processor-specific extensions, which depend on the machine
+architecture (see ``e_machine`` in
+:numref:`Contents-of-the-ELF-Header`); and OSABI-specific extensions,
+which depend on the operating system and psABI (see ``EI_OSABI`` in
+:numref:`elf-identification`).
+
+ELF assigns meaning to fields and constant values, throughout the
+specification. Any unassigned bits or values not explicitly delegated to
+the psABI or OSABI are reserved to the ELF standard for potential future
+use. Implementations must not assign meaning, or otherwise make use of,
+any unassigned items.
+
+Some object file control structures can grow, because the ELF header
+contains their actual sizes. If the object file format changes, a program
+may encounter control structures that are larger or smaller than expected.
+Programs might therefore ignore “extra” information. The treatment of
+“missing” information depends on context and will be specified when and
+if extensions are defined. This form of extension is reserved for future
+revisions of the ELF standard, and must not be used for
+implementation-specific purposes.
+
+Required Features
+=================
+
+The ELF standard assigns meaning to a number of features, such as
+special sections, symbol types, and program header entries, but an
+implementation is not required to support all features defined in this
+specification. The psABI supplement should designate which features are
+required for a particular implementation.

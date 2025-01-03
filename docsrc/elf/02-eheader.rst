@@ -4,12 +4,12 @@
 ELF Header
 **********
 
-Some object file control structures can grow, because the ELF header
-contains their actual sizes. If the object file format changes, a program
-may encounter control structures that are larger or smaller than expected.
-Programs might therefore ignore “extra” information. The treatment of
-“missing” information depends on context and will be specified when and
-if extensions are defined.
+The ELF header resides at the beginning of an ELF file.
+It identifies the file as an ELF file and contains the information
+necessary for interpreting the contents of the file and locating
+the other components of the file.
+
+.. _Contents-of-the-ELF-Header:
 
 Contents of the ELF Header
 ==========================
@@ -269,12 +269,12 @@ These indexes access bytes that hold the following values.
 
     Class ``ELFCLASS32`` supports machines with
     32-bit architectures. It
-    uses the basic types defined in the table
-    labeled “32-Bit Data Types.”
+    uses the basic types defined in :numref:`32-bit-data-types`,
+    “32-Bit Data Types.”
 
     Class ``ELFCLASS64`` supports machines with 64-bit
-    architectures.  It uses the basic types defined in the table
-    labeled “64-Bit Data Types.”
+    architectures.  It uses the basic types defined in :numref:`64-bit-data-types`,
+    “64-Bit Data Types.”
 
     Other classes will be defined as necessary, with different basic types
     and sizes for object file data.
@@ -323,10 +323,8 @@ These indexes access bytes that hold the following values.
     The psABI supplement for an architecture
     can define its own associated set of values for this byte in this range.
     If the psABI supplement does not specify a set of values,
-    one of the following values shall be used,
-    where ``0`` can also be taken to mean *unspecified*.
-
-    See :doc:`Appendix B <b-osabi>` for currently-defined values for this field.
+    one of the values defined in :doc:`Appendix B <b-osabi>` shall be used,
+    where ``0`` (``ELFOSABI_NONE``) can also be taken to mean *unspecified*.
 
 ``EI_ABIVERSION``
     Byte ``e_ident[EI_ABIVERSION]`` identifies the
@@ -362,7 +360,7 @@ Encoding ``ELFDATA2LSB`` specifies 2’s complement values,
 with the least significant byte occupying the lowest address.
 Encoding ``ELFDATA2MSB`` specifies 2’s complement values,
 with the most significant byte occupying the lowest address.
-See :numref:`data-encoding` for examples.
+See :numref:`data-encoding`.
 
 .. _data-encoding:
 
@@ -370,4 +368,4 @@ See :numref:`data-encoding` for examples.
    :alt: Data Encoding
    :width: 702pt
 
-   Example Data Encodings for 8-, 16-, 32-, and 64-bit Values
+   Data Encodings for 8-, 16-, 32-, and 64-bit Values
