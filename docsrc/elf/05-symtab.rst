@@ -102,9 +102,7 @@ A symbol table entry has the following format.
     Every symbol table entry is *defined* in relation
     to some section. This member holds the relevant
     section header table index.
-    As the ``sh_link`` and ``sh_info`` interpretation
-    table
-    and the related text describe,
+    As described in :ref:`special-section-indexes`,
     some section indexes indicate special meanings.
 
     If this member contains ``SHN_XINDEX``,

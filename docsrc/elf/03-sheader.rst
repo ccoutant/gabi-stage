@@ -51,6 +51,8 @@ the section header at index ``0``
 (otherwise, the ``sh_size`` member of the initial entry
 contains ``0``\ ).
 
+.. _special-section-indexes:
+
 Special Section Indexes
 =======================
 
