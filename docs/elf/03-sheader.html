@@ -1,20 +1,17 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>3. Sections &#8212; gABI  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=128e1f3d" />
+    <script src="../_static/documentation_options.js?v=7f41d439"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="4. String Table" href="04-strtab.html" />
@@ -22,8 +19,9 @@
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
 <div class="pageheader">
@@ -53,7 +51,7 @@
       <div class="body" role="main">
       
   <section id="sections">
-<span id="id1"></span><h1><span class="section-number">3. </span>Sections<a class="headerlink" href="#sections" title="Permalink to this heading">¶</a></h1>
+<span id="id1"></span><h1><span class="section-number">3. </span>Sections<a class="headerlink" href="#sections" title="Link to this heading">¶</a></h1>
 <p>An object file’s section header table lets one
 locate all the file’s sections.
 The section header table is an array of <code class="docutils literal notranslate"><span class="pre">Elf32_Shdr</span></code>
@@ -69,7 +67,7 @@ file to the section header table.
 except the ELF header, the program header table,
 and the section header table.
 Moreover, object files’ sections satisfy several conditions.</p>
-<ul class="simple">
+<ul>
 <li><p>Every section in an object file has exactly one
 section header describing it.
 Section headers may exist that do not have a section.</p></li>
@@ -80,7 +78,14 @@ No byte in a file resides in more than one section.</p></li>
 <li><p>An object file may have inactive space.
 The various headers and the sections might not
 “cover” every byte in an object file.
-The contents of the inactive data are unspecified.</p></li>
+The contents of the inactive data are unspecified.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A common example of inactive space is the padding
+placed between sections to ensure proper alignment
+for the subsequent section.</p>
+</div>
+</li>
 </ul>
 <p>If the number of sections is greater than or equal to
 <code class="docutils literal notranslate"><span class="pre">SHN_LORESERVE</span></code> (<code class="docutils literal notranslate"><span class="pre">0xff00</span></code>), <code class="docutils literal notranslate"><span class="pre">e_shnum</span></code>
@@ -91,7 +96,7 @@ the section header at index <code class="docutils literal notranslate"><span cla
 (otherwise, the <code class="docutils literal notranslate"><span class="pre">sh_size</span></code> member of the initial entry
 contains <code class="docutils literal notranslate"><span class="pre">0</span></code>).</p>
 <section id="special-section-indexes">
-<h2><span class="section-number">3.1. </span>Special Section Indexes<a class="headerlink" href="#special-section-indexes" title="Permalink to this heading">¶</a></h2>
+<span id="id2"></span><h2><span class="section-number">3.1. </span>Special Section Indexes<a class="headerlink" href="#special-section-indexes" title="Link to this heading">¶</a></h2>
 <p>Some section header table indexes are reserved in contexts
 where index size is restricted, for example, the <code class="docutils literal notranslate"><span class="pre">st_shndx</span></code>
 member of a symbol table entry and the <code class="docutils literal notranslate"><span class="pre">e_shnum</span></code> and
@@ -100,8 +105,8 @@ In such contexts, the reserved values do not represent actual
 sections in the object file.  Also in such contexts, an escape
 value indicates that the actual section
 index is to be found elsewhere, in a larger field.</p>
-<table class="docutils align-default" id="id4">
-<caption><span class="caption-number">Table 3.1 </span><span class="caption-text">Special Section Indexes</span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
+<table class="docutils align-default" id="id6">
+<caption><span class="caption-number">Table 3.1 </span><span class="caption-text">Special Section Indexes</span><a class="headerlink" href="#id6" title="Link to this table">¶</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Name</p></th>
 <th class="head"><p>Value</p></th>
@@ -152,8 +157,8 @@ the section header table contains an entry for index 0.
 If the <code class="docutils literal notranslate"><span class="pre">e_shnum</span></code>
 member of the ELF header says a file has 6 entries
 in the section header table, they have the indexes 0 through 5.
-The contents of the initial entry are specified later in this
-section.</p>
+The contents of the initial entry are specified in
+<a class="reference internal" href="#first-section-header-table-entry"><span class="std std-ref">First Section Header Table Entry</span></a>.</p>
 </div>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">SHN_LORESERVE</span></code></dt><dd><p>This value specifies the lower bound of the
@@ -190,35 +195,35 @@ contain entries for the reserved indexes.</p>
 </dl>
 </section>
 <section id="section-header-table-entry">
-<h2><span class="section-number">3.2. </span>Section Header Table Entry<a class="headerlink" href="#section-header-table-entry" title="Permalink to this heading">¶</a></h2>
+<h2><span class="section-number">3.2. </span>Section Header Table Entry<a class="headerlink" href="#section-header-table-entry" title="Link to this heading">¶</a></h2>
 <p>A section header has the following structure.</p>
-<div class="literal-block-wrapper docutils container" id="id5">
-<div class="code-block-caption"><span class="caption-number">Listing 3.1 </span><span class="caption-text">Section Header</span><a class="headerlink" href="#id5" title="Permalink to this code">¶</a></div>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_name</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_type</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_flags</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf32_Addr</span><span class="w">  </span><span class="n">sh_addr</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf32_Off</span><span class="w">   </span><span class="n">sh_offset</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_size</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_link</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_info</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_addralign</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_entsize</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"> </span><span class="n">Elf32_Shdr</span><span class="p">;</span><span class="w"></span>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-number">Listing 3.1 </span><span class="caption-text">Section Header</span><a class="headerlink" href="#id7" title="Link to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_name</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_type</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_flags</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Addr</span><span class="w">  </span><span class="n">sh_addr</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Off</span><span class="w">   </span><span class="n">sh_offset</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_size</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_link</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_info</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_addralign</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_entsize</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Elf32_Shdr</span><span class="p">;</span>
 
-<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">sh_name</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">sh_type</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">sh_flags</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf64_Addr</span><span class="w">  </span><span class="n">sh_addr</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf64_Off</span><span class="w">   </span><span class="n">sh_offset</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">sh_size</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">sh_link</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">sh_info</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">sh_addralign</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">sh_entsize</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"> </span><span class="n">Elf64_Shdr</span><span class="p">;</span><span class="w"></span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">sh_name</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">sh_type</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">sh_flags</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Addr</span><span class="w">  </span><span class="n">sh_addr</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Off</span><span class="w">   </span><span class="n">sh_offset</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">sh_size</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">sh_link</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">sh_info</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">sh_addralign</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">sh_entsize</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Elf64_Shdr</span><span class="p">;</span>
 </pre></div>
 </div>
 </div>
@@ -284,10 +289,10 @@ of fixed-size entries.</p>
 </dl>
 </section>
 <section id="section-type">
-<h2><span class="section-number">3.3. </span>Section Type<a class="headerlink" href="#section-type" title="Permalink to this heading">¶</a></h2>
+<h2><span class="section-number">3.3. </span>Section Type<a class="headerlink" href="#section-type" title="Link to this heading">¶</a></h2>
 <p>A section header’s <code class="docutils literal notranslate"><span class="pre">sh_type</span></code> member specifies the section’s semantics.</p>
-<table class="docutils align-default" id="id6">
-<caption><span class="caption-number">Table 3.2 </span><span class="caption-text">Section Types, <code class="docutils literal notranslate"><span class="pre">sh_type</span></code></span><a class="headerlink" href="#id6" title="Permalink to this table">¶</a></caption>
+<table class="docutils align-default" id="id8">
+<caption><span class="caption-number">Table 3.2 </span><span class="caption-text">Section Types, <code class="docutils literal notranslate"><span class="pre">sh_type</span></code></span><a class="headerlink" href="#id8" title="Link to this table">¶</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Name</p></th>
 <th class="head"><p>Value</p></th>
@@ -458,14 +463,14 @@ the group.</p>
 <dt><code class="docutils literal notranslate"><span class="pre">SHT_SYMTAB_SHNDX</span></code></dt><dd><p>This section is associated with a symbol table section
 and is required if any of the section header indexes referenced
 by that symbol table contain the escape value <code class="docutils literal notranslate"><span class="pre">SHN_XINDEX</span></code>.
-The section is an array of <code class="docutils literal notranslate"><span class="pre">Elf32_Word</span></code> values.
+The section is an array of <code class="docutils literal notranslate"><span class="pre">Elf32_Word/Elf64_Word</span></code> values.
 Each value corresponds one to one with a symbol table entry
 and appear in the same order as those entries.
 The values represent the section header indexes against which
 the symbol table entries are defined.
 Only if the corresponding symbol table entry’s <code class="docutils literal notranslate"><span class="pre">st_shndx</span></code> field
 contains the escape value <code class="docutils literal notranslate"><span class="pre">SHN_XINDEX</span></code>
-will the matching <code class="docutils literal notranslate"><span class="pre">Elf32_Word</span></code> hold the actual section header index;
+will the matching word hold the actual section header index;
 otherwise, the entry must be <code class="docutils literal notranslate"><span class="pre">SHN_UNDEF</span></code> (<code class="docutils literal notranslate"><span class="pre">0</span></code>).</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">SHT_RELR</span></code></dt><dd><p>The section holds an array of relocation entries, used to encode
@@ -496,13 +501,13 @@ current or future system-defined section types.</p>
 <p>Other section type values are reserved.</p>
 </section>
 <section id="section-flags">
-<h2><span class="section-number">3.4. </span>Section Flags<a class="headerlink" href="#section-flags" title="Permalink to this heading">¶</a></h2>
+<h2><span class="section-number">3.4. </span>Section Flags<a class="headerlink" href="#section-flags" title="Link to this heading">¶</a></h2>
 <p>A section header’s <code class="docutils literal notranslate"><span class="pre">sh_flags</span></code>
 member holds 1-bit flags that describe the section’s attributes.
 Defined values appear in the following table;
 other values are reserved.</p>
-<table class="docutils align-default" id="id7">
-<caption><span class="caption-number">Table 3.3 </span><span class="caption-text">Section Attribute Flags</span><a class="headerlink" href="#id7" title="Permalink to this table">¶</a></caption>
+<table class="docutils align-default" id="id9">
+<caption><span class="caption-number">Table 3.3 </span><span class="caption-text">Section Attribute Flags</span><a class="headerlink" href="#id9" title="Link to this table">¶</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Name</p></th>
 <th class="head"><p>Value</p></th>
@@ -650,12 +655,12 @@ If meanings are specified, the psABI supplement explains them.</p>
 </dl>
 </section>
 <section id="the-sh-link-and-sh-info-fields">
-<h2><span class="section-number">3.5. </span>The sh_link and sh_info Fields<a class="headerlink" href="#the-sh-link-and-sh-info-fields" title="Permalink to this heading">¶</a></h2>
+<span id="shlink-shinfo-fields"></span><h2><span class="section-number">3.5. </span>The sh_link and sh_info Fields<a class="headerlink" href="#the-sh-link-and-sh-info-fields" title="Link to this heading">¶</a></h2>
 <p>Two members in the section header,
 <code class="docutils literal notranslate"><span class="pre">sh_link</span></code> and <code class="docutils literal notranslate"><span class="pre">sh_info</span></code>,
 hold special information, depending on section type.</p>
-<table class="docutils align-default" id="id8">
-<caption><span class="caption-number">Table 3.4 </span><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">sh_link</span></code> and <code class="docutils literal notranslate"><span class="pre">sh_info</span></code> Interpretation</span><a class="headerlink" href="#id8" title="Permalink to this table">¶</a></caption>
+<table class="docutils align-default" id="id10">
+<caption><span class="caption-number">Table 3.4 </span><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">sh_link</span></code> and <code class="docutils literal notranslate"><span class="pre">sh_info</span></code> Interpretation</span><a class="headerlink" href="#id10" title="Link to this table">¶</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p><code class="docutils literal notranslate"><span class="pre">sh_type</span></code></p></th>
 <th class="head"><p><code class="docutils literal notranslate"><span class="pre">sh_link</span></code></p></th>
@@ -703,103 +708,13 @@ the associated symbol table section.</p></td>
 </tbody>
 </table>
 </section>
-<section id="compressed-sections">
-<span id="id2"></span><h2><span class="section-number">3.6. </span>Compressed Sections<a class="headerlink" href="#compressed-sections" title="Permalink to this heading">¶</a></h2>
-<p>All relocations to a compressed section specifiy offsets to the
-uncompressed section data.  It is therefore necessary to decompress
-the section data before relocations can be applied.  Each compressed section
-specifies the algorithm independently.  It is permissible for
-different sections in a given ELF object to employ different compression
-algorithms.</p>
-<p>Compressed sections begin with a compression header structure that
-identifies the compression algorithm.</p>
-<div class="literal-block-wrapper docutils container" id="id9">
-<div class="code-block-caption"><span class="caption-number">Listing 3.2 </span><span class="caption-text">Compression Header</span><a class="headerlink" href="#id9" title="Permalink to this code">¶</a></div>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">ch_type</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">ch_size</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">ch_addralign</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"> </span><span class="n">Elf32_Chdr</span><span class="p">;</span><span class="w"></span>
-
-<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">ch_type</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">ch_reserved</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">ch_size</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">ch_addralign</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"> </span><span class="n">Elf64_Chdr</span><span class="p">;</span><span class="w"></span>
-</pre></div>
-</div>
-</div>
-<dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">ch_type</span></code></dt><dd><p>This member specifies the compression algorithm.  Supported algorithms
-and their descriptions are listed in the
-ELF Compression Types table below.</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">ch_size</span></code></dt><dd><p>This member provides the size in bytes of the uncompressed data.
-See <code class="docutils literal notranslate"><span class="pre">sh_size</span></code>.</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">ch_addralign</span></code></dt><dd><p>Specifies the required alignment for the uncompressed data.
-See <code class="docutils literal notranslate"><span class="pre">sh_addralign</span></code>.</p>
-</dd>
-</dl>
-<p>The <code class="docutils literal notranslate"><span class="pre">sh_size</span></code> and <code class="docutils literal notranslate"><span class="pre">sh_addralign</span></code> fields of the section
-header for a compressed section reflect the requirements of the
-compressed section.  The <code class="docutils literal notranslate"><span class="pre">ch_size</span></code> and <code class="docutils literal notranslate"><span class="pre">ch_addralign</span></code>
-fields in the compression header provide the corresponding values for the
-uncompressed data, thereby supplying the values that <code class="docutils literal notranslate"><span class="pre">sh_size</span></code> and
-<code class="docutils literal notranslate"><span class="pre">sh_addralign</span></code> would have had if the section had not been
-compressed.</p>
-<p>The layout and interpretation of the data that follows the compression header
-is specific to each algorithm, and is defined below for each value of
-<code class="docutils literal notranslate"><span class="pre">ch_type</span></code>.  This area may contain algorithm specific parameters
-and alignment padding in addition to compressed data bytes.</p>
-<p>A compression header’s <code class="docutils literal notranslate"><span class="pre">ch_type</span></code> member specifies the
-compression algoritm employed, as shown in the following table.</p>
-<table class="docutils align-default" id="id10" style="width: 50%">
-<caption><span class="caption-number">Table 3.5 </span><span class="caption-text">ELF Compression Types, <code class="docutils literal notranslate"><span class="pre">ch_type</span></code></span><a class="headerlink" href="#id10" title="Permalink to this table">¶</a></caption>
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Value</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_ZLIB</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_LOOS</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">0x60000000</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_HIOS</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">0x6fffffff</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_LOPROC</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">0x70000000</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_HIPROC</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">0x7fffffff</span></code></p></td>
-</tr>
-</tbody>
-</table>
-<dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_ZLIB</span></code></dt><dd><p>The section data is compressed with the ZLIB algoritm.  The compressed
-ZLIB data bytes begin with the byte immediately following the compression
-header, and extend to the end of the section.  Additional documentation
-for ZLIB may be found at <a class="reference external" href="http://zlib.net">http://zlib.net</a>.</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_LOOS</span> <span class="pre">-</span> <span class="pre">ELFCOMPRESS_HIOS</span></code></dt><dd><p>Values in this inclusive range are reserved for operating system-specific
-semantics.</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_LOPROC</span> <span class="pre">-</span> <span class="pre">ELF_COMPRESS_HIPROC</span></code></dt><dd><p>Values in this inclusive range are reserved for processor-specific semantics.</p>
-</dd>
-</dl>
-</section>
-<section id="section-header-table-entry-0">
-<h2><span class="section-number">3.7. </span>Section Header Table Entry 0<a class="headerlink" href="#section-header-table-entry-0" title="Permalink to this heading">¶</a></h2>
-<p>As mentioned before, the section header for index 0 (<code class="docutils literal notranslate"><span class="pre">SHN_UNDEF</span></code>)
+<section id="first-section-header-table-entry">
+<span id="id3"></span><h2><span class="section-number">3.6. </span>First Section Header Table Entry<a class="headerlink" href="#first-section-header-table-entry" title="Link to this heading">¶</a></h2>
+<p>As mentioned before, the section header at index 0 (<code class="docutils literal notranslate"><span class="pre">SHN_UNDEF</span></code>)
 exists, even though the index marks undefined section references.
 This entry holds the following.</p>
 <table class="docutils align-default" id="id11">
-<caption><span class="caption-number">Table 3.6 </span><span class="caption-text">Section Header Table Entry: Index 0</span><a class="headerlink" href="#id11" title="Permalink to this table">¶</a></caption>
+<caption><span class="caption-number">Table 3.5 </span><span class="caption-text">First Section Header Table Entry</span><a class="headerlink" href="#id11" title="Link to this table">¶</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Name</p></th>
 <th class="head"><p>Value</p></th>
@@ -850,8 +765,98 @@ This entry holds the following.</p>
 </tbody>
 </table>
 </section>
+<section id="compressed-sections">
+<span id="id4"></span><h2><span class="section-number">3.7. </span>Compressed Sections<a class="headerlink" href="#compressed-sections" title="Link to this heading">¶</a></h2>
+<p>All relocations to a compressed section specify offsets to the
+uncompressed section data.  It is therefore necessary to decompress
+the section data before relocations can be applied.  Each compressed section
+specifies the algorithm independently.  It is permissible for
+different sections in a given ELF object to employ different compression
+algorithms.</p>
+<p>Compressed sections begin with a compression header structure that
+identifies the compression algorithm.</p>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-number">Listing 3.2 </span><span class="caption-text">Compression Header</span><a class="headerlink" href="#id12" title="Link to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">ch_type</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">ch_size</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">ch_addralign</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Elf32_Chdr</span><span class="p">;</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">ch_type</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">ch_reserved</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">ch_size</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">ch_addralign</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Elf64_Chdr</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">ch_type</span></code></dt><dd><p>This member specifies the compression algorithm.  Supported algorithms
+and their descriptions are listed in the
+ELF Compression Types table below.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ch_size</span></code></dt><dd><p>This member provides the size in bytes of the uncompressed data.
+See <code class="docutils literal notranslate"><span class="pre">sh_size</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ch_addralign</span></code></dt><dd><p>Specifies the required alignment for the uncompressed data.
+See <code class="docutils literal notranslate"><span class="pre">sh_addralign</span></code>.</p>
+</dd>
+</dl>
+<p>The <code class="docutils literal notranslate"><span class="pre">sh_size</span></code> and <code class="docutils literal notranslate"><span class="pre">sh_addralign</span></code> fields of the section
+header for a compressed section reflect the requirements of the
+compressed section.  The <code class="docutils literal notranslate"><span class="pre">ch_size</span></code> and <code class="docutils literal notranslate"><span class="pre">ch_addralign</span></code>
+fields in the compression header provide the corresponding values for the
+uncompressed data, thereby supplying the values that <code class="docutils literal notranslate"><span class="pre">sh_size</span></code> and
+<code class="docutils literal notranslate"><span class="pre">sh_addralign</span></code> would have had if the section had not been
+compressed.</p>
+<p>The layout and interpretation of the data that follows the compression header
+is specific to each algorithm, and is defined below for each value of
+<code class="docutils literal notranslate"><span class="pre">ch_type</span></code>.  This area may contain algorithm specific parameters
+and alignment padding in addition to compressed data bytes.</p>
+<p>A compression header’s <code class="docutils literal notranslate"><span class="pre">ch_type</span></code> member specifies the
+compression algorithm employed, as shown in the following table.</p>
+<table class="docutils align-default" id="id13" style="width: 50%">
+<caption><span class="caption-number">Table 3.6 </span><span class="caption-text">ELF Compression Types, <code class="docutils literal notranslate"><span class="pre">ch_type</span></code></span><a class="headerlink" href="#id13" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_ZLIB</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_LOOS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x60000000</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_HIOS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x6fffffff</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_LOPROC</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x70000000</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_HIPROC</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x7fffffff</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_ZLIB</span></code></dt><dd><p>The section data is compressed with the ZLIB algorithm.  The compressed
+ZLIB data bytes begin with the byte immediately following the compression
+header, and extend to the end of the section.  Additional documentation
+for ZLIB may be found at <a class="reference external" href="http://zlib.net">http://zlib.net</a>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_LOOS</span> <span class="pre">-</span> <span class="pre">ELFCOMPRESS_HIOS</span></code></dt><dd><p>Values in this inclusive range are reserved for operating system-specific
+semantics.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_LOPROC</span> <span class="pre">-</span> <span class="pre">ELF_COMPRESS_HIPROC</span></code></dt><dd><p>Values in this inclusive range are reserved for processor-specific semantics.</p>
+</dd>
+</dl>
+</section>
 <section id="rules-for-linking-unrecognized-sections">
-<h2><span class="section-number">3.8. </span>Rules for Linking Unrecognized Sections<a class="headerlink" href="#rules-for-linking-unrecognized-sections" title="Permalink to this heading">¶</a></h2>
+<h2><span class="section-number">3.8. </span>Rules for Linking Unrecognized Sections<a class="headerlink" href="#rules-for-linking-unrecognized-sections" title="Link to this heading">¶</a></h2>
 <p>If a link editor encounters sections whose headers contain OS-specific
 values it does not recognize in the <code class="docutils literal notranslate"><span class="pre">sh_type</span></code>
 or <code class="docutils literal notranslate"><span class="pre">sh_flags</span></code> fields, the link editor should combine those
@@ -895,7 +900,7 @@ different from zero, where appropriate.</p>
 </div>
 </section>
 <section id="section-groups">
-<h2><span class="section-number">3.9. </span>Section Groups<a class="headerlink" href="#section-groups" title="Permalink to this heading">¶</a></h2>
+<h2><span class="section-number">3.9. </span>Section Groups<a class="headerlink" href="#section-groups" title="Link to this heading">¶</a></h2>
 <p>Some sections occur in interrelated groups.  For example, an out-of-line
 definition of an inline function might require, in addition to the
 section containing its executable instructions, a read-only data
@@ -921,11 +926,11 @@ The name of the section (<code class="docutils literal notranslate"><span class=
 Its containing symbol table section need not be a member of the group,
 for example.</p>
 <p>The section data of a <code class="docutils literal notranslate"><span class="pre">SHT_GROUP</span></code> section is an array
-of <code class="docutils literal notranslate"><span class="pre">Elf32_Word</span></code> entries.  The first entry is a flag word.
+of <code class="docutils literal notranslate"><span class="pre">Elf32_Word/Elf64_Word</span></code> entries.  The first entry is a flag word.
 The remaining entries are a sequence of section header indices.</p>
 <p>The following flags are currently defined:</p>
-<table class="docutils align-default" id="id12">
-<caption><span class="caption-number">Table 3.7 </span><span class="caption-text">Section Group Flags</span><a class="headerlink" href="#id12" title="Permalink to this table">¶</a></caption>
+<table class="docutils align-default" id="id14">
+<caption><span class="caption-number">Table 3.7 </span><span class="caption-text">Section Group Flags</span><a class="headerlink" href="#id14" title="Link to this table">¶</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Name</p></th>
 <th class="head"><p>Value</p></th>
@@ -1003,13 +1008,13 @@ member’s section header index in an <code class="docutils literal notranslate"
 </ul>
 </section>
 <section id="special-sections">
-<span id="id3"></span><h2><span class="section-number">3.10. </span>Special Sections<a class="headerlink" href="#special-sections" title="Permalink to this heading">¶</a></h2>
+<span id="id5"></span><h2><span class="section-number">3.10. </span>Special Sections<a class="headerlink" href="#special-sections" title="Link to this heading">¶</a></h2>
 <p>Various sections hold program and control information.</p>
 <p>The following table
 shows sections that are used by the system
 and have the indicated types and attributes.</p>
-<table class="docutils align-default" id="id13">
-<caption><span class="caption-number">Table 3.8 </span><span class="caption-text">Special Sections</span><a class="headerlink" href="#id13" title="Permalink to this table">¶</a></caption>
+<table class="docutils align-default" id="id15">
+<caption><span class="caption-number">Table 3.8 </span><span class="caption-text">Special Sections</span><a class="headerlink" href="#id15" title="Link to this table">¶</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Name</p></th>
 <th class="head"><p>Type</p></th>
@@ -1301,8 +1306,8 @@ architecture names used for <code class="docutils literal notranslate"><span cla
 For instance <code class="docutils literal notranslate"><span class="pre">.``FOO\</span> <span class="pre">``.psect</span></code> is the <code class="docutils literal notranslate"><span class="pre">psect</span></code>
 section defined by the FOO architecture.
 Existing extensions are called by their historical names.</p>
-<table class="docutils align-default" id="id14">
-<caption><span class="caption-number">Table 3.9 </span><span class="caption-text"><strong>Pre-existing Extensions</strong></span><a class="headerlink" href="#id14" title="Permalink to this table">¶</a></caption>
+<table class="docutils align-default" id="id16">
+<caption><span class="caption-number">Table 3.9 </span><span class="caption-text"><strong>Pre-existing Extensions</strong></span><a class="headerlink" href="#id16" title="Link to this table">¶</a></caption>
 <tbody>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.sdata</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">.tdesc</span></code></p></td>
@@ -1371,7 +1376,7 @@ see the psABI supplement for the desired processor.</p>
 </ul>
 
       </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -1379,7 +1384,7 @@ see the psABI supplement for the desired processor.</p>
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
     </div>
   </div>
