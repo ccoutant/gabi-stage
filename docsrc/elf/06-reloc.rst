@@ -10,8 +10,7 @@ For example, when a program calls a function, the associated call
 instruction must transfer control to the proper destination address
 at execution.
 Relocatable files must have relocation entries,
-which are necessary because they contain information that
-describes how to modify their section contents, thus allowing
+which describe how to modify the section contents, thus allowing
 executable and shared object files to hold
 the right information for a process’s program image.
 
@@ -92,7 +91,7 @@ may use one form exclusively or either form depending on context.
 A relocation section references two other sections:
 a symbol table and a section to modify.
 The section header’s ``sh_info`` and ``sh_link``
-members, described in :ref:`Sections`, specify these relationships.
+members, described in :ref:`shlink-shinfo-fields`, specify these relationships.
 Relocation entries for different object files have
 slightly different interpretations for the
 ``r_offset`` member.

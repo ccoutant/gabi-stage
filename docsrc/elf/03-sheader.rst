@@ -542,6 +542,8 @@ Undefined attributes are set to zero.
     are reserved for processor-specific semantics.
     If meanings are specified, the psABI supplement explains them.
 
+.. _shlink-shinfo-fields:
+
 The sh_link and sh_info Fields
 ==============================
 
