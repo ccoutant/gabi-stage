@@ -15,6 +15,8 @@ A file specifies its own program header size with the ELF header’s
 ``e_phentsize`` and ``e_phnum`` members.
 See :ref:`ELF-Header` for more information.
 
+Segment entries may appear in any order, except as explicitly noted below.
+
 Program Header Entry
 ====================
 
@@ -88,17 +90,16 @@ Program Header Entry
     should equal ``p_offset``,
     modulo ``p_align``.
 
-Some entries describe process segments; others
-give supplementary information and do not contribute to
-the process image.
-Segment entries may appear in any order, except as
-explicitly noted below.
-
 Segment Types
 =============
 
-Defined type values follow;
+Some entries describe process segments; others give supplementary
+information and do not contribute to the process image.
+
+Defined segment type values are listed in :numref:`segment-types`;
 other values are reserved for future use.
+
+.. _segment-types:
 
 .. table:: Segment Types, ``p_type``
 
