@@ -10,7 +10,7 @@ definitions and references.
 A symbol table index is a subscript into this array.
 Index 0 both designates the first entry in the table
 and serves as the undefined symbol index.  The contents of the
-initial entry are specified in :ref:`Symbol-Table-Entry-0`.
+initial entry are specified in :ref:`first-symbol-table-entry`.
 
 .. table:: Special Symbol Table Index
 
@@ -29,21 +29,21 @@ A symbol table entry has the following format.
    :caption: Symbol Table Entry
 
    typedef struct {
-       Elf32_Word  st_name;
-       Elf32_Addr  st_value;
-       Elf32_Word  st_size;
-       unsigned char   st_info;
-       unsigned char   st_other;
-       Elf32_Half  st_shndx;
+       Elf32_Word     st_name;
+       Elf32_Addr     st_value;
+       Elf32_Word     st_size;
+       unsigned char  st_info;
+       unsigned char  st_other;
+       Elf32_Half     st_shndx;
    } Elf32_Sym;
 
    typedef struct {
-       Elf64_Word  st_name;
-       unsigned char   st_info;
-       unsigned char   st_other;
-       Elf64_Half  st_shndx;
-       Elf64_Addr  st_value;
-       Elf64_Xword st_size;
+       Elf64_Word     st_name;
+       unsigned char  st_info;
+       unsigned char  st_other;
+       Elf64_Half     st_shndx;
+       Elf64_Addr     st_value;
+       Elf64_Xword    st_size;
    } Elf64_Sym;
 
 ``st_name``
@@ -76,15 +76,15 @@ A symbol table entry has the following format.
     The following code shows how to manipulate the values for
     both 32 and 64-bit objects.
 
-    .. code::
+    .. code-block:: c
 
-           #define ELF32_ST_BIND(i)   ((i)>>4)
-           #define ELF32_ST_TYPE(i)   ((i)&0xf)
-           #define ELF32_ST_INFO(b,t) (((b)<<4)+((t)&0xf))
+       #define ELF32_ST_BIND(i)   ((i)>>4)
+       #define ELF32_ST_TYPE(i)   ((i)&0xf)
+       #define ELF32_ST_INFO(b,t) (((b)<<4)+((t)&0xf))
 
-           #define ELF64_ST_BIND(i)   ((i)>>4)
-           #define ELF64_ST_TYPE(i)   ((i)&0xf)
-           #define ELF64_ST_INFO(b,t) (((b)<<4)+((t)&0xf))
+       #define ELF64_ST_BIND(i)   ((i)>>4)
+       #define ELF64_ST_TYPE(i)   ((i)&0xf)
+       #define ELF64_ST_INFO(b,t) (((b)<<4)+((t)&0xf))
 
 ``st_other``
     This member currently specifies a symbol’s visibility.
@@ -93,18 +93,16 @@ A symbol table entry has the following format.
     both 32 and 64-bit objects.  Other bits contain 0 and have
     no defined meaning.
 
-    .. code::
+    .. code-block:: c
 
-           #define ELF32_ST_VISIBILITY(o) ((o)&0x7)
-           #define ELF64_ST_VISIBILITY(o) ((o)&0x7)
+       #define ELF32_ST_VISIBILITY(o) ((o)&0x7)
+       #define ELF64_ST_VISIBILITY(o) ((o)&0x7)
 
 ``st_shndx``
     Every symbol table entry is *defined* in relation
     to some section. This member holds the relevant
     section header table index.
-    As the ``sh_link`` and ``sh_info`` interpretation
-    table
-    and the related text describe,
+    As described in :ref:`special-section-indexes`,
     some section indexes indicate special meanings.
 
     If this member contains ``SHN_XINDEX``,
@@ -257,7 +255,7 @@ the associated entity.
     by only special thread-local storage relocations
     and thread-local storage relocations can only reference
     symbols with type ``STT_TLS``.
-    Implementation need not support thread-local storage.
+    Implementations need not support thread-local storage.
 
 ``STT_LOOS`` through \ ``STT_HIOS``
     Values in this inclusive range
@@ -475,15 +473,15 @@ Some special section index values give other semantics.
     will hold valid section header indexes;
     all other entries will have value ``0``.
 
-.. _Symbol-Table-Entry-0:
+.. _first-symbol-table-entry:
 
-Symbol Table Entry 0
-====================
+First Symbol Table Entry
+========================
 
 The symbol table entry for index 0 (\ ``STN_UNDEF``\ ) is reserved;
 it holds the following.
 
-.. table:: Symbol Table Entry 0
+.. table:: First Symbol Table Entry
 
    ============  =============  ======================
    Name          Value          Note
@@ -517,6 +515,8 @@ slightly different interpretations for the ``st_value`` member.
   gives way to a virtual address (memory interpretation)
   for which the section number is irrelevant.
 
-Although the symbol table values have similar meanings
-for different object files, the data allows
-efficient access by the appropriate programs.
+Despite this difference in interpretation, the ``st_value`` for a given
+symbol conveys the same meaning across the different ELF object types.
+The different interpretation for relocatable, and the other object
+types, allows for efficient access by the link-editor, as well
+as by the runtime linker, in their respective contexts.

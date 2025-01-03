@@ -36,6 +36,12 @@ Moreover, object files’ sections satisfy several conditions.
   “cover” every byte in an object file.
   The contents of the inactive data are unspecified.
 
+  .. note::
+
+     A common example of inactive space is the padding
+     placed between sections to ensure proper alignment
+     for the subsequent section.
+
 If the number of sections is greater than or equal to
 ``SHN_LORESERVE`` (\ ``0xff00``\ ), ``e_shnum``
 has the value ``SHN_UNDEF`` (\ ``0``\ ) and the
@@ -44,6 +50,8 @@ entries is contained in the ``sh_size`` field of
 the section header at index ``0``
 (otherwise, the ``sh_size`` member of the initial entry
 contains ``0``\ ).
+
+.. _special-section-indexes:
 
 Special Section Indexes
 =======================
@@ -87,8 +95,8 @@ index is to be found elsewhere, in a larger field.
        If the ``e_shnum``
        member of the ELF header says a file has 6 entries
        in the section header table, they have the indexes 0 through 5.
-       The contents of the initial entry are specified later in this
-       section.
+       The contents of the initial entry are specified in
+       :ref:`first-section-header-table-entry`.
 
 ``SHN_LORESERVE``
     This value specifies the lower bound of the
@@ -371,14 +379,14 @@ A section header’s ``sh_type`` member specifies the section’s semantics.
     This section is associated with a symbol table section
     and is required if any of the section header indexes referenced
     by that symbol table contain the escape value ``SHN_XINDEX``.
-    The section is an array of ``Elf32_Word`` values.
+    The section is an array of ``Elf32_Word/Elf64_Word`` values.
     Each value corresponds one to one with a symbol table entry
     and appear in the same order as those entries.
     The values represent the section header indexes against which
     the symbol table entries are defined.
     Only if the corresponding symbol table entry’s ``st_shndx`` field
     contains the escape value ``SHN_XINDEX``
-    will the matching ``Elf32_Word`` hold the actual section header index;
+    will the matching word hold the actual section header index;
     otherwise, the entry must be ``SHN_UNDEF`` (\ ``0``\ ).
 
 ``SHT_RELR``
@@ -552,6 +560,8 @@ Undefined attributes are set to zero.
     are reserved for processor-specific semantics.
     If meanings are specified, the psABI supplement explains them.
 
+.. _shlink-shinfo-fields:
+
 The sh_link and sh_info Fields
 ==============================
 
@@ -587,12 +597,38 @@ hold special information, depending on section type.
                                          the associated symbol table section.
    ====================================  ====================================  ================================================================
 
+.. _first-section-header-table-entry:
+
+First Section Header Table Entry
+================================
+
+As mentioned before, the section header at index 0 (\ ``SHN_UNDEF``\ )
+exists, even though the index marks undefined section references.
+This entry holds the following.
+
+.. table:: First Section Header Table Entry
+
+   ================  ============  =================================================================
+   Name              Value         Note
+   ================  ============  =================================================================
+   ``sh_name``       ``0``         No name
+   ``sh_type``       ``SHT_NULL``  Inactive
+   ``sh_flags``      ``0``         No flags
+   ``sh_addr``       ``0``         No address
+   ``sh_offset``     ``0``         No offset
+   ``sh_size``       Unspecified   If non-zero, the actual number of section header entries
+   ``sh_link``       Unspecified   If non-zero, the index of the section header string table section
+   ``sh_info``       ``0``         No auxiliary information
+   ``sh_addralign``  ``0``         No alignment
+   ``sh_entsize``    ``0``         No entries
+   ================  ============  =================================================================
+
 .. _Compressed-Sections:
 
 Compressed Sections
 ===================
 
-All relocations to a compressed section specifiy offsets to the
+All relocations to a compressed section specify offsets to the
 uncompressed section data.  It is therefore necessary to decompress
 the section data before relocations can be applied.  Each compressed section
 specifies the algorithm independently.  It is permissible for
@@ -645,7 +681,7 @@ is specific to each algorithm, and is defined below for each value of
 and alignment padding in addition to compressed data bytes.
 
 A compression header’s ``ch_type`` member specifies the
-compression algoritm employed, as shown in the following table.
+compression algorithm employed, as shown in the following table.
 
 .. table:: ELF Compression Types, ``ch_type``
    :width: 50%
@@ -661,7 +697,7 @@ compression algoritm employed, as shown in the following table.
    ======================  ==============
 
 ``ELFCOMPRESS_ZLIB``
-    The section data is compressed with the ZLIB algoritm.  The compressed
+    The section data is compressed with the ZLIB algorithm.  The compressed
     ZLIB data bytes begin with the byte immediately following the compression
     header, and extend to the end of the section.  Additional documentation
     for ZLIB may be found at http://zlib.net.
@@ -672,30 +708,6 @@ compression algoritm employed, as shown in the following table.
 
 ``ELFCOMPRESS_LOPROC - ELF_COMPRESS_HIPROC``
     Values in this inclusive range are reserved for processor-specific semantics.
-
-Section Header Table Entry 0
-============================
-
-As mentioned before, the section header for index 0 (\ ``SHN_UNDEF``\ )
-exists, even though the index marks undefined section references.
-This entry holds the following.
-
-.. table:: Section Header Table Entry: Index 0
-
-   ================  ============  =================================================================
-   Name              Value         Note
-   ================  ============  =================================================================
-   ``sh_name``       ``0``         No name
-   ``sh_type``       ``SHT_NULL``  Inactive
-   ``sh_flags``      ``0``         No flags
-   ``sh_addr``       ``0``         No address
-   ``sh_offset``     ``0``         No offset
-   ``sh_size``       Unspecified   If non-zero, the actual number of section header entries
-   ``sh_link``       Unspecified   If non-zero, the index of the section header string table section
-   ``sh_info``       ``0``         No auxiliary information
-   ``sh_addralign``  ``0``         No alignment
-   ``sh_entsize``    ``0``         No entries
-   ================  ============  =================================================================
 
 Rules for Linking Unrecognized Sections
 =======================================
@@ -776,7 +788,7 @@ Its containing symbol table section need not be a member of the group,
 for example.
 
 The section data of a ``SHT_GROUP`` section is an array
-of ``Elf32_Word`` entries.  The first entry is a flag word.
+of ``Elf32_Word/Elf64_Word`` entries.  The first entry is a flag word.
 The remaining entries are a sequence of section header indices.
 
 The following flags are currently defined:
