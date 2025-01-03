@@ -494,6 +494,8 @@ slightly different interpretations for the ``st_value`` member.
   gives way to a virtual address (memory interpretation)
   for which the section number is irrelevant.
 
-Although the symbol table values have similar meanings
-for different object files, the data allows
-efficient access by the appropriate programs.
+Despite this difference in interpretation, the ``st_value`` for a given
+symbol conveys the same meaning across the different ELF object types.
+The different interpretation for relocatable, and the other object
+types, allows for efficient access by the link-editor, as well
+as by the runtime linker, in their respective contexts.
