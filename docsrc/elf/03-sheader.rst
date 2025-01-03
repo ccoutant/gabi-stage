@@ -36,6 +36,12 @@ Moreover, object files’ sections satisfy several conditions.
   “cover” every byte in an object file.
   The contents of the inactive data are unspecified.
 
+  .. note::
+
+     A common example of inactive space is the padding
+     placed between sections to ensure proper alignment
+     for the subsequent section.
+
 If the number of sections is greater than or equal to
 ``SHN_LORESERVE`` (\ ``0xff00``\ ), ``e_shnum``
 has the value ``SHN_UNDEF`` (\ ``0``\ ) and the
