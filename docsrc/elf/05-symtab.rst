@@ -10,7 +10,7 @@ definitions and references.
 A symbol table index is a subscript into this array.
 Index 0 both designates the first entry in the table
 and serves as the undefined symbol index.  The contents of the
-initial entry are specified in :ref:`Symbol-Table-Entry-0`.
+initial entry are specified in :ref:`first-symbol-table-entry`.
 
 .. table:: Special Symbol Table Index
 
@@ -454,15 +454,15 @@ Some special section index values give other semantics.
     will hold valid section header indexes;
     all other entries will have value ``0``.
 
-.. _Symbol-Table-Entry-0:
+.. _first-symbol-table-entry:
 
-Symbol Table Entry 0
-====================
+First Symbol Table Entry
+========================
 
 The symbol table entry for index 0 (\ ``STN_UNDEF``\ ) is reserved;
 it holds the following.
 
-.. table:: Symbol Table Entry 0
+.. table:: First Symbol Table Entry
 
    ============  =============  ======================
    Name          Value          Note

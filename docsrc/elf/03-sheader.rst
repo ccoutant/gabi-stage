@@ -93,8 +93,8 @@ index is to be found elsewhere, in a larger field.
        If the ``e_shnum``
        member of the ELF header says a file has 6 entries
        in the section header table, they have the indexes 0 through 5.
-       The contents of the initial entry are specified later in this
-       section.
+       The contents of the initial entry are specified in
+       :ref:`first-section-header-table-entry`.
 
 ``SHN_LORESERVE``
     This value specifies the lower bound of the
@@ -575,6 +575,32 @@ hold special information, depending on section type.
                                          the associated symbol table section.
    ====================================  ====================================  ================================================================
 
+.. _first-section-header-table-entry:
+
+First Section Header Table Entry
+================================
+
+As mentioned before, the section header at index 0 (\ ``SHN_UNDEF``\ )
+exists, even though the index marks undefined section references.
+This entry holds the following.
+
+.. table:: First Section Header Table Entry
+
+   ================  ============  =================================================================
+   Name              Value         Note
+   ================  ============  =================================================================
+   ``sh_name``       ``0``         No name
+   ``sh_type``       ``SHT_NULL``  Inactive
+   ``sh_flags``      ``0``         No flags
+   ``sh_addr``       ``0``         No address
+   ``sh_offset``     ``0``         No offset
+   ``sh_size``       Unspecified   If non-zero, the actual number of section header entries
+   ``sh_link``       Unspecified   If non-zero, the index of the section header string table section
+   ``sh_info``       ``0``         No auxiliary information
+   ``sh_addralign``  ``0``         No alignment
+   ``sh_entsize``    ``0``         No entries
+   ================  ============  =================================================================
+
 Compressed Sections
 ===================
 
@@ -658,30 +684,6 @@ compression algorithm employed, as shown in the following table.
 
 ``ELFCOMPRESS_LOPROC - ELF_COMPRESS_HIPROC``
     Values in this inclusive range are reserved for processor-specific semantics.
-
-Section Header Table Entry 0
-============================
-
-As mentioned before, the section header for index 0 (\ ``SHN_UNDEF``\ )
-exists, even though the index marks undefined section references.
-This entry holds the following.
-
-.. table:: Section Header Table Entry: Index 0
-
-   ================  ============  =================================================================
-   Name              Value         Note
-   ================  ============  =================================================================
-   ``sh_name``       ``0``         No name
-   ``sh_type``       ``SHT_NULL``  Inactive
-   ``sh_flags``      ``0``         No flags
-   ``sh_addr``       ``0``         No address
-   ``sh_offset``     ``0``         No offset
-   ``sh_size``       Unspecified   If non-zero, the actual number of section header entries
-   ``sh_link``       Unspecified   If non-zero, the index of the section header string table section
-   ``sh_info``       ``0``         No auxiliary information
-   ``sh_addralign``  ``0``         No alignment
-   ``sh_entsize``    ``0``         No entries
-   ================  ============  =================================================================
 
 Rules for Linking Unrecognized Sections
 =======================================
