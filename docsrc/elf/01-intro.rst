@@ -117,7 +117,7 @@ so that such major changes are rare, and the file format can be extended
 in several ways that do not require a version number change.
 
 Most object file structures are contained within sections
-(see :numref:`sections`), and are designated with special section types.
+(see :ref:`sections`), and are designated with special section types.
 Additional control structures can be defined by defining new section types.
 
 Many control structures have fields with enumerated values, and the
@@ -125,9 +125,9 @@ standard sets aside certain ranges of values for these fields for
 implementation-specific uses. These extensions can fall into one of two
 classes: processor-specific extensions, which depend on the machine
 architecture (see ``e_machine`` in
-:numref:`Contents-of-the-ELF-Header`); and OSABI-specific extensions,
+:ref:`Contents-of-the-ELF-Header`); and OSABI-specific extensions,
 which depend on the operating system and psABI (see ``EI_OSABI`` in
-:numref:`elf-identification`).
+:ref:`elf-identification`).
 
 ELF assigns meaning to fields and constant values, throughout the
 specification. Any unassigned bits or values not explicitly delegated to
