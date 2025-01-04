@@ -1,6 +1,8 @@
-******************
-Foreword: SVR4 ABI
-******************
+********
+Foreword
+********
+
+.. rubric:: The SVR4 ABI
 
 The System V Release 4 (SVR4) Application Binary Interface (ABI)
 is composed of several components, ranging from
