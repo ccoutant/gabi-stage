@@ -10,6 +10,16 @@ div.pageheader img.logo {
     max-width: 220px;
 }
 
+div.toppagetitle {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+div.toppagetitle a {
+    text-decoration: none;
+    color: inherit;
+}
+
 div.body p, div.body dd, div.body li, div.body blockquote {
     -moz-hyphens: none;
     -ms-hyphens: none;
@@ -71,6 +81,11 @@ table.docutils tr {
 table.docutils td, table.docutils th {
     border: none;
     border-bottom: 1px solid #aaa;
+}
+
+div.sphinxsidebar ul li.toctree-l1 {
+    margin-left: 10px;
+    text-indent: -10px;
 }
 
 @media screen and (max-width: 875px) {

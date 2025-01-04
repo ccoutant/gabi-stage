@@ -18,6 +18,11 @@
 	{{- rellink_markup () }}
       </div>
       <div class="body" role="main">
+      {% if pagename != "index" %}
+      <div class="toppagetitle">
+      <a href="{{ pathto(root_doc)|e }}">ELF Object File Format</a>
+      </div>
+      {% endif %}
       {% block body %}{% endblock %}
       </div>
       <div class="related bottom">
