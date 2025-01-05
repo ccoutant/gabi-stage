@@ -4,6 +4,28 @@
 Dynamic Linking
 ***************
 
+After the system loads the program, it must complete
+the process image by resolving symbolic references among the object
+files that compose the process.
+This chapter discusses the object file structures that
+pertain to dynamic linking.
+
+.. note::
+
+   The psABI supplement defines a naming convention for ELF constants
+   that have processor ranges specified.  Names such as ``DT_``, ``PT_``,
+   for processor specific extensions, incorporate the name of the
+   processor: ``DT_M32_SPECIAL``, for example.
+   Pre-existing processor extensions not using this convention will be supported.
+
+   .. table::
+
+      +-------------------------+
+      | Pre-Existing Extensions |
+      +=========================+
+      | ``DT_JUMP_REL``         |
+      +-------------------------+
+
 .. _Program-Interpreter:
 
 Program Interpreter

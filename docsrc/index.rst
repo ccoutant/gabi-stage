@@ -13,7 +13,7 @@ and its data representation.
 Chapters 2–6 describe the file header and the structures that
 pertain to building programs.
 
-Chapters 7–9 describe additional structures that are
+Chapters 7–8 describe additional structures that are
 necessary to execute a program.
 
 .. toctree::
@@ -31,9 +31,8 @@ necessary to execute a program.
    elf/04-strtab
    elf/05-symtab
    elf/06-reloc
-   elf/07-loading-intro
-   elf/08-pheader
-   elf/09-dynamic
+   elf/07-pheader
+   elf/08-dynamic
 
 .. toctree::
    :maxdepth: 1
