@@ -5,15 +5,12 @@ ELF Object File Format
 .. rubric:: Version 4.2 (2023)
 
 This document describes the
-object file format, called ELF (Executable and Linking Format).
-
+ELF (Executable and Linking Format) object file format.
 Chapter 1 presents an overview of the file format
 and its data representation.
-
 Chapters 2–6 describe the file header and the structures that
 pertain to building programs.
-
-Chapters 7–8 describe additional structures that are
+Chapters 7 and 8 describe additional structures that are
 necessary to execute a program.
 
 .. toctree::
