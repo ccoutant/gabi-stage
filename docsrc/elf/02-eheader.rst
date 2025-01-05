@@ -279,6 +279,8 @@ These indexes access bytes that hold the following values.
     Other classes will be defined as necessary, with different basic types
     and sizes for object file data.
 
+.. _ei-data:
+
 ``EI_DATA``
     Byte ``e_ident[EI_DATA]`` specifies the
     encoding of both the data structures used by object file container

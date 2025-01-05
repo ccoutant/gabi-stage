@@ -441,6 +441,12 @@ organization, but they are not part of the specification.
     The ABI does not define what descriptors mean.
 
 To illustrate, the following (``ELFCLASS32``) note segment holds two entries.
+Both have a 7-byte ``name`` field of “xyz co” (counting the null terminator).
+The first has a ``type`` field of 1 and no descriptor,
+and the second has a ``type`` field of 3 with 8 bytes of descriptor
+data (with no null terminator).
+Note that the word-size fields ``namesz``, ``descsz`` and ``type`` are stored
+with the byte order specified in the ELF Header (see :ref:`ei-data`).
 
 .. figure:: /svg/figure-5.svg
    :alt: Example ELFCLASS32 Note Segment
