@@ -1,0 +1,85 @@
+\makeatletter
+
+% Copy of sphinxtableofcontents
+% Sets \frontmatter and does not reset \pagenumbering
+\newcommand{\elftableofcontents}{%
+  \frontmatter%
+  %\pagenumbering{roman}%
+  \begingroup
+    \parskip \z@skip
+    \sphinxtableofcontentshook
+    \tableofcontents
+  \endgroup
+  % before resetting page counter, let's do the right thing.
+  \if@openright\cleardoublepage\else\clearpage\fi
+  %\pagenumbering{arabic}%
+}
+
+% Redefine page footers to omit chapter numbers.
+\fancypagestyle{normal}{
+  \fancyhf{}
+  \fancyfoot[RO]{{\py@HeaderFamily\thepage}}
+  \fancyfoot[LO]{{\py@HeaderFamily\nouppercase{\rightmark}}}
+  \fancyhead[RO]{{\py@HeaderFamily \@title}}
+  \if@twoside
+   \fancyfoot[LE]{{\py@HeaderFamily\thepage}}
+   \fancyfoot[RE]{{\if@mainmatter \py@HeaderFamily\nouppercase{\leftmark}\fi}}
+   \fancyhead[LE]{{\py@HeaderFamily \@title}}
+  \fi
+  \renewcommand{\headrulewidth}{0.4pt}
+  \renewcommand{\footrulewidth}{0.4pt}
+  % define chaptermark with \@chappos when \@chappos is available for Japanese
+  % \ltx@ifundefined{@chappos}{}
+  %   {\def\chaptermark##1{\markboth{\@chapapp\space\thechapter\space\@chappos\space ##1}{}}}
+}
+
+% Redefine admonitions to keep from breaking across pages.
+\renewenvironment{sphinxadmonition}[2]{% #1=type, #2=heading
+  \needspace{6\baselineskip}
+  % can't use #1 directly in definition of end part
+  \def\spx@noticetype {#1}%
+  % those next three are a remnant of legacy code; they are not used at
+  % all by sphinxheavybox, and their usage could be disposed of by sphinxlightbox
+  % but we keep for backward compatibility and also because it may be simpler
+  % for user redefinitions to employ for example "spx@notice@bgcolor" and not
+  % the more bulky "sphinx\spx@noticetype BgColor".
+  \sphinxcolorlet{spx@notice@bordercolor}{sphinx#1BorderColor}%
+  \sphinxcolorlet{spx@notice@bgcolor}{sphinx#1BgColor}%
+  % At 7.4.0 there are no \spx@<type>@boder macros anymore only top, left,
+  % bottom, right.  For this legacy \spx@notice@border only needed by
+  % sphinxlightbox (which is not used by own Sphinx environments anymore)
+  % we thus use here @top
+  \spx@notice@border \dimexpr\csname spx@#1@border@top\endcsname\relax
+  % trigger the sphinx<type> environment, #2=heading is passed as argument
+  \begin{sphinx#1}{#2}%
+  % MEMO: the heading #2 will be typeset before the next lines are executed
+  % 6.2.0 support of div.<type>_TeX{color,extras} options
+  \csname ifspx@\spx@noticetype @withtextcolor\endcsname
+         \color{sphinx\spx@noticetype TextColor}%
+  \fi
+  % Other code to be executed at start of contents (after title)
+  \csname spx@\spx@noticetype @TeXextras\endcsname
+  }
+  % workaround some LaTeX "feature" of \end command (i.e. can't use "sphinx#1" here)
+  {\edef\spx@temp{\noexpand\end{sphinx\spx@noticetype}}\spx@temp}
+
+\makeatother
+
+\newcommand\sphinxbackoftitlepage{
+  \null
+  \vfill
+  \begingroup
+  \raggedleft
+  Copyright © 1997, 1998, 1999, 2000, 2001 The Santa Cruz Operation, Inc.  All rights reserved.\\
+  Copyright © 2002 Caldera International.  All rights reserved.\\
+  Copyright © 2003-2010 The SCO Group.  All rights reserved.\\
+  Copyright © 2011-2014, 2023–2025 Xinuos Inc.  All rights reserved.\\
+  \endgroup
+}
+
+\newcommand\elfappendices{
+  % \backmatter
+  % \setcounter{chapter}{0}
+  \appendix
+  \renewcommand{\thetable}{\Alph{chapter}.\arabic{table}}
+}

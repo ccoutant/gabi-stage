@@ -65,7 +65,10 @@ sections in the object file.  Also in such contexts, an escape
 value indicates that the actual section
 index is to be found elsewhere, in a larger field.
 
+.. tabularcolumns:: l r
+
 .. table:: Special Section Indexes
+   :width: 50%
 
    =================  ==========
    Name               Value
@@ -243,6 +246,8 @@ Section Type
 
 A section header’s ``sh_type`` member specifies the section’s semantics.
 
+.. tabularcolumns:: l r
+
 .. table:: Section Types, ``sh_type``
 
    =====================  ==============
@@ -417,6 +422,8 @@ member holds 1-bit flags that describe the section’s attributes.
 Defined values appear in the following table;
 other values are reserved.
 
+.. tabularcolumns:: l r
+
 .. table:: Section Attribute Flags
 
    ========================  ==============
@@ -551,7 +558,11 @@ Two members in the section header,
 ``sh_link`` and ``sh_info``,
 hold special information, depending on section type.
 
+.. tabularcolumns::  >{\raggedright\arraybackslash}p{1.5in} >{\raggedright\arraybackslash}p{2in} >{\raggedright\arraybackslash}p{2in}
+
 .. table:: ``sh_link`` and ``sh_info`` Interpretation
+   :width: 100%
+   :widths: 1, 2, 2
 
    ====================================  ====================================  ================================================================
    ``sh_type``                           ``sh_link``                           ``sh_info``
@@ -587,6 +598,8 @@ First Section Header Table Entry
 As mentioned before, the section header at index 0 (\ ``SHN_UNDEF``\ )
 exists, even though the index marks undefined section references.
 This entry holds the following.
+
+.. tabularcolumns:: l l l
 
 .. table:: First Section Header Table Entry
 
@@ -662,6 +675,8 @@ and alignment padding in addition to compressed data bytes.
 
 A compression header’s ``ch_type`` member specifies the
 compression algorithm employed, as shown in the following table.
+
+.. tabularcolumns:: l r
 
 .. table:: ELF Compression Types, ``ch_type``
    :width: 50%
@@ -773,6 +788,8 @@ The remaining entries are a sequence of section header indices.
 
 The following flags are currently defined:
 
+.. tabularcolumns:: l r
+
 .. table:: Section Group Flags
 
    ================  ==============
@@ -856,6 +873,8 @@ Various sections hold program and control information.
 The following table
 shows sections that are used by the system
 and have the indicated types and attributes.
+
+.. tabularcolumns:: l l l
 
 .. table:: Special Sections
 
@@ -1086,6 +1105,12 @@ Existing extensions are called by their historical names.
    For information on processor-specific sections,
    see the psABI supplement for the desired processor.
 
-.. |br| raw:: html
+.. |br| replace:: |htmlbr| |latexbr|
+
+.. |htmlbr| raw:: html
 
    <br />
+
+.. |latexbr| raw:: latex
+
+   \newline

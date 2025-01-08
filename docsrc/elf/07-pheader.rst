@@ -124,6 +124,8 @@ information and do not contribute to the process image.
 Defined segment type values are listed in :numref:`segment-types`;
 other values are reserved for future use.
 
+.. tabularcolumns:: l r
+
 .. _segment-types:
 
 .. table:: Segment Types, ``p_type``
@@ -267,6 +269,8 @@ this is not required by the file format).
 When the system creates loadable segments’ memory images,
 it gives access permissions as specified in the ``p_flags`` member.
 
+.. tabularcolumns:: l r l
+
 .. table:: Segment Flag Bits, ``p_flags``
 
    ===============  ==============  ===========
@@ -296,6 +300,8 @@ unless it is specified explicitly.
 The following table shows both the exact flag interpretation
 and the allowable flag interpretation. ABI-conforming systems may
 provide either.
+
+.. tabularcolumns:: l r l l
 
 .. table:: Segment Permissions
 

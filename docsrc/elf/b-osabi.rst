@@ -1,5 +1,5 @@
 #################################
-Appendix B: Assigned OSABI Values
+Assigned OSABI Values
 #################################
 
 The table below lists all assigned ``EI_OSABI`` values.
@@ -17,6 +17,8 @@ Please include your contact information (preferably a company email
 address, not a free email provider), the name of the company, the name
 of the operating system with a brief description, your preferred ``ELFOSABI_xxx``
 name, and a link (if available) to any public information about the OS.
+
+.. tabularcolumns:: l r >{\raggedright\arraybackslash}p{3.5in}
 
 .. table:: ``EI_OSABI`` Values
 

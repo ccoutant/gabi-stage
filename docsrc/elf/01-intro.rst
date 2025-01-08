@@ -67,6 +67,10 @@ section size, and so on.
 Files used during linking must have a section header table;
 other object files may or may not have one.
 
+.. raw:: latex
+
+   \needspace{10\baselineskip}
+
 .. note::
 
    Although :numref:`elf-object-file-format` shows the program header table
@@ -91,6 +95,8 @@ Remaining data in an object file
 use the encoding of the target processor, regardless of
 the machine on which the file was created.
 
+.. tabularcolumns:: l c c l
+
 .. _32-bit-data-types:
 
 .. table:: 32-Bit Data Types
@@ -105,6 +111,8 @@ the machine on which the file was created.
    ``Elf32_Sword``    ``4``  ``4``      Signed integer
    ``unsigned char``  ``1``  ``1``      Unsigned small integer
    =================  =====  =========  ========================
+
+.. tabularcolumns:: l c c l
 
 .. _64-bit-data-types:
 

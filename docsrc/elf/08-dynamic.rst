@@ -240,6 +240,8 @@ array for an ABI-conforming file must have an entry of that type.
 Likewise, “optional” means an entry for the tag may appear
 but is not required.
 
+.. tabularcolumns:: l r l l l
+
 .. table:: Dynamic Array Tags, ``d_tag``
 
    ======================  ==============  ===========  ==============  =================
@@ -538,6 +540,8 @@ Except for the ``DT_NULL`` element at the end of the array,
 and the relative order of ``DT_NEEDED``
 elements, entries may appear in any order.
 Tag values not appearing in the table are reserved.
+
+.. tabularcolumns:: l r
 
 .. table:: ``DT_FLAGS`` values
 

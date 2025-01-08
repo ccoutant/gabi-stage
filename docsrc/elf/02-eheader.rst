@@ -63,6 +63,8 @@ Contents of the ELF Header
 ``e_type``
     This member identifies the object file type.
 
+    .. tabularcolumns:: l r l
+
     .. table:: Object File Types
 
        =============  ==========  =========================
@@ -108,6 +110,8 @@ Contents of the ELF Header
 
 ``e_version``
     This member identifies the object file version.
+
+    .. tabularcolumns:: l r l
 
     .. table:: Object File Version Numbers
 
@@ -210,6 +214,8 @@ remaining contents.
 The initial bytes of an ELF header (and an object file) correspond to
 the ``e_ident`` member.
 
+.. tabularcolumns:: l r l
+
 .. table:: ``e_ident[]`` Identification Indexes
 
    =================  =========  ===================================
@@ -234,6 +240,8 @@ These indexes access bytes that hold the following values.
     A file’s first 4 bytes hold a “magic number,” identifying the file
     as an ELF object file.
 
+    .. tabularcolumns:: l c l
+
     .. table:: ELF Magic Numbers
 
        ===========  =========  ====================
@@ -248,6 +256,8 @@ These indexes access bytes that hold the following values.
 ``EI_CLASS``
     The next byte, ``e_ident[EI_CLASS]``, identifies the
     file’s class, or capacity.
+
+    .. tabularcolumns:: l r l
 
     .. table:: ELF Class
 
@@ -286,6 +296,8 @@ These indexes access bytes that hold the following values.
     encoding of both the data structures used by object file container
     and data contained in object file sections.
     The following encodings are currently defined.
+
+    .. tabularcolumns:: l r l
 
     .. table:: ELF Data Encoding
 

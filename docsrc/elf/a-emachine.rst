@@ -1,5 +1,9 @@
+.. raw:: latex
+
+   \elfappendices
+
 ###################################
-Appendix A: Assigned Machine Values
+Assigned Machine Values
 ###################################
 
 The table below lists all assigned ``e_machine`` values.
@@ -13,6 +17,8 @@ address, not a free email provider), the name of the company, the name
 of the architecture with a brief description, your preferred ``EM_xxx``
 name, and a link (if available) to any public information about the
 architecture.
+
+.. tabularcolumns:: l r >{\raggedright\arraybackslash}p{3.5in}
 
 .. table:: ``e_machine`` Values
 

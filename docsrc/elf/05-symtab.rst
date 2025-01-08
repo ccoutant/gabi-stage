@@ -12,6 +12,8 @@ Index 0 both designates the first entry in the table
 and serves as the undefined symbol index.  The contents of the
 initial entry are specified in :ref:`first-symbol-table-entry`.
 
+.. tabularcolumns:: l r
+
 .. table:: Special Symbol Table Index
 
    =============  =====
@@ -116,6 +118,8 @@ Symbol Binding
 A symbol’s binding determines the linkage visibility
 and behavior.
 
+.. tabularcolumns:: l r
+
 .. table:: Symbol Binding
 
    ==============  ======
@@ -201,6 +205,8 @@ Symbol Type
 
 A symbol’s type provides a general classification for
 the associated entity.
+
+.. tabularcolumns:: l r
 
 .. table:: Symbol Types
 
@@ -304,6 +310,8 @@ Symbol Visibility
 A symbol’s visibility, although it may be specified in a relocatable
 object, defines how that symbol may be accessed once it has
 become part of an executable or shared object.
+
+.. tabularcolumns:: l r
 
 .. table:: Symbol Visibility
 
@@ -459,6 +467,8 @@ First Symbol Table Entry
 
 The symbol table entry for index 0 (\ ``STN_UNDEF``\ ) is reserved;
 it holds the following.
+
+.. tabularcolumns:: l r l
 
 .. table:: First Symbol Table Entry
 

@@ -81,14 +81,19 @@ latex_show_pagerefs = True
 latex_table_style = ['booktabs', 'nocolorrows']
 
 latex_elements = {
-    'release': 'Version 4.3 DRAFT (2025)',
+    'releasename': 'Version',
+    'fontpkg': r"""
+\usepackage[default]{opensans}
+\usepackage{inconsolata}
+\usepackage[T1]{fontenc}
+""",
     'fncychap': '',
     'tableofcontents': r'\elftableofcontents',
     'preamble': r'\input{elfstyles.tex.txt}'
 }
 
 latex_additional_files = [
-    'elfstyles.tex.txt'
+    '_latex/elfstyles.tex.txt'
 ]
 
 latex_theme = 'manual'
