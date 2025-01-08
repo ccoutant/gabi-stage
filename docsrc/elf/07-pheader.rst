@@ -401,7 +401,7 @@ Labels appear below
 to help explain note information
 organization, but they are not part of the specification.
 
-.. figure:: /svg/figure-4.svg
+.. figure:: /svg/figure-4.*
    :alt: Note Information
    :width: 270pt
 
@@ -448,7 +448,7 @@ data (with no null terminator).
 Note that the word-size fields ``namesz``, ``descsz`` and ``type`` are stored
 with the byte order specified in the ELF Header (see :ref:`ei-data`).
 
-.. figure:: /svg/figure-5.svg
+.. figure:: /svg/figure-5.*
    :alt: Example ELFCLASS32 Note Segment
    :width: 392pt
 

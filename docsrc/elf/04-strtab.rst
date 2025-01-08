@@ -26,7 +26,7 @@ member of the ELF header.
 The following figures show a string table with 25 bytes
 and the strings associated with various indexes.
 
-.. figure:: /svg/figure-3.svg
+.. figure:: /svg/figure-3.*
    :alt: Example String Table
    :width: 540pt
 

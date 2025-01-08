@@ -803,7 +803,7 @@ Labels appear below
 to help explain the hash table organization,
 but they are not part of the specification.
 
-.. figure:: /svg/figure-6.svg
+.. figure:: /svg/figure-6.*
    :alt: Hash Table
    :width: 270pt
 
@@ -889,10 +889,10 @@ From this information a dependency graph can be drawn.
 The above algorithm on initialization will then allow the following
 specified initialization orderings (among others).
 
-.. figure:: /svg/init-term.dot.svg
+.. figure:: /svg/init-term.dot.*
    :width: 654pt
 
-.. figure:: /svg/init-term.dot.2.svg
+.. figure:: /svg/init-term.dot.2.*
    :width: 639pt
 
    Initialization Ordering Example

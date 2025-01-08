@@ -14,11 +14,14 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('_extensions'))
 
+
 # -- Project information -----------------------------------------------------
 
-project = 'gABI'
-copyright = '2023, Xinuos'
+project = 'ELF Object File Format'
+copyright = '2025, Xinuos'
 author = 'Xinuos'
+version = '4.2'
+release = version
 
 
 # -- General configuration ---------------------------------------------------
@@ -60,3 +63,36 @@ numfig = True
 numfig_format = { 'figure' : 'Figure %s'}
 
 highlight_language = 'c';
+
+# -- Options for latex output -------------------------------------------------
+
+latex_documents = [
+    ('index', 'elf.tex', 'ELF Object File Format', 'Xinuos, Inc.', 'manual', True)
+]
+
+latex_docclass = {
+    'manual': 'book'
+}
+
+latex_top_level_sectioning = 'chapter'
+
+latex_show_pagerefs = True
+
+latex_table_style = ['booktabs', 'nocolorrows']
+
+latex_elements = {
+    'release': 'Version 4.3 DRAFT (2025)',
+    'fncychap': '',
+    'tableofcontents': r'\elftableofcontents',
+    'preamble': r'\input{elfstyles.tex.txt}'
+}
+
+latex_additional_files = [
+    'elfstyles.tex.txt'
+]
+
+latex_theme = 'manual'
+
+latex_theme_options = {
+}
+

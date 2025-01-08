@@ -1,3 +1,7 @@
+.. raw:: latex
+
+   \mainmatter
+
 ************
 Introduction
 ************
@@ -37,7 +41,7 @@ contents, reflecting the differing needs of those activities.
 
 .. _elf-object-file-format:
 
-.. figure:: /svg/figure-1.svg
+.. figure:: /svg/figure-1.*
    :alt: ELF Object File Format
    :width: 555pt
 

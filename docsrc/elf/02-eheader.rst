@@ -366,7 +366,7 @@ See :numref:`data-encoding`.
 
 .. _data-encoding:
 
-.. figure:: /svg/figure-2.svg
+.. figure:: /svg/figure-2.*
    :alt: Data Encoding
    :width: 702pt
 
