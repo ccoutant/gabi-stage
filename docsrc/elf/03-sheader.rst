@@ -1051,7 +1051,7 @@ and have the indicated types and attributes.
     This section holds the “text,” or executable
     instructions, of a program.
 
-Section names with a dot (\ ``.``\ ) prefix
+Section names with a dot (``.``) prefix
 are reserved for the system,
 although applications may use these sections
 if their existing meanings are satisfactory.
@@ -1067,7 +1067,7 @@ are formed by placing an abbreviation of the architecture
 name ahead of the section name.
 The name should be taken from the
 architecture names used for ``e_machine``.
-For instance ``.``FOO\ ``.psect`` is the ``psect``
+For instance ``.FOO.psect`` is the ``psect``
 section defined by the FOO architecture.
 Existing extensions are called by their historical names.
 
