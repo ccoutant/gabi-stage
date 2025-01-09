@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3. Sections &#8212; ELF Object File Format 4.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=128e1f3d" />
+    <script src="../_static/documentation_options.js?v=b8c38029"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4. String Table" href="04-strtab.html" />
+    <link rel="prev" title="2. ELF Header" href="02-eheader.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+<div class="pageheader">
+  <a href="https://xinuos.com">
+    <img class="logo" src="../_static/Xinuos_Logo__Black.svg" alt="Xinuos" />
+  </a>
+</div>
+
+<div class="document">
+  <div class="documentwrapper">
+    <div class="bodywrapper">
+      <div class="related top">
+	&nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="02-eheader.html" title="Previous document"><span class="section-number">2. </span>ELF Header</a>
+        </li>
+        <li>
+          <a href="04-strtab.html" title="Next document"><span class="section-number">4. </span>String Table</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+      </div>
+      <div class="body" role="main">
+      
+      <div class="toppagetitle">
+      <a href="../index.html">ELF Object File Format</a>
+      </div>
+      
+      
+  <section id="sections">
+<span id="id1"></span><h1><span class="section-number">3. </span>Sections<a class="headerlink" href="#sections" title="Link to this heading">¶</a></h1>
+<p>An object file’s section header table lets one
+locate all the file’s sections.
+The section header table is an array of <code class="docutils literal notranslate"><span class="pre">Elf32_Shdr</span></code>
+or <code class="docutils literal notranslate"><span class="pre">Elf64_Shdr</span></code> structures
+as described below.
+A section header table index is a subscript into this array.
+The ELF header’s <code class="docutils literal notranslate"><span class="pre">e_shoff</span></code>
+member gives the byte offset from the beginning of the
+file to the section header table.
+<code class="docutils literal notranslate"><span class="pre">e_shnum</span></code> normally tells how many entries the section header table contains.
+<code class="docutils literal notranslate"><span class="pre">e_shentsize</span></code> gives the size in bytes of each entry.</p>
+<p>Sections contain all information in an object file
+except the ELF header, the program header table,
+and the section header table.
+Moreover, object files’ sections satisfy several conditions.</p>
+<ul>
+<li><p>Every section in an object file has exactly one
+section header describing it.
+Section headers may exist that do not have a section.</p></li>
+<li><p>Each section occupies one contiguous (possibly empty)
+sequence of bytes within a file.</p></li>
+<li><p>Sections in a file may not overlap.
+No byte in a file resides in more than one section.</p></li>
+<li><p>An object file may have inactive space.
+The various headers and the sections might not
+“cover” every byte in an object file.
+The contents of the inactive data are unspecified.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A common example of inactive space is the padding
+placed between sections to ensure proper alignment
+for the subsequent section.</p>
+</div>
+</li>
+</ul>
+<p>If the number of sections is greater than or equal to
+<code class="docutils literal notranslate"><span class="pre">SHN_LORESERVE</span></code> (<code class="docutils literal notranslate"><span class="pre">0xff00</span></code>), <code class="docutils literal notranslate"><span class="pre">e_shnum</span></code>
+has the value <code class="docutils literal notranslate"><span class="pre">SHN_UNDEF</span></code> (<code class="docutils literal notranslate"><span class="pre">0</span></code>) and the
+actual number of section header table
+entries is contained in the <code class="docutils literal notranslate"><span class="pre">sh_size</span></code> field of
+the section header at index <code class="docutils literal notranslate"><span class="pre">0</span></code>
+(otherwise, the <code class="docutils literal notranslate"><span class="pre">sh_size</span></code> member of the initial entry
+contains <code class="docutils literal notranslate"><span class="pre">0</span></code>).</p>
+<section id="special-section-indexes">
+<span id="id2"></span><h2><span class="section-number">3.1. </span>Special Section Indexes<a class="headerlink" href="#special-section-indexes" title="Link to this heading">¶</a></h2>
+<p>Some section header table indexes are reserved in contexts
+where index size is restricted, for example, the <code class="docutils literal notranslate"><span class="pre">st_shndx</span></code>
+member of a symbol table entry and the <code class="docutils literal notranslate"><span class="pre">e_shnum</span></code> and
+<code class="docutils literal notranslate"><span class="pre">e_shstrndx</span></code> members of the ELF header.
+In such contexts, the reserved values do not represent actual
+sections in the object file.  Also in such contexts, an escape
+value indicates that the actual section
+index is to be found elsewhere, in a larger field.</p>
+<table class="docutils align-default" id="id5" style="width: 50%">
+<caption><span class="caption-number">Table 3.1 </span><span class="caption-text">Special Section Indexes</span><a class="headerlink" href="#id5" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHN_UNDEF</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHN_LORESERVE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xff00</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHN_LOPROC</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xff00</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHN_HIPROC</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xff1f</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHN_LOOS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xff20</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHN_HIOS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xff3f</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHN_ABS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xfff1</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHN_COMMON</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xfff2</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHN_XINDEX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xffff</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHN_HIRESERVE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xffff</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">SHN_UNDEF</span></code></dt><dd><p>This value marks an undefined, missing, irrelevant, or
+otherwise meaningless section reference.
+For example, a symbol “defined” relative to section number
+<code class="docutils literal notranslate"><span class="pre">SHN_UNDEF</span></code> is an undefined symbol.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although index 0 is reserved as the undefined value,
+the section header table contains an entry for index 0.
+If the <code class="docutils literal notranslate"><span class="pre">e_shnum</span></code>
+member of the ELF header says a file has 6 entries
+in the section header table, they have the indexes 0 through 5.
+The contents of the initial entry are specified in
+<a class="reference internal" href="#first-section-header-table-entry"><span class="std std-ref">First Section Header Table Entry</span></a>.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHN_LORESERVE</span></code></dt><dd><p>This value specifies the lower bound of the
+range of reserved indexes.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHN_LOPROC</span></code> through <code class="docutils literal notranslate"><span class="pre">SHN_HIPROC</span></code></dt><dd><p>Values in this inclusive range
+are reserved for processor-specific semantics.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHN_LOOS</span></code> through <code class="docutils literal notranslate"><span class="pre">SHN_HIOS</span></code></dt><dd><p>Values in this inclusive range
+are reserved for operating system-specific semantics.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHN_ABS</span></code></dt><dd><p>This value specifies absolute values for the corresponding reference.
+For example, symbols defined relative to section number <code class="docutils literal notranslate"><span class="pre">SHN_ABS</span></code>
+have absolute values and are not affected by relocation.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHN_COMMON</span></code></dt><dd><p>Symbols defined relative to this section are common symbols,
+such as FORTRAN
+<code class="docutils literal notranslate"><span class="pre">COMMON</span></code>
+or unallocated C external variables.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHN_XINDEX</span></code></dt><dd><p>This value is an escape value.
+It indicates that the actual section header index is too large to fit
+in the containing field and is to be found in another location
+(specific to the structure where it appears).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHN_HIRESERVE</span></code></dt><dd><p>This value specifies the upper bound of the
+range of reserved indexes.
+The system reserves indexes between <code class="docutils literal notranslate"><span class="pre">SHN_LORESERVE</span></code>
+and <code class="docutils literal notranslate"><span class="pre">SHN_HIRESERVE</span></code>,
+inclusive; the values do not reference the section header table.
+The section header table does not
+contain entries for the reserved indexes.</p>
+</dd>
+</dl>
+</section>
+<section id="section-header-table-entry">
+<h2><span class="section-number">3.2. </span>Section Header Table Entry<a class="headerlink" href="#section-header-table-entry" title="Link to this heading">¶</a></h2>
+<p>A section header has the following structure.</p>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-number">Listing 3.1 </span><span class="caption-text">Section Header</span><a class="headerlink" href="#id6" title="Link to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_name</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_type</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_flags</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Addr</span><span class="w">  </span><span class="n">sh_addr</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Off</span><span class="w">   </span><span class="n">sh_offset</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_size</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_link</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_info</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_addralign</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">sh_entsize</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Elf32_Shdr</span><span class="p">;</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">sh_name</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">sh_type</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">sh_flags</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Addr</span><span class="w">  </span><span class="n">sh_addr</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Off</span><span class="w">   </span><span class="n">sh_offset</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">sh_size</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">sh_link</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">sh_info</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">sh_addralign</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">sh_entsize</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Elf64_Shdr</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">sh_name</span></code></dt><dd><p>This member specifies the name of the section.
+Its value is an index into the section header
+string table section (see <a class="reference internal" href="04-strtab.html#string-table"><span class="std std-ref">String Table</span></a>),
+giving the location of a null-terminated string.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sh_type</span></code></dt><dd><p>This member categorizes the section’s contents and semantics.
+Section types and their descriptions appear
+below.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sh_flags</span></code></dt><dd><p>Sections support 1-bit flags that describe miscellaneous attributes.
+Flag definitions appear
+below.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sh_addr</span></code></dt><dd><p>If the section will appear in the memory image of a process,
+this member gives the address at which the section’s first
+byte should reside.
+Otherwise, the member contains 0.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sh_offset</span></code></dt><dd><p>This member’s value gives the byte offset from the beginning of the file
+to the first byte in the section.
+One section type, <code class="docutils literal notranslate"><span class="pre">SHT_NOBITS</span></code>
+described
+below,
+occupies no space in the file, and its
+<code class="docutils literal notranslate"><span class="pre">sh_offset</span></code> member locates the conceptual placement in the file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sh_size</span></code></dt><dd><p>This member gives the section’s size in bytes.
+Unless the section type is
+<code class="docutils literal notranslate"><span class="pre">SHT_NOBITS</span></code>, the section occupies <code class="docutils literal notranslate"><span class="pre">sh_size</span></code>
+bytes in the file.
+A section of type <code class="docutils literal notranslate"><span class="pre">SHT_NOBITS</span></code>
+may have a non-zero size, but it occupies no space in the file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sh_link</span></code></dt><dd><p>This member holds a section header table index link,
+whose interpretation depends on the section type.
+A table below
+describes the values.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sh_info</span></code></dt><dd><p>This member holds extra information,
+whose interpretation depends on the section type.
+A table below
+describes the values.  If the <code class="docutils literal notranslate"><span class="pre">sh_flags</span></code> field for this
+section header includes the attribute <code class="docutils literal notranslate"><span class="pre">SHF_INFO_LINK</span></code>, then this member represents a section header table index.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sh_addralign</span></code></dt><dd><p>Some sections have address alignment constraints.
+For example, if a section holds a doubleword,
+the system must ensure doubleword alignment for the entire section.
+The value of <code class="docutils literal notranslate"><span class="pre">sh_addr</span></code>
+must be congruent to 0, modulo the value of <code class="docutils literal notranslate"><span class="pre">sh_addralign</span></code>.
+Currently, only 0 and positive integral powers of two are allowed.
+Values 0 and 1 mean the section has no alignment constraints.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sh_entsize</span></code></dt><dd><p>Some sections hold a table of fixed-size entries,
+such as a symbol table.
+For such a section, this member gives the size in bytes of each entry.
+The member contains 0 if the section does not hold a table
+of fixed-size entries.</p>
+</dd>
+</dl>
+</section>
+<section id="section-type">
+<h2><span class="section-number">3.3. </span>Section Type<a class="headerlink" href="#section-type" title="Link to this heading">¶</a></h2>
+<p>A section header’s <code class="docutils literal notranslate"><span class="pre">sh_type</span></code> member specifies the section’s semantics.</p>
+<table class="docutils align-default" id="id7">
+<caption><span class="caption-number">Table 3.2 </span><span class="caption-text">Section Types, <code class="docutils literal notranslate"><span class="pre">sh_type</span></code></span><a class="headerlink" href="#id7" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_NULL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_PROGBITS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_SYMTAB</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_STRTAB</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">3</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_RELA</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">4</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_HASH</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_DYNAMIC</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">6</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_NOTE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">7</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_NOBITS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">8</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_REL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">9</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_SHLIB</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_DYNSYM</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">11</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_INIT_ARRAY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">14</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_FINI_ARRAY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">15</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_PREINIT_ARRAY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">16</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_GROUP</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">17</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_SYMTAB_SHNDX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">18</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_LOOS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x60000000</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_HIOS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x6fffffff</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_LOPROC</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x70000000</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_HIPROC</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x7fffffff</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_LOUSER</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x80000000</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_HIUSER</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xffffffff</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">SHT_NULL</span></code></dt><dd><p>This value marks the section header as inactive;
+it does not have an associated section.
+Other members of the section header have undefined values.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHT_PROGBITS</span></code></dt><dd><p>The section holds information defined by the program,
+whose format and meaning are determined solely by the program.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHT_SYMTAB</span></code> and <code class="docutils literal notranslate"><span class="pre">SHT_DYNSYM</span></code></dt><dd><p>These sections hold a symbol table.
+Currently, an object file may have only one section of each type,
+but this restriction may be relaxed in the future.
+Typically, <code class="docutils literal notranslate"><span class="pre">SHT_SYMTAB</span></code>
+provides symbols for link editing, though it may also be
+used for dynamic linking.
+As a complete symbol table, it may contain many symbols unnecessary
+for dynamic linking.
+Consequently, an object file may also contain a <code class="docutils literal notranslate"><span class="pre">SHT_DYNSYM</span></code>
+section, which holds a minimal set of dynamic linking symbols,
+to save space.
+See “Symbol Table” below
+for details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHT_STRTAB</span></code></dt><dd><p>The section holds a string table.
+An object file may have multiple string table sections.
+See <a class="reference internal" href="04-strtab.html#string-table"><span class="std std-ref">String Table</span></a> for details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHT_RELA</span></code></dt><dd><p>The section holds relocation entries
+with explicit addends, such as type
+<code class="docutils literal notranslate"><span class="pre">Elf32_Rela</span></code> for the 32-bit class of object files
+or type <code class="docutils literal notranslate"><span class="pre">Elf64_Rela</span></code> for the 64-bit class of object files.
+An object file may have multiple relocation sections.
+See <a class="reference internal" href="06-reloc.html#relocation"><span class="std std-ref">Relocation</span></a> for details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHT_HASH</span></code></dt><dd><p>The section holds a symbol hash table.
+Currently, an object file may have only one hash table,
+but this restriction may be relaxed in the future.
+See <a class="reference internal" href="08-dynamic.html#hash-table"><span class="std std-ref">Hash Table</span></a> for details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHT_DYNAMIC</span></code></dt><dd><p>The section holds information for dynamic linking.
+Currently, an object file may have only one dynamic section,
+but this restriction may be relaxed in the future.
+See <a class="reference internal" href="08-dynamic.html#dynamic-section"><span class="std std-ref">Dynamic Section</span></a> for details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHT_NOTE</span></code></dt><dd><p>The section holds information that marks the file in some way.
+See <a class="reference internal" href="07-pheader.html#note-sections"><span class="std std-ref">Note Sections</span></a> for details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHT_NOBITS</span></code></dt><dd><p>A section of this type occupies no space in the file but
+otherwise resembles
+<code class="docutils literal notranslate"><span class="pre">SHT_PROGBITS</span></code>.
+Although this section contains no bytes, the <code class="docutils literal notranslate"><span class="pre">sh_offset</span></code>
+member contains the conceptual file offset.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHT_REL</span></code></dt><dd><p>The section holds relocation entries
+without explicit addends, such as type
+<code class="docutils literal notranslate"><span class="pre">Elf32_Rel</span></code> for the 32-bit class of object files or
+type <code class="docutils literal notranslate"><span class="pre">Elf64_Rel</span></code> for the 64-bit class of object files.
+An object file may have multiple relocation sections.
+See <a class="reference internal" href="06-reloc.html#relocation"><span class="std std-ref">Relocation</span></a> for details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHT_SHLIB</span></code></dt><dd><p>This section type is reserved but has unspecified semantics.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHT_INIT_ARRAY</span></code></dt><dd><p>This section contains an array of pointers to initialization functions,
+as described in <a class="reference internal" href="08-dynamic.html#initialization-and-termination-functions"><span class="std std-ref">Initialization and Termination Functions</span></a>.
+Each pointer in the array
+is taken as a parameterless procedure with a void return.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHT_FINI_ARRAY</span></code></dt><dd><p>This section contains an array of pointers to termination functions,
+as described in <a class="reference internal" href="08-dynamic.html#initialization-and-termination-functions"><span class="std std-ref">Initialization and Termination Functions</span></a>.
+Each pointer in the array
+is taken as a parameterless procedure with a void return.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHT_PREINIT_ARRAY</span></code></dt><dd><p>This section contains an array of pointers to functions that are
+invoked before all other initialization functions,
+as described in <a class="reference internal" href="08-dynamic.html#initialization-and-termination-functions"><span class="std std-ref">Initialization and Termination Functions</span></a>.
+Each pointer in the array
+is taken as a parameterless procedure with a void return.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHT_GROUP</span></code></dt><dd><p>This section defines a section group.  A section group
+is a set of sections that are related and that must be treated
+specially by the linker (see below for further
+details).  Sections of type <code class="docutils literal notranslate"><span class="pre">SHT_GROUP</span></code> may appear only
+in relocatable objects (objects with the ELF header <code class="docutils literal notranslate"><span class="pre">e_type</span></code>
+member set to <code class="docutils literal notranslate"><span class="pre">ET_REL</span></code>).   The section header table entry
+for a group section must appear in the section header table
+before the entries for any of the sections that are members of
+the group.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHT_SYMTAB_SHNDX</span></code></dt><dd><p>This section is associated with a symbol table section
+and is required if any of the section header indexes referenced
+by that symbol table contain the escape value <code class="docutils literal notranslate"><span class="pre">SHN_XINDEX</span></code>.
+The section is an array of <code class="docutils literal notranslate"><span class="pre">Elf32_Word/Elf64_Word</span></code> values.
+Each value corresponds one to one with a symbol table entry
+and appear in the same order as those entries.
+The values represent the section header indexes against which
+the symbol table entries are defined.
+Only if the corresponding symbol table entry’s <code class="docutils literal notranslate"><span class="pre">st_shndx</span></code> field
+contains the escape value <code class="docutils literal notranslate"><span class="pre">SHN_XINDEX</span></code>
+will the matching word hold the actual section header index;
+otherwise, the entry must be <code class="docutils literal notranslate"><span class="pre">SHN_UNDEF</span></code> (<code class="docutils literal notranslate"><span class="pre">0</span></code>).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHT_LOOS</span></code> through <code class="docutils literal notranslate"><span class="pre">SHT_HIOS</span></code></dt><dd><p>Values in this inclusive range
+are reserved for operating system-specific semantics.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHT_LOPROC</span></code> through <code class="docutils literal notranslate"><span class="pre">SHT_HIPROC</span></code></dt><dd><p>Values in this inclusive range
+are reserved for processor-specific semantics.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHT_LOUSER</span></code></dt><dd><p>This value specifies the lower bound of the range of
+indexes reserved for application programs.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHT_HIUSER</span></code></dt><dd><p>This value specifies the upper bound of the range of
+indexes reserved for application programs.
+Section types between <code class="docutils literal notranslate"><span class="pre">SHT_LOUSER</span></code> and
+<code class="docutils literal notranslate"><span class="pre">SHT_HIUSER</span></code> may be used by the application, without conflicting with
+current or future system-defined section types.</p>
+</dd>
+</dl>
+<p>Other section type values are reserved.</p>
+</section>
+<section id="section-flags">
+<h2><span class="section-number">3.4. </span>Section Flags<a class="headerlink" href="#section-flags" title="Link to this heading">¶</a></h2>
+<p>A section header’s <code class="docutils literal notranslate"><span class="pre">sh_flags</span></code>
+member holds 1-bit flags that describe the section’s attributes.
+Defined values appear in the following table;
+other values are reserved.</p>
+<table class="docutils align-default" id="id8">
+<caption><span class="caption-number">Table 3.3 </span><span class="caption-text">Section Attribute Flags</span><a class="headerlink" href="#id8" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHF_WRITE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x1</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHF_ALLOC</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x2</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHF_EXECINSTR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x4</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHF_MERGE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x10</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHF_STRINGS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x20</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHF_INFO_LINK</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x40</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHF_LINK_ORDER</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x80</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHF_OS_NONCONFORMING</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x100</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHF_GROUP</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x200</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHF_TLS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x400</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHF_COMPRESSED</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x800</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHF_MASKOS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x0ff00000</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHF_MASKPROC</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xf0000000</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>If a flag bit is set in <code class="docutils literal notranslate"><span class="pre">sh_flags</span></code>,
+the attribute is “on” for the section.
+Otherwise, the attribute is “off” or does not apply.
+Undefined attributes are set to zero.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">SHF_WRITE</span></code></dt><dd><p>The section contains data that should be writable during
+process execution.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHF_ALLOC</span></code></dt><dd><p>The section occupies memory during process execution.
+Some control sections do not reside in the memory image
+of an object file; this attribute is off for those sections.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHF_EXECINSTR</span></code></dt><dd><p>The section contains executable machine instructions.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHF_MERGE</span></code></dt><dd><p>The data in the section may be merged to eliminate duplication.
+Unless the <code class="docutils literal notranslate"><span class="pre">SHF_STRINGS</span></code> flag is also set,
+the data elements in the section are of a uniform size.
+The size of each element is specified in the section
+header’s <code class="docutils literal notranslate"><span class="pre">sh_entsize</span></code> field.
+If the <code class="docutils literal notranslate"><span class="pre">SHF_STRINGS</span></code> flag is also set,
+the data elements consist of null-terminated character strings.
+The size of each character is specified in the section
+header’s <code class="docutils literal notranslate"><span class="pre">sh_entsize</span></code> field.</p>
+<p>Each element in the section is compared against other elements
+in sections with the same name, type and flags.
+Elements that would have identical values at program run-time
+may be merged.
+Relocations referencing elements of such sections must be
+resolved to the merged locations of the referenced values.
+Note that any relocatable values, including
+values that would result in run-time relocations, must be
+analyzed to determine whether the run-time values would actually
+be identical.  An ABI-conforming object file may not depend
+on specific elements being merged, and an ABI-conforming
+link editor may choose not to merge specific elements.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHF_STRINGS</span></code></dt><dd><p>The data elements in the section consist of null-terminated character
+strings.  The size of each character is specified in the section
+header’s <code class="docutils literal notranslate"><span class="pre">sh_entsize</span></code> field.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHF_INFO_LINK</span></code></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">sh_info</span></code> field of this section header holds a section
+header table index.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHF_LINK_ORDER</span></code></dt><dd><p>This flag adds special ordering requirements for link editors.
+The requirements apply if the
+<code class="docutils literal notranslate"><span class="pre">sh_link</span></code> field of this section’s header references
+another section (the linked-to section).
+If this section is combined with other
+sections in the output file, it must appear in the same
+relative order with respect to those sections, as the linked-to section
+appears with respect to sections the linked-to section is combined with.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A typical use of this flag is to build a table that references text or
+data sections in address order.</p>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHF_OS_NONCONFORMING</span></code></dt><dd><p>This section requires special OS-specific processing
+(beyond the standard linking rules)
+to avoid incorrect behavior.
+If this section has either an <code class="docutils literal notranslate"><span class="pre">sh_type</span></code> value
+or contains <code class="docutils literal notranslate"><span class="pre">sh_flags</span></code> bits in the OS-specific ranges for
+those fields, and a link editor processing this section does not
+recognize those values, then the link editor should reject
+the object file containing this section with an error.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHF_GROUP</span></code></dt><dd><p>This section is a member (perhaps the only one) of a section group.
+The section must be referenced by a section of type <code class="docutils literal notranslate"><span class="pre">SHT_GROUP</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">SHF_GROUP</span></code> flag may be set only for sections contained
+in relocatable objects (objects with the ELF header <code class="docutils literal notranslate"><span class="pre">e_type</span></code>
+member set to <code class="docutils literal notranslate"><span class="pre">ET_REL</span></code>).
+See below for further details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHF_TLS</span></code></dt><dd><p>This section holds <em>Thread-Local Storage</em>,
+meaning that each separate execution flow
+has its own distinct instance of this data.
+Implementations need not support this flag.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHF_COMPRESSED</span></code></dt><dd><p>This flag identifies a section containing compressed data.  SHF_COMPRESSED
+applies only to non-allocable sections, and cannot be used in
+conjunction with SHF_ALLOC.  In addition, SHF_COMPRESSED cannot
+be applied to sections of type SHT_NOBITS.
+See “Compressed Sections,” below.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHF_MASKOS</span></code></dt><dd><p>All bits included in this mask
+are reserved for operating system-specific semantics.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SHF_MASKPROC</span></code></dt><dd><p>All bits included in this mask
+are reserved for processor-specific semantics.
+If meanings are specified, the psABI supplement explains them.</p>
+</dd>
+</dl>
+</section>
+<section id="the-sh-link-and-sh-info-fields">
+<span id="shlink-shinfo-fields"></span><h2><span class="section-number">3.5. </span>The sh_link and sh_info Fields<a class="headerlink" href="#the-sh-link-and-sh-info-fields" title="Link to this heading">¶</a></h2>
+<p>Two members in the section header,
+<code class="docutils literal notranslate"><span class="pre">sh_link</span></code> and <code class="docutils literal notranslate"><span class="pre">sh_info</span></code>,
+hold special information, depending on section type.</p>
+<table class="docutils align-default" id="id9" style="width: 100%">
+<caption><span class="caption-number">Table 3.4 </span><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">sh_link</span></code> and <code class="docutils literal notranslate"><span class="pre">sh_info</span></code> Interpretation</span><a class="headerlink" href="#id9" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 40.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><code class="docutils literal notranslate"><span class="pre">sh_type</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">sh_link</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">sh_info</span></code></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_DYNAMIC</span></code></p></td>
+<td><p>The section header index of
+the string table used by
+entries in the section.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_HASH</span></code></p></td>
+<td><p>The section header index of
+the symbol table to which
+the hash table applies.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_REL</span></code> <br />  <code class="docutils literal notranslate"><span class="pre">SHT_RELA</span></code></p></td>
+<td><p>The section header index of
+the associated symbol table.</p></td>
+<td><p>The section header index of
+the section to which the
+relocation applies.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_SYMTAB</span></code> <br />  <code class="docutils literal notranslate"><span class="pre">SHT_DYNSYM</span></code></p></td>
+<td><p>The section header index of
+the associated string table.</p></td>
+<td><p>One greater than the symbol table index of the last local
+symbol (binding <code class="docutils literal notranslate"><span class="pre">STB_LOCAL</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_GROUP</span></code></p></td>
+<td><p>The section header index of
+the associated symbol table.</p></td>
+<td><p>The symbol table index of an entry in the
+associated symbol table.  The name of the specified symbol table
+entry provides a signature for the section group.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SHT_SYMTAB_SHNDX</span></code></p></td>
+<td><p>The section header index of
+the associated symbol table section.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="first-section-header-table-entry">
+<span id="id3"></span><h2><span class="section-number">3.6. </span>First Section Header Table Entry<a class="headerlink" href="#first-section-header-table-entry" title="Link to this heading">¶</a></h2>
+<p>As mentioned before, the section header at index 0 (<code class="docutils literal notranslate"><span class="pre">SHN_UNDEF</span></code>)
+exists, even though the index marks undefined section references.
+This entry holds the following.</p>
+<table class="docutils align-default" id="id10">
+<caption><span class="caption-number">Table 3.5 </span><span class="caption-text">First Section Header Table Entry</span><a class="headerlink" href="#id10" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>Note</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sh_name</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>No name</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sh_type</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_NULL</span></code></p></td>
+<td><p>Inactive</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sh_flags</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>No flags</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sh_addr</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>No address</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sh_offset</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>No offset</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sh_size</span></code></p></td>
+<td><p>Unspecified</p></td>
+<td><p>If non-zero, the actual number of section header entries</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sh_link</span></code></p></td>
+<td><p>Unspecified</p></td>
+<td><p>If non-zero, the index of the section header string table section</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sh_info</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>No auxiliary information</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sh_addralign</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>No alignment</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sh_entsize</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>No entries</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="compressed-sections">
+<h2><span class="section-number">3.7. </span>Compressed Sections<a class="headerlink" href="#compressed-sections" title="Link to this heading">¶</a></h2>
+<p>All relocations to a compressed section specify offsets to the
+uncompressed section data.  It is therefore necessary to decompress
+the section data before relocations can be applied.  Each compressed section
+specifies the algorithm independently.  It is permissible for
+different sections in a given ELF object to employ different compression
+algorithms.</p>
+<p>Compressed sections begin with a compression header structure that
+identifies the compression algorithm.</p>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-number">Listing 3.2 </span><span class="caption-text">Compression Header</span><a class="headerlink" href="#id11" title="Link to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">ch_type</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">ch_size</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">ch_addralign</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Elf32_Chdr</span><span class="p">;</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">ch_type</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">ch_reserved</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">ch_size</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">ch_addralign</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Elf64_Chdr</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">ch_type</span></code></dt><dd><p>This member specifies the compression algorithm.  Supported algorithms
+and their descriptions are listed in the
+ELF Compression Types table below.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ch_size</span></code></dt><dd><p>This member provides the size in bytes of the uncompressed data.
+See <code class="docutils literal notranslate"><span class="pre">sh_size</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ch_addralign</span></code></dt><dd><p>Specifies the required alignment for the uncompressed data.
+See <code class="docutils literal notranslate"><span class="pre">sh_addralign</span></code>.</p>
+</dd>
+</dl>
+<p>The <code class="docutils literal notranslate"><span class="pre">sh_size</span></code> and <code class="docutils literal notranslate"><span class="pre">sh_addralign</span></code> fields of the section
+header for a compressed section reflect the requirements of the
+compressed section.  The <code class="docutils literal notranslate"><span class="pre">ch_size</span></code> and <code class="docutils literal notranslate"><span class="pre">ch_addralign</span></code>
+fields in the compression header provide the corresponding values for the
+uncompressed data, thereby supplying the values that <code class="docutils literal notranslate"><span class="pre">sh_size</span></code> and
+<code class="docutils literal notranslate"><span class="pre">sh_addralign</span></code> would have had if the section had not been
+compressed.</p>
+<p>The layout and interpretation of the data that follows the compression header
+is specific to each algorithm, and is defined below for each value of
+<code class="docutils literal notranslate"><span class="pre">ch_type</span></code>.  This area may contain algorithm specific parameters
+and alignment padding in addition to compressed data bytes.</p>
+<p>A compression header’s <code class="docutils literal notranslate"><span class="pre">ch_type</span></code> member specifies the
+compression algorithm employed, as shown in the following table.</p>
+<table class="docutils align-default" id="id12" style="width: 50%">
+<caption><span class="caption-number">Table 3.6 </span><span class="caption-text">ELF Compression Types, <code class="docutils literal notranslate"><span class="pre">ch_type</span></code></span><a class="headerlink" href="#id12" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_ZLIB</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_LOOS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x60000000</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_HIOS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x6fffffff</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_LOPROC</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x70000000</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_HIPROC</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x7fffffff</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_ZLIB</span></code></dt><dd><p>The section data is compressed with the ZLIB algorithm.  The compressed
+ZLIB data bytes begin with the byte immediately following the compression
+header, and extend to the end of the section.  Additional documentation
+for ZLIB may be found at <a class="reference external" href="http://zlib.net">http://zlib.net</a>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_LOOS</span> <span class="pre">-</span> <span class="pre">ELFCOMPRESS_HIOS</span></code></dt><dd><p>Values in this inclusive range are reserved for operating system-specific
+semantics.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_LOPROC</span> <span class="pre">-</span> <span class="pre">ELF_COMPRESS_HIPROC</span></code></dt><dd><p>Values in this inclusive range are reserved for processor-specific semantics.</p>
+</dd>
+</dl>
+</section>
+<section id="rules-for-linking-unrecognized-sections">
+<h2><span class="section-number">3.8. </span>Rules for Linking Unrecognized Sections<a class="headerlink" href="#rules-for-linking-unrecognized-sections" title="Link to this heading">¶</a></h2>
+<p>If a link editor encounters sections whose headers contain OS-specific
+values it does not recognize in the <code class="docutils literal notranslate"><span class="pre">sh_type</span></code>
+or <code class="docutils literal notranslate"><span class="pre">sh_flags</span></code> fields, the link editor should combine those
+sections as described below.</p>
+<p>If the section’s <code class="docutils literal notranslate"><span class="pre">sh_flags</span></code> bits include the attribute
+<code class="docutils literal notranslate"><span class="pre">SHF_OS_NONCONFORMING</span></code>, then the section requires
+special knowledge to be correctly processed, and the link editor should
+reject the object containing the section with an error.</p>
+<p>Unrecognized sections that do not have the
+<code class="docutils literal notranslate"><span class="pre">SHF_OS_NONCONFORMING</span></code> attribute, are combined in a two-phase
+process.  As the link editor combines sections using this process,
+it must honor the alignment constraints of the
+input sections (asserted by the <code class="docutils literal notranslate"><span class="pre">sh_addralign</span></code> field),
+padding between sections with zero bytes, if necessary, and producing
+a combination with the maximum alignment constraint of its
+component input sections.</p>
+<ol class="arabic simple">
+<li><p>In the first phase, input sections that match in name, type
+and attribute flags should be concatenated into single sections.
+The concatenation order should satisfy the requirements of
+any known input section attributes (e.g, <code class="docutils literal notranslate"><span class="pre">SHF_MERGE</span></code>
+and <code class="docutils literal notranslate"><span class="pre">SHF_LINK_ORDER</span></code>).  When not otherwise constrained,
+sections should be emitted in input order.</p></li>
+<li><p>In the second phase, sections should be assigned to segments or
+other units based on their attribute flags.  Sections of each particular
+unrecognized type should be assigned to the same unit unless
+prevented by incompatible flags, and within a unit, sections
+of the same unrecognized type should be placed together
+if possible.</p></li>
+</ol>
+<p>Non OS-specific processing (e.g. relocation) should be applied
+to unrecognized section types.  An output section header table,
+if present, should contain entries for unknown sections.
+Any unrecognized section attribute flags should be removed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is recommended that link editors follow the same two-phase
+ordering approach described above when linking sections of
+known types.  Padding between such sections may have values
+different from zero, where appropriate.</p>
+</div>
+</section>
+<section id="section-groups">
+<h2><span class="section-number">3.9. </span>Section Groups<a class="headerlink" href="#section-groups" title="Link to this heading">¶</a></h2>
+<p>Some sections occur in interrelated groups.  For example, an out-of-line
+definition of an inline function might require, in addition to the
+section containing its executable instructions, a read-only data
+section containing literals referenced, one or more debugging information
+sections and other informational sections.  Furthermore, there may be
+internal references among these sections that would not make sense
+if one of the sections were removed or replaced by a duplicate from
+another object.  Therefore, such groups must be
+included or omitted from the linked object as a unit.
+A section cannot be a member of more than one group.</p>
+<p>A section of type <code class="docutils literal notranslate"><span class="pre">SHT_GROUP</span></code> defines such a grouping
+of sections. The name of a symbol from one of the containing
+object’s symbol tables provides a signature for the section group.
+The section header of the <code class="docutils literal notranslate"><span class="pre">SHT_GROUP</span></code> section specifies
+the identifying symbol entry, as described above:
+the <code class="docutils literal notranslate"><span class="pre">sh_link</span></code> member contains the section header index
+of the symbol table section that contains the entry.
+The <code class="docutils literal notranslate"><span class="pre">sh_info</span></code> member contains the symbol table index of
+the identifying entry.   The <code class="docutils literal notranslate"><span class="pre">sh_flags</span></code>
+member of the section header contains <code class="docutils literal notranslate"><span class="pre">0</span></code>.
+The name of the section (<code class="docutils literal notranslate"><span class="pre">sh_name</span></code>) is not specified.</p>
+<p>The referenced signature symbol is not restricted.
+Its containing symbol table section need not be a member of the group,
+for example.</p>
+<p>The section data of a <code class="docutils literal notranslate"><span class="pre">SHT_GROUP</span></code> section is an array
+of <code class="docutils literal notranslate"><span class="pre">Elf32_Word/Elf64_Word</span></code> entries.  The first entry is a flag word.
+The remaining entries are a sequence of section header indices.</p>
+<p>The following flags are currently defined:</p>
+<table class="docutils align-default" id="id13">
+<caption><span class="caption-number">Table 3.7 </span><span class="caption-text">Section Group Flags</span><a class="headerlink" href="#id13" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">GRP_COMDAT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x1</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GRP_MASKOS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x0ff00000</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">GRP_MASKPROC</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xf0000000</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">GRP_COMDAT</span></code></dt><dd><p>This is a COMDAT group.  It may duplicate another COMDAT group
+in another object file, where duplication is defined as having the
+same group signature.  In such cases, only one of the
+duplicate groups may be retained by the linker, and the
+members of the remaining groups must be discarded.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GRP_MASKOS</span></code></dt><dd><p>All bits included in this mask
+are reserved for operating system-specific semantics.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">GRP_MASKPROC</span></code></dt><dd><p>All bits included in this mask
+are reserved for processor-specific semantics.
+If meanings are specified, the psABI supplement explains them.</p>
+</dd>
+</dl>
+<p>The section header indices in the <code class="docutils literal notranslate"><span class="pre">SHT_GROUP</span></code> section
+identify the sections that make up the group.  Each such section
+must have the <code class="docutils literal notranslate"><span class="pre">SHF_GROUP</span></code> flag set in its <code class="docutils literal notranslate"><span class="pre">sh_flags</span></code>
+section header member.  If the linker decides to remove the section
+group, it must remove all members of the group.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This requirement is not intended to imply that special case behavior
+like removing debugging information requires removing the sections
+to which that information refers, even if they are part of the same
+group.</p>
+</div>
+<p>To facilitate removing a group without leaving dangling references
+and with only minimal processing of the symbol table,
+the following rules must be followed:</p>
+<ul class="simple">
+<li><p>A symbol table entry with <code class="docutils literal notranslate"><span class="pre">STB_GLOBAL</span></code> or <code class="docutils literal notranslate"><span class="pre">STB_WEAK</span></code>
+binding that is defined relative to one of a group’s sections,
+and that is contained in a symbol table section
+that is not part of the group,
+must be converted to an undefined symbol
+(its section index must be changed to <code class="docutils literal notranslate"><span class="pre">SHN_UNDEF</span></code>)
+if the group members are discarded.
+References to this symbol table entry from outside the group are allowed.</p></li>
+<li><p>A symbol table entry with <code class="docutils literal notranslate"><span class="pre">STB_LOCAL</span></code> binding
+that is defined relative to one of a group’s sections,
+and that is contained in a symbol table section
+that is not part of the group,
+must be discarded if the group members are discarded.
+References to this symbol table entry from outside the group are not allowed.</p></li>
+<li><p>An undefined symbol that is referenced only from one or more sections
+that are part of a particular group,
+and that is contained in a symbol table section
+that is not part of the group,
+is not removed when the group members are discarded.
+In other words,
+the undefined symbol is not removed
+even if no references to that symbol remain.</p></li>
+<li><p>There may not be non-symbol references to the sections comprising
+a group from outside the group, for example, use of a group
+member’s section header index in an <code class="docutils literal notranslate"><span class="pre">sh_link</span></code> or
+<code class="docutils literal notranslate"><span class="pre">sh_info</span></code> member.</p></li>
+</ul>
+</section>
+<section id="special-sections">
+<span id="id4"></span><h2><span class="section-number">3.10. </span>Special Sections<a class="headerlink" href="#special-sections" title="Link to this heading">¶</a></h2>
+<p>Various sections hold program and control information.</p>
+<p>The following table
+shows sections that are used by the system
+and have the indicated types and attributes.</p>
+<table class="docutils align-default" id="id14">
+<caption><span class="caption-number">Table 3.8 </span><span class="caption-text">Special Sections</span><a class="headerlink" href="#id14" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Attributes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.bss</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_NOBITS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHF_ALLOC+SHF_WRITE</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.comment</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_PROGBITS</span></code></p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.data</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_PROGBITS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHF_ALLOC+SHF_WRITE</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.data1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_PROGBITS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHF_ALLOC+SHF_WRITE</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.debug</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_PROGBITS</span></code></p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.dynamic</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_DYNAMIC</span></code></p></td>
+<td><p>see below</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.dynstr</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_STRTAB</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHF_ALLOC</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.dynsym</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_DYNSYM</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHF_ALLOC</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.fini</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_PROGBITS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHF_ALLOC+SHF_EXECINSTR</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.fini_array</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_FINI_ARRAY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHF_ALLOC+SHF_WRITE</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.got</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_PROGBITS</span></code></p></td>
+<td><p>see below</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.hash</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_HASH</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHF_ALLOC</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.init</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_PROGBITS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHF_ALLOC+SHF_EXECINSTR</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.init_array</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_INIT_ARRAY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHF_ALLOC+SHF_WRITE</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.interp</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_PROGBITS</span></code></p></td>
+<td><p>see below</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.line</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_PROGBITS</span></code></p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.note</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_NOTE</span></code></p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.plt</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_PROGBITS</span></code></p></td>
+<td><p>see below</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.preinit_array</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_PREINIT_ARRAY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHF_ALLOC+SHF_WRITE</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.rel</span></code><em>name</em></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_REL</span></code></p></td>
+<td><p>see below</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.rela</span></code><em>name</em></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_RELA</span></code></p></td>
+<td><p>see below</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.rodata</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_PROGBITS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHF_ALLOC</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.rodata1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_PROGBITS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHF_ALLOC</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.shstrtab</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_STRTAB</span></code></p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.strtab</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_STRTAB</span></code></p></td>
+<td><p>see below</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.symtab</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_SYMTAB</span></code></p></td>
+<td><p>see below</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.symtab_shndx</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_SYMTAB_SHNDX</span></code></p></td>
+<td><p>see below</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.tbss</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_NOBITS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHF_ALLOC+SHF_WRITE+SHF_TLS</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.tdata</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_PROGBITS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHF_ALLOC+SHF_WRITE+SHF_TLS</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.tdata1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_PROGBITS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHF_ALLOC+SHF_WRITE+SHF_TLS</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.text</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHT_PROGBITS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHF_ALLOC+SHF_EXECINSTR</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">.bss</span></code></dt><dd><p>This section holds uninitialized data that contribute
+to the program’s memory image.
+By definition, the system initializes the data with zeros
+when the program begins to run.
+The section occupies no file space, as indicated by the section type,
+<code class="docutils literal notranslate"><span class="pre">SHT_NOBITS</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.comment</span></code></dt><dd><p>This section holds version control information.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.data</span></code> and <code class="docutils literal notranslate"><span class="pre">.data1</span></code></dt><dd><p>These sections hold initialized data that contribute
+to the program’s memory image.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.debug</span></code></dt><dd><p>This section holds information for symbolic debugging.
+The contents are unspecified.  All section names with the
+prefix <code class="docutils literal notranslate"><span class="pre">.debug</span></code> are reserved for future use in the
+ABI.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.dynamic</span></code></dt><dd><p>This section holds dynamic linking information.
+The section’s attributes will include the <code class="docutils literal notranslate"><span class="pre">SHF_ALLOC</span></code> bit.
+Whether the <code class="docutils literal notranslate"><span class="pre">SHF_WRITE</span></code> bit is set is processor specific.
+See <a class="reference internal" href="08-dynamic.html#dynamic-section"><span class="std std-ref">Dynamic Section</span></a> for more information.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.dynstr</span></code></dt><dd><p>This section holds strings needed for dynamic linking,
+most commonly the strings
+that represent the names associated with symbol table entries.
+See <a class="reference internal" href="08-dynamic.html#dynamic-section"><span class="std std-ref">Dynamic Section</span></a> for more information.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.dynsym</span></code></dt><dd><p>This section holds the dynamic linking symbol table,
+as described in <a class="reference internal" href="05-symtab.html#symbol-table"><span class="std std-ref">Symbol Table</span></a> and <a class="reference internal" href="08-dynamic.html#dynamic-linking"><span class="std std-ref">Dynamic Linking</span></a>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.fini</span></code></dt><dd><p>This section holds executable instructions that contribute
+to the process termination code.
+That is, when a program exits normally, the system arranges
+to execute the code in this section.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.fini_array</span></code></dt><dd><p>This section holds an array of function pointers that contributes
+to a single termination array for the executable or shared
+object containing the section.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.got</span></code></dt><dd><p>This section holds the global offset table.
+See the psABI supplement for more information.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.hash</span></code></dt><dd><p>This section holds a symbol hash table.
+See <a class="reference internal" href="08-dynamic.html#hash-table"><span class="std std-ref">Hash Table</span></a> for more information.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.init</span></code></dt><dd><p>This section holds executable instructions that contribute
+to the process initialization code.
+When a program starts to run, the system arranges
+to execute the code in this section before calling the
+main program entry point (called <code class="docutils literal notranslate"><span class="pre">main</span></code> for C programs).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.init_array</span></code></dt><dd><p>This section holds an array of function pointers that contributes
+to a single initialization array for the executable or shared
+object containing the section.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.interp</span></code></dt><dd><p>This section holds the path name of a program interpreter.
+If the file has a loadable segment that includes
+relocation, the sections’ attributes will include the
+<code class="docutils literal notranslate"><span class="pre">SHF_ALLOC</span></code> bit; otherwise, that bit will be off.
+See <a class="reference internal" href="08-dynamic.html#program-interpreter"><span class="std std-ref">Program Interpreter</span></a> for more information.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.line</span></code></dt><dd><p>This section holds line number information for symbolic
+debugging, which describes
+the correspondence between the source program and the
+machine code.
+The contents are unspecified.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.note</span></code></dt><dd><p>This section holds information as described in <a class="reference internal" href="07-pheader.html#note-sections"><span class="std std-ref">Note Sections</span></a>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.plt</span></code></dt><dd><p>This section holds the procedure linkage table.
+See the psABI supplement for more information.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.preinit_array</span></code></dt><dd><p>This section holds an array of function pointers that contributes
+to a single pre-initialization array for the executable or shared
+object containing the section.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.rel</span></code><em>name</em> and <code class="docutils literal notranslate"><span class="pre">.rela</span></code><em>name</em></dt><dd><p>These sections hold relocation information, as described in
+<a class="reference internal" href="06-reloc.html#relocation"><span class="std std-ref">Relocation</span></a>.
+If the file has a loadable segment that includes
+relocation, the sections’ attributes will include the
+<code class="docutils literal notranslate"><span class="pre">SHF_ALLOC</span></code> bit; otherwise, that bit will be off.
+Conventionally, <em>name</em>
+is supplied by the section to which the relocations apply.
+Thus a relocation section for <code class="docutils literal notranslate"><span class="pre">.text</span></code>
+normally would have the name <code class="docutils literal notranslate"><span class="pre">.rel.text</span></code> or <code class="docutils literal notranslate"><span class="pre">.rela.text</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.rodata</span></code> and <code class="docutils literal notranslate"><span class="pre">.rodata1</span></code></dt><dd><p>These sections hold read-only data that
+typically contribute to a non-writable segment
+in the process image.
+See <a class="reference internal" href="07-pheader.html#program-header"><span class="std std-ref">Program Loading</span></a> for more information.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.shstrtab</span></code></dt><dd><p>This section holds section names.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.strtab</span></code></dt><dd><p>This section holds strings, most commonly the strings
+that represent the names associated with symbol table entries.
+If the file has a loadable segment that includes the
+symbol string table, the section’s attributes will include the
+<code class="docutils literal notranslate"><span class="pre">SHF_ALLOC</span></code>
+bit; otherwise, that bit will be off.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.symtab</span></code></dt><dd><p>This section holds a symbol table, as described in
+<a class="reference internal" href="05-symtab.html#symbol-table"><span class="std std-ref">Symbol Table</span></a>.
+If the file has a loadable segment that includes the
+symbol table, the section’s attributes will include the
+<code class="docutils literal notranslate"><span class="pre">SHF_ALLOC</span></code> bit; otherwise, that bit will be off.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.symtab_shndx</span></code></dt><dd><p>This section holds the special symbol table section index
+array, as described above.  The section’s attributes will include
+the <code class="docutils literal notranslate"><span class="pre">SHF_ALLOC</span></code> bit if the associated symbol table
+section does; otherwise that bit will be off.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.tbss</span></code></dt><dd><p>This section holds uninitialized <em>thread-local data</em> that contribute
+to the program’s memory image.
+By definition,
+the system initializes the data with zeros
+when the data is instantiated for each new execution flow.
+The section occupies no file space, as indicated by the section type,
+<code class="docutils literal notranslate"><span class="pre">SHT_NOBITS</span></code>.
+Implementations need not support thread-local storage.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.tdata</span></code></dt><dd><p>This section holds initialized <em>thread-local data</em> that contributes
+to the program’s memory image.
+A copy of its contents is instantiated by the system
+for each new execution flow.
+Implementations need not support thread-local storage.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">.text</span></code></dt><dd><p>This section holds the “text,” or executable
+instructions, of a program.</p>
+</dd>
+</dl>
+<p>Section names with a dot (<code class="docutils literal notranslate"><span class="pre">.</span></code>) prefix
+are reserved for the system,
+although applications may use these sections
+if their existing meanings are satisfactory.
+Applications may use names without the prefix to
+avoid conflicts with system sections.
+The object file format lets one define sections not
+shown in the previous list.
+An object file may have more than one section
+with the same name.</p>
+<p>Section names reserved for a processor architecture
+are formed by placing an abbreviation of the architecture
+name ahead of the section name.
+The name should be taken from the
+architecture names used for <code class="docutils literal notranslate"><span class="pre">e_machine</span></code>.
+For instance <code class="docutils literal notranslate"><span class="pre">.FOO.psect</span></code> is the <code class="docutils literal notranslate"><span class="pre">psect</span></code>
+section defined by the FOO architecture.
+Existing extensions are called by their historical names.</p>
+<table class="docutils align-default" id="id15">
+<caption><span class="caption-number">Table 3.9 </span><span class="caption-text"><strong>Pre-existing Extensions</strong></span><a class="headerlink" href="#id15" title="Link to this table">¶</a></caption>
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.sdata</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.tdesc</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.sbss</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.lit4</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.lit8</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.reginfo</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.gptab</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.liblist</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.conflict</span></code></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For information on processor-specific sections,
+see the psABI supplement for the desired processor.</p>
+</div>
+</section>
+</section>
+
+
+      </div>
+      <div class="related bottom">
+	&nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="02-eheader.html" title="Previous document"><span class="section-number">2. </span>ELF Header</a>
+        </li>
+        <li>
+          <a href="04-strtab.html" title="Next document"><span class="section-number">4. </span>String Table</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+      </div>
+    </div>
+  </div>
+  <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+    <div class="sphinxsidebarwrapper">
+      <div class="sphinxsidebar-navigation__pages">
+	<h3><a href="../index.html">Contents</a></h3>
+	<ul>
+<li class="toctree-l1"><a class="reference internal" href="00-foreword.html">Foreword</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="01-intro.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02-eheader.html">2. ELF Header</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Sections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04-strtab.html">4. String Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05-symtab.html">5. Symbol Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06-reloc.html">6. Relocation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07-pheader.html">7. Program Loading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08-dynamic.html">8. Dynamic Linking</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="a-emachine.html">Assigned Machine Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="b-osabi.html">Assigned OSABI Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="c-history.html">Revision History</a></li>
+</ul>
+
+      </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+    </div>
+  </div>
+  <div class="clearer"></div>
+</div>
+<div class="footer">
+<p>© 1997, 1998, 1999, 2000, 2001 The Santa Cruz Operation, Inc.  All rights reserved.
+<br>© 2002 Caldera International.  All rights reserved.
+<br>© 2003-2010 The SCO Group.  All rights reserved.
+<br>© 2011-2014, 2023, 2024 Xinuos Inc.  All rights reserved.</p>
+<p>Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.1</a>
+&amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</p>
+</div>  
+
+  </body>
+</html>

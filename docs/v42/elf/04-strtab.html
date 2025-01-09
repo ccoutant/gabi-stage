@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>4. String Table &#8212; ELF Object File Format 4.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=128e1f3d" />
+    <script src="../_static/documentation_options.js?v=b8c38029"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5. Symbol Table" href="05-symtab.html" />
+    <link rel="prev" title="3. Sections" href="03-sheader.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+<div class="pageheader">
+  <a href="https://xinuos.com">
+    <img class="logo" src="../_static/Xinuos_Logo__Black.svg" alt="Xinuos" />
+  </a>
+</div>
+
+<div class="document">
+  <div class="documentwrapper">
+    <div class="bodywrapper">
+      <div class="related top">
+	&nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="03-sheader.html" title="Previous document"><span class="section-number">3. </span>Sections</a>
+        </li>
+        <li>
+          <a href="05-symtab.html" title="Next document"><span class="section-number">5. </span>Symbol Table</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+      </div>
+      <div class="body" role="main">
+      
+      <div class="toppagetitle">
+      <a href="../index.html">ELF Object File Format</a>
+      </div>
+      
+      
+  <section id="string-table">
+<span id="id1"></span><h1><span class="section-number">4. </span>String Table<a class="headerlink" href="#string-table" title="Link to this heading">¶</a></h1>
+<p>String table sections hold null-terminated character sequences,
+commonly called strings.
+The object file uses these strings to represent symbol and section names.
+One references a string as an index into the
+string table section.
+The first byte, which is index zero, is defined to hold
+a null character.
+Likewise, a string table’s last byte is defined to hold
+a null character, ensuring null termination for all strings.
+A string whose index is zero specifies
+either no name or a null name, depending on the context.
+An empty string table section is permitted; its section header’s <code class="docutils literal notranslate"><span class="pre">sh_size</span></code>
+member would contain zero.
+Non-zero indexes are invalid for an empty string table.</p>
+<p>A section header’s <code class="docutils literal notranslate"><span class="pre">sh_name</span></code>
+member holds an index into the section header string table
+section, as designated by the <code class="docutils literal notranslate"><span class="pre">e_shstrndx</span></code>
+member of the ELF header.
+The following figures show a string table with 25 bytes
+and the strings associated with various indexes.</p>
+<figure class="align-default" id="id2">
+<img alt="Example String Table" src="../_images/figure-3.svg" style="width: 540pt;" />
+<figcaption>
+<p><span class="caption-number">Figure 4.1 </span><span class="caption-text">Example String Table</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-number">Table 4.1 </span><span class="caption-text">String Table Indexes</span><a class="headerlink" href="#id3" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Index</p></th>
+<th class="head"><p>String</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p><em>none</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">“name.”</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">“Variable”</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>11</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">“able”</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>16</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">“able”</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>22</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">“xx”</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>24</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">“”</span></code> (<em>null string</em>)</p></td>
+</tr>
+</tbody>
+</table>
+<p>As the example shows, a string table index may refer
+to any byte in the section.
+A string may appear more than once,
+references to substrings may exist,
+and a single string may be referenced multiple times.
+Unreferenced strings also are allowed.</p>
+</section>
+
+
+      </div>
+      <div class="related bottom">
+	&nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="03-sheader.html" title="Previous document"><span class="section-number">3. </span>Sections</a>
+        </li>
+        <li>
+          <a href="05-symtab.html" title="Next document"><span class="section-number">5. </span>Symbol Table</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+      </div>
+    </div>
+  </div>
+  <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+    <div class="sphinxsidebarwrapper">
+      <div class="sphinxsidebar-navigation__pages">
+	<h3><a href="../index.html">Contents</a></h3>
+	<ul>
+<li class="toctree-l1"><a class="reference internal" href="00-foreword.html">Foreword</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="01-intro.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02-eheader.html">2. ELF Header</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03-sheader.html">3. Sections</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. String Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05-symtab.html">5. Symbol Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06-reloc.html">6. Relocation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07-pheader.html">7. Program Loading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08-dynamic.html">8. Dynamic Linking</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="a-emachine.html">Assigned Machine Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="b-osabi.html">Assigned OSABI Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="c-history.html">Revision History</a></li>
+</ul>
+
+      </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+    </div>
+  </div>
+  <div class="clearer"></div>
+</div>
+<div class="footer">
+<p>© 1997, 1998, 1999, 2000, 2001 The Santa Cruz Operation, Inc.  All rights reserved.
+<br>© 2002 Caldera International.  All rights reserved.
+<br>© 2003-2010 The SCO Group.  All rights reserved.
+<br>© 2011-2014, 2023, 2024 Xinuos Inc.  All rights reserved.</p>
+<p>Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.1</a>
+&amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</p>
+</div>  
+
+  </body>
+</html>

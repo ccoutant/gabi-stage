@@ -1,5 +1,9 @@
+.. |appendixb| raw:: html
+
+   Appendix B:
+
 #################################
-Assigned OSABI Values
+|appendixb| Assigned OSABI Values
 #################################
 
 The table below lists all assigned ``EI_OSABI`` values.
