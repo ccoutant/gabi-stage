@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath('_extensions'))
 project = 'ELF Object File Format'
 copyright = '2025, Xinuos'
 author = 'Xinuos'
-version = '4.2'
+version = '4.3 DRAFT'
 release = version
 
 
@@ -83,7 +83,7 @@ latex_table_style = ['booktabs', 'nocolorrows']
 latex_elements = {
     'releasename': 'Version',
     'fontpkg': r"""
-\usepackage[default]{opensans}
+\usepackage[default,defaultsans]{opensans}
 \usepackage{inconsolata}
 \usepackage[T1]{fontenc}
 """,

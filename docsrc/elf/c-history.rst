@@ -129,3 +129,14 @@ Version 4.2 (Published 2025)
 * Converted to ReStructuredText.
 * ELF specification is now separate from the gABI document.
 * Removed empty placeholders for psABI sections.
+
+Version 4.3 (DRAFT)
+
+* Added extra requirements for ``SHF_LINKORDER`` flag.
+* Added relative relocation table (``Elf32_Relr`` and ``Elf64_Relr``).
+* Changed the symbol visibility attribute to use the lower 3 bits
+  of ``st_other`` (instead of 2 bits).
+* Added ``DT_SYMTABSZ`` entry, and made ``DT_HASH`` optional if
+  ``DT_SYMTABSZ`` is provided.
+* Changed ``SHF_COMPRESSED`` to allow with ``SHF_ALLOC`` sections
+  in ``ET_REL`` objects.

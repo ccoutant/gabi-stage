@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="342" height="81" viewBox="0 0 342 81">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #231f20;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2 {
+        font-size: 10px;
+      }
+
+      .cls-2, .cls-3 {
+        fill: #231f20;
+        font-family: Helvetica;
+      }
+
+      .cls-3 {
+        font-size: 8px;
+      }
+    </style>
+  </defs>
+  <g id="Drawing">
+    <rect class="cls-1" x="171" y="9" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="191.25" y="9" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="211.5" y="9" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="231.75" y="9" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="252" y="9" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="272.25" y="9" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="292.5" y="9" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="312.75" y="9" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="9" y="45" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="171" y="45" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="29.25" y="45" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="49.5" y="45" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="69.75" y="45" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="90" y="45" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="110.25" y="45" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="130.5" y="45" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="150.75" y="45" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="9" y="9" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="29.25" y="9" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="49.5" y="9" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="69.75" y="9" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="90" y="9" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="110.25" y="9" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="130.5" y="9" width="20.25" height="14.21"/>
+    <rect class="cls-1" x="150.75" y="9" width="20.25" height="14.21"/>
+  </g>
+  <g id="Text">
+    <text class="cls-2" transform="translate(178.34 19.7)">a</text>
+    <text class="cls-2" transform="translate(199.71 19.7)">r</text>
+    <text class="cls-2" transform="translate(220.51 19.7)">i</text>
+    <text class="cls-2" transform="translate(239.09 19.7)">a</text>
+    <text class="cls-2" transform="translate(259.34 19.7)">b</text>
+    <text class="cls-2" transform="translate(281.26 19.7)">l</text>
+    <text class="cls-2" transform="translate(299.84 19.7)">e</text>
+    <text class="cls-2" transform="translate(318.71 19.7)">\0</text>
+    <text class="cls-3" transform="translate(178.9 33.19)">8</text>
+    <text class="cls-3" transform="translate(199.15 33.19)">9</text>
+    <text class="cls-3" transform="translate(217.18 33.19)">10</text>
+    <text class="cls-3" transform="translate(237.43 33.19)">11</text>
+    <text class="cls-3" transform="translate(257.68 33.19)">12</text>
+    <text class="cls-3" transform="translate(277.93 33.19)">13</text>
+    <text class="cls-3" transform="translate(298.18 33.19)">14</text>
+    <text class="cls-3" transform="translate(318.43 33.19)">15</text>
+    <text class="cls-2" transform="translate(16.34 55.7)">a</text>
+    <text class="cls-2" transform="translate(36.59 55.7)">b</text>
+    <text class="cls-2" transform="translate(58.51 55.7)">l</text>
+    <text class="cls-2" transform="translate(77.09 55.7)">e</text>
+    <text class="cls-2" transform="translate(95.96 55.7)">\0</text>
+    <text class="cls-2" transform="translate(116.21 55.7)">\0</text>
+    <text class="cls-2" transform="translate(138.13 55.7)">x</text>
+    <text class="cls-2" transform="translate(158.38 55.7)">x</text>
+    <text class="cls-3" transform="translate(14.68 69.19)">16</text>
+    <text class="cls-2" transform="translate(176.96 55.7)">\0</text>
+    <text class="cls-3" transform="translate(176.68 69.19)">24</text>
+    <text class="cls-3" transform="translate(34.93 69.19)">17</text>
+    <text class="cls-3" transform="translate(55.18 69.19)">18</text>
+    <text class="cls-3" transform="translate(75.43 69.19)">19</text>
+    <text class="cls-3" transform="translate(95.68 69.19)">20</text>
+    <text class="cls-3" transform="translate(115.93 69.19)">21</text>
+    <text class="cls-3" transform="translate(136.18 69.19)">22</text>
+    <text class="cls-3" transform="translate(156.43 69.19)">23</text>
+    <text class="cls-2" transform="translate(14.96 19.7)">\0</text>
+    <text class="cls-2" transform="translate(36.59 19.7)">n</text>
+    <text class="cls-2" transform="translate(56.84 19.7)">a</text>
+    <text class="cls-2" transform="translate(75.71 19.7)">m</text>
+    <text class="cls-2" transform="translate(97.34 19.7)">e</text>
+    <text class="cls-2" transform="translate(118.99 19.7)">.</text>
+    <text class="cls-2" transform="translate(136.46 19.7)">\0</text>
+    <text class="cls-2" transform="translate(157.54 19.7)">V</text>
+    <text class="cls-3" transform="translate(16.9 33.19)">0</text>
+    <text class="cls-3" transform="translate(37.15 33.19)">1</text>
+    <text class="cls-3" transform="translate(57.4 33.19)">2</text>
+    <text class="cls-3" transform="translate(77.65 33.19)">3</text>
+    <text class="cls-3" transform="translate(97.9 33.19)">4</text>
+    <text class="cls-3" transform="translate(118.15 33.19)">5</text>
+    <text class="cls-3" transform="translate(138.4 33.19)">6</text>
+    <text class="cls-3" transform="translate(158.65 33.19)">7</text>
+  </g>
+</svg>

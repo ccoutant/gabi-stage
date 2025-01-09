@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="261" height="243" viewBox="0 0 261 243">
+  <defs>
+    <style>
+      .c {
+        stroke-width: .75px;
+      }
+
+      .c, .d, .e {
+        fill: none;
+        stroke: #231f20;
+        stroke-miterlimit: 10;
+      }
+
+      .f, .g {
+        font-size: 10px;
+      }
+
+      .f, .g, .h, .i {
+        fill: #231f20;
+      }
+
+      .f, .j, .i {
+        font-family: Helvetica, Helvetica;
+      }
+
+      .h {
+        font-size: 8px;
+      }
+
+      .h, .k {
+        font-family: Helvetica-Oblique, Helvetica;
+        font-style: oblique;
+      }
+
+      .i {
+        font-size: 6px;
+      }
+
+      .e {
+        stroke-width: .5px;
+      }
+    </style>
+  </defs>
+  <g id="a" data-name="Drawing">
+    <rect class="d" x="27" y="18" width="108" height="18"/>
+    <rect class="d" x="27" y="36" width="108" height="18"/>
+    <rect class="d" x="27" y="54" width="108" height="18"/>
+    <rect class="d" x="27" y="72" width="27" height="18"/>
+    <rect class="d" x="54" y="72" width="27" height="18"/>
+    <rect class="d" x="81" y="72" width="27" height="18"/>
+    <rect class="d" x="108" y="72" width="27" height="18"/>
+    <rect class="d" x="27" y="90" width="27" height="18"/>
+    <rect class="d" x="54" y="90" width="27" height="18"/>
+    <rect class="d" x="81" y="90" width="27" height="18"/>
+    <rect class="d" x="108" y="90" width="27" height="18"/>
+    <rect class="d" x="27" y="108" width="108" height="18"/>
+    <rect class="d" x="27" y="126" width="108" height="18"/>
+    <rect class="d" x="27" y="144" width="108" height="18"/>
+    <rect class="d" x="27" y="162" width="27" height="18"/>
+    <rect class="d" x="54" y="162" width="27" height="18"/>
+    <rect class="d" x="81" y="162" width="27" height="18"/>
+    <rect class="d" x="108" y="162" width="27" height="18"/>
+    <rect class="d" x="27" y="180" width="27" height="18"/>
+    <rect class="d" x="54" y="180" width="27" height="18"/>
+    <rect class="d" x="81" y="180" width="27" height="18"/>
+    <rect class="d" x="108" y="180" width="27" height="18"/>
+    <rect class="d" x="27" y="198" width="27" height="18"/>
+    <rect class="d" x="54" y="198" width="27" height="18"/>
+    <rect class="d" x="81" y="198" width="27" height="18"/>
+    <rect class="d" x="108" y="198" width="27" height="18"/>
+    <rect class="d" x="27" y="216" width="27" height="18"/>
+    <rect class="d" x="54" y="216" width="27" height="18"/>
+    <rect class="d" x="81" y="216" width="27" height="18"/>
+    <rect class="d" x="108" y="216" width="27" height="18"/>
+    <path class="c" d="m137.14,74.52c4.86,0,0,15.48,4.86,15.48-4.86,0,0,15.48-4.86,15.48"/>
+    <path class="c" d="m137.14,164.52c4.86,0,0,15.48,4.86,15.48-4.86,0,0,15.48-4.86,15.48"/>
+    <path class="c" d="m137.14,200.52c4.86,0,0,15.48,4.86,15.48-4.86,0,0,15.48-4.86,15.48"/>
+  </g>
+  <g id="b" data-name="Text">
+    <text class="i" transform="translate(27 15.95)"><tspan x="0" y="0">+0</tspan></text>
+    <text class="i" transform="translate(21.663 33.95)"><tspan x="0" y="0">0</tspan></text>
+    <text class="i" transform="translate(21.663 51.95)"><tspan x="0" y="0">4</tspan></text>
+    <text class="i" transform="translate(21.663 69.95)"><tspan x="0" y="0">8</tspan></text>
+    <text class="i" transform="translate(18.326 87.95)"><tspan x="0" y="0">12</tspan></text>
+    <text class="i" transform="translate(18.326 105.95)"><tspan x="0" y="0">16</tspan></text>
+    <text class="i" transform="translate(18.326 123.95)"><tspan x="0" y="0">20</tspan></text>
+    <text class="i" transform="translate(18.326 141.95)"><tspan x="0" y="0">24</tspan></text>
+    <text class="i" transform="translate(18.326 159.95)"><tspan x="0" y="0">28</tspan></text>
+    <text class="i" transform="translate(18.326 177.95)"><tspan x="0" y="0">32</tspan></text>
+    <text class="i" transform="translate(18.326 195.95)"><tspan x="0" y="0">36</tspan></text>
+    <text class="i" transform="translate(18.326 213.95)"><tspan x="0" y="0">40</tspan></text>
+    <text class="i" transform="translate(18.326 231.95)"><tspan x="0" y="0">44</tspan></text>
+    <text class="i" transform="translate(54 15.95)"><tspan x="0" y="0">+1</tspan></text>
+    <text class="i" transform="translate(81 15.95)"><tspan x="0" y="0">+2</tspan></text>
+    <text class="i" transform="translate(108 15.95)"><tspan x="0" y="0">+3</tspan></text>
+    <text class="f" transform="translate(144 31.294)"><tspan x="0" y="0">namesz</tspan></text>
+    <text class="g" transform="translate(144 49.294)"><tspan class="j" x="0" y="0">descsz </tspan><tspan class="k" x="33.901" y="0">(no descriptor)</tspan></text>
+    <text class="f" transform="translate(144 67.294)"><tspan x="0" y="0">type</tspan></text>
+    <text class="f" transform="translate(144 94.294)"><tspan x="0" y="0">name</tspan></text>
+    <text class="f" transform="translate(144 121.294)"><tspan x="0" y="0">namesz</tspan></text>
+    <text class="f" transform="translate(144 139.294)"><tspan x="0" y="0">descsz</tspan></text>
+    <text class="f" transform="translate(144 157.294)"><tspan x="0" y="0">type</tspan></text>
+    <text class="f" transform="translate(144 184.294)"><tspan x="0" y="0">name</tspan></text>
+    <text class="f" transform="translate(144 220.294)"><tspan x="0" y="0">desc</tspan></text>
+    <text class="f" transform="translate(78.219 30.595)"><tspan x="0" y="0">7</tspan></text>
+    <text class="f" transform="translate(78.219 48.595)"><tspan x="0" y="0">0</tspan></text>
+    <text class="f" transform="translate(78.219 66.595)"><tspan x="0" y="0">1</tspan></text>
+    <text class="f" transform="translate(38 84.595)"><tspan x="0" y="0">x</tspan></text>
+    <text class="f" transform="translate(65 84.595)"><tspan x="0" y="0">y</tspan></text>
+    <text class="f" transform="translate(92 84.595)"><tspan x="0" y="0">z</tspan></text>
+    <text class="f" transform="translate(38 102.595)"><tspan x="0" y="0">c</tspan></text>
+    <text class="f" transform="translate(64.719 102.595)"><tspan x="0" y="0">o</tspan></text>
+    <text class="f" transform="translate(90.33 102.595)"><tspan x="0" y="0">\0</tspan></text>
+    <text class="h" transform="translate(114.826 101.88)"><tspan x="0" y="0">pad</tspan></text>
+    <polyline class="e" points="117 84 117 85.5 127 85.5 127 84"/>
+    <text class="f" transform="translate(78.219 120.595)"><tspan x="0" y="0">7</tspan></text>
+    <text class="f" transform="translate(78.219 138.595)"><tspan x="0" y="0">8</tspan></text>
+    <text class="f" transform="translate(78.219 156.595)"><tspan x="0" y="0">3</tspan></text>
+    <text class="f" transform="translate(38 174.595)"><tspan x="0" y="0">x</tspan></text>
+    <text class="f" transform="translate(65 174.595)"><tspan x="0" y="0">y</tspan></text>
+    <text class="f" transform="translate(92 174.595)"><tspan x="0" y="0">z</tspan></text>
+    <text class="f" transform="translate(38 192.595)"><tspan x="0" y="0">c</tspan></text>
+    <text class="f" transform="translate(64.719 192.595)"><tspan x="0" y="0">o</tspan></text>
+    <text class="f" transform="translate(90.33 192.595)"><tspan x="0" y="0">\0</tspan></text>
+    <text class="h" transform="translate(114.826 191.88)"><tspan x="0" y="0">pad</tspan></text>
+    <polyline class="e" points="117 174 117 175.5 127 175.5 127 174"/>
+    <text class="f" transform="translate(37.719 210.595)"><tspan x="0" y="0">e</tspan></text>
+    <text class="f" transform="translate(65 210.595)"><tspan x="0" y="0">x</tspan></text>
+    <text class="f" transform="translate(91.719 210.595)"><tspan x="0" y="0">a</tspan></text>
+    <text class="f" transform="translate(117.335 210.595)"><tspan x="0" y="0">m</tspan></text>
+    <text class="f" transform="translate(37.719 228.595)"><tspan x="0" y="0">p</tspan></text>
+    <text class="f" transform="translate(66.389 228.595)"><tspan x="0" y="0">l</tspan></text>
+    <text class="f" transform="translate(91.719 228.595)"><tspan x="0" y="0">e</tspan></text>
+    <text class="f" transform="translate(118.719 228.595)"><tspan x="0" y="0">1</tspan></text>
+  </g>
+</svg>

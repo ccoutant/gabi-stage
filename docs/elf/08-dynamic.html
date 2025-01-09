@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>8. Dynamic Linking &#8212; ELF Object File Format 4.3 DRAFT documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=128e1f3d" />
+    <script src="../_static/documentation_options.js?v=4977a7ef"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Appendix A: Assigned Machine Values" href="a-emachine.html" />
+    <link rel="prev" title="7. Program Loading" href="07-pheader.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+<div class="pageheader">
+  <a href="https://xinuos.com">
+    <img class="logo" src="../_static/Xinuos_Logo__Black.svg" alt="Xinuos" />
+  </a>
+</div>
+
+<div class="document">
+  <div class="documentwrapper">
+    <div class="bodywrapper">
+      <div class="related top">
+	&nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="07-pheader.html" title="Previous document"><span class="section-number">7. </span>Program Loading</a>
+        </li>
+        <li>
+          <a href="a-emachine.html" title="Next document">Appendix A: Assigned Machine Values</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+      </div>
+      <div class="body" role="main">
+      
+      <div class="toppagetitle">
+      <a href="../index.html">ELF Object File Format</a>
+      </div>
+      
+      
+  <section id="dynamic-linking">
+<span id="id1"></span><h1><span class="section-number">8. </span>Dynamic Linking<a class="headerlink" href="#dynamic-linking" title="Link to this heading">¶</a></h1>
+<p>After the system loads the program, it must complete
+the process image by resolving symbolic references among the object
+files that compose the process.
+This chapter discusses the object file structures that
+pertain to dynamic linking.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The psABI supplement defines a naming convention for ELF constants
+that have processor ranges specified.  Names such as <code class="docutils literal notranslate"><span class="pre">DT_</span></code>, <code class="docutils literal notranslate"><span class="pre">PT_</span></code>,
+for processor specific extensions, incorporate the name of the
+processor: <code class="docutils literal notranslate"><span class="pre">DT_M32_SPECIAL</span></code>, for example.
+Pre-existing processor extensions not using this convention will be supported.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Pre-Existing Extensions</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_JUMP_REL</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="program-interpreter">
+<span id="id2"></span><h2><span class="section-number">8.1. </span>Program Interpreter<a class="headerlink" href="#program-interpreter" title="Link to this heading">¶</a></h2>
+<p>An executable file that participates in
+dynamic linking shall have one
+<code class="docutils literal notranslate"><span class="pre">PT_INTERP</span></code> program header element.
+During process startup (e.g., <code class="docutils literal notranslate"><span class="pre">exec()</span></code>),
+the system retrieves a path name from the <code class="docutils literal notranslate"><span class="pre">PT_INTERP</span></code>
+segment and creates the initial process image from
+the interpreter file’s segments. That is,
+instead of using the original executable file’s
+segment images, the system composes a memory
+image for the interpreter.
+It then is the interpreter’s responsibility to
+receive control from the system and provide an
+environment for the application program.</p>
+<p>The interpreter typically receives control in one of two ways.
+First, it may receive a file descriptor
+to read the executable file, positioned at the beginning.
+It can use this file descriptor to read and/or map the executable
+file’s segments into memory.
+Second, depending on the executable file format, the system
+may load the executable file into memory instead of giving the
+interpreter an open file descriptor.
+With the possible exception of the file descriptor,
+the interpreter’s initial process state matches
+what the executable file would have received.
+The interpreter itself may not require a second interpreter.
+An interpreter may be either a shared object
+or an executable file.
+See the psABI supplement for additional information.</p>
+<p>A shared object (the normal case) is loaded as
+position-independent, with addresses that may vary
+from one process to another; the system creates its segments
+in the dynamic segment area used by <code class="docutils literal notranslate"><span class="pre">mmap</span></code> and related services.
+Consequently, a shared object interpreter typically will
+not conflict with the original executable file’s
+original segment addresses.</p>
+<p>An executable file may be loaded at fixed addresses;
+if so, the system creates its segments
+using the virtual addresses from the program header table.
+Consequently, an executable file interpreter’s
+virtual addresses may collide with the
+first executable file; the interpreter is responsible
+for resolving conflicts.</p>
+</section>
+<section id="dynamic-linker">
+<h2><span class="section-number">8.2. </span>Dynamic Linker<a class="headerlink" href="#dynamic-linker" title="Link to this heading">¶</a></h2>
+<p>When building an executable file that uses dynamic linking,
+the link editor adds a program header element of type
+<code class="docutils literal notranslate"><span class="pre">PT_INTERP</span></code> to an executable file, telling the system to invoke
+the dynamic linker as the program interpreter.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The locations of the system provided dynamic
+linkers are processor specific.</p>
+</div>
+<p>The system loader (e.g., <code class="docutils literal notranslate"><span class="pre">exec()</span></code>) and the dynamic linker cooperate to
+create the process image for the program, which entails
+the following actions:</p>
+<ul class="simple">
+<li><p>Adding the executable file’s memory segments to the process image;</p></li>
+<li><p>Adding shared object memory segments to the process image;</p></li>
+<li><p>Performing relocations for the executable file and its
+shared objects;</p></li>
+<li><p>Closing the file descriptor that was used to read the executable file,
+if one was given to the dynamic linker;</p></li>
+<li><p>Transferring control to the program, making it look as if
+the program had received control directly from the system loader.</p></li>
+</ul>
+<p>The link editor also constructs various data
+that assist the dynamic linker
+for executable and shared object files.
+As shown in <a class="reference internal" href="07-pheader.html#program-header"><span class="std std-ref">Program Loading</span></a>, this data resides
+in loadable segments, making them available during execution.
+(Once again, recall the exact segment contents are processor-specific.
+See the psABI supplement for complete information).</p>
+<ul class="simple">
+<li><p>A <code class="docutils literal notranslate"><span class="pre">.dynamic</span></code> section with type <code class="docutils literal notranslate"><span class="pre">SHT_DYNAMIC</span></code>
+holds various data.
+The structure residing at the
+beginning of the section holds the addresses
+of other dynamic linking information.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">.hash</span></code> section with type <code class="docutils literal notranslate"><span class="pre">SHT_HASH</span></code>
+holds a symbol hash table.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">.got</span></code> and <code class="docutils literal notranslate"><span class="pre">.plt</span></code> sections with type
+<code class="docutils literal notranslate"><span class="pre">SHT_PROGBITS</span></code>
+hold two separate tables:
+the global offset table and the procedure linkage table.
+The psABI supplement discusses how programs use the global offset table
+for position-independent code.
+Sections below explain how the dynamic linker uses
+and changes the tables to create memory images for object files.</p></li>
+</ul>
+<p>Because every ABI-conforming program imports the basic system
+services from a shared object library,
+the dynamic linker participates in every ABI-conforming program execution.</p>
+<p>Shared objects may occupy
+virtual memory addresses that are different from the addresses recorded
+in the file’s program header table.
+The dynamic linker relocates the memory image, updating
+absolute addresses before the application gains control.
+Although the absolute address values would be correct
+if the library were loaded at
+the addresses specified in the program header table, this normally
+is not the case.</p>
+<p>If the process environment contains a variable named <code class="docutils literal notranslate"><span class="pre">LD_BIND_NOW</span></code>
+with a non-null value, the dynamic linker processes
+all relocations before transferring control to the program.
+For example, all the following environment entries
+would specify this behavior.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">LD_BIND_NOW=1</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LD_BIND_NOW=on</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LD_BIND_NOW=off</span></code></p></li>
+</ul>
+<p>Otherwise, <code class="docutils literal notranslate"><span class="pre">LD_BIND_NOW</span></code> either
+does not occur in the environment or has a null value.
+The dynamic linker is permitted to evaluate procedure linkage table
+entries lazily, thus avoiding symbol resolution and relocation
+overhead for functions that are not called.
+See the psABI supplement for more information.</p>
+</section>
+<section id="dynamic-section">
+<span id="id3"></span><h2><span class="section-number">8.3. </span>Dynamic Section<a class="headerlink" href="#dynamic-section" title="Link to this heading">¶</a></h2>
+<p>If an object file participates in dynamic linking,
+its program header table will have an element of type
+<code class="docutils literal notranslate"><span class="pre">PT_DYNAMIC</span></code>.
+This “segment” contains the <code class="docutils literal notranslate"><span class="pre">.dynamic</span></code> section.
+A special symbol, <code class="docutils literal notranslate"><span class="pre">_DYNAMIC</span></code>,
+labels the section, which contains
+an array of the following structures.</p>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-number">Listing 8.1 </span><span class="caption-text">Dynamic Structure</span><a class="headerlink" href="#id8" title="Link to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Elf32_Sword</span><span class="w"> </span><span class="n">d_tag</span><span class="p">;</span>
+<span class="w">    </span><span class="k">union</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Elf32_Word</span><span class="w">  </span><span class="n">d_val</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Elf32_Addr</span><span class="w">  </span><span class="n">d_ptr</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="n">d_un</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Elf32_Dyn</span><span class="p">;</span>
+
+<span class="k">extern</span><span class="w"> </span><span class="n">Elf32_Dyn</span><span class="w">    </span><span class="n">_DYNAMIC</span><span class="p">[];</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Elf64_Sxword</span><span class="w">    </span><span class="n">d_tag</span><span class="p">;</span>
+<span class="w">    </span><span class="k">union</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">d_val</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Elf64_Addr</span><span class="w">  </span><span class="n">d_ptr</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="n">d_un</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Elf64_Dyn</span><span class="p">;</span>
+
+<span class="k">extern</span><span class="w"> </span><span class="n">Elf64_Dyn</span><span class="w">    </span><span class="n">_DYNAMIC</span><span class="p">[];</span>
+</pre></div>
+</div>
+</div>
+<p>For each object with this type, <code class="docutils literal notranslate"><span class="pre">d_tag</span></code>
+controls the interpretation of <code class="docutils literal notranslate"><span class="pre">d_un</span></code>.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">d_val</span></code></dt><dd><p>These objects represent integer values with various
+interpretations.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">d_ptr</span></code></dt><dd><p>These objects represent program virtual addresses.
+As mentioned previously, a file’s virtual addresses
+might not match the memory virtual addresses during execution.
+When interpreting addresses contained in the dynamic
+structure, the dynamic linker computes actual addresses,
+based on the original file value and the memory base address.
+For consistency, files do <em>not</em>
+contain relocation entries to “correct” addresses in the dynamic
+structure.</p>
+</dd>
+</dl>
+<p>To make it simpler for tools to interpret the contents of
+dynamic section entries, the value of each tag, except for those in
+two special compatibility ranges,
+will determine the interpretation of the <code class="docutils literal notranslate"><span class="pre">d_un</span></code>
+union.  A tag whose value is an even number
+indicates a dynamic section entry that uses <code class="docutils literal notranslate"><span class="pre">d_ptr</span></code>.
+A tag whose value is an odd number indicates a dynamic section entry
+that uses <code class="docutils literal notranslate"><span class="pre">d_val</span></code> or that uses neither <code class="docutils literal notranslate"><span class="pre">d_ptr</span></code>
+nor <code class="docutils literal notranslate"><span class="pre">d_val</span></code>.  Tags whose values are less
+than the special value <code class="docutils literal notranslate"><span class="pre">DT_ENCODING</span></code> and tags
+whose values fall between <code class="docutils literal notranslate"><span class="pre">DT_HIOS</span></code> and
+<code class="docutils literal notranslate"><span class="pre">DT_LOPROC</span></code> do not follow these rules.</p>
+<p>The following table summarizes the tag requirements
+for executable and shared object files.
+If a tag is marked “mandatory”, the dynamic linking
+array for an ABI-conforming file must have an entry of that type.
+Likewise, “optional” means an entry for the tag may appear
+but is not required.</p>
+<table class="docutils align-default" id="id9">
+<caption><span class="caption-number">Table 8.1 </span><span class="caption-text">Dynamic Array Tags, <code class="docutils literal notranslate"><span class="pre">d_tag</span></code></span><a class="headerlink" href="#id9" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">d_un</span></code></p></th>
+<th class="head"><p>Executable</p></th>
+<th class="head"><p>Shared Object</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_NULL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>ignored</p></td>
+<td><p>mandatory</p></td>
+<td><p>mandatory</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT_NEEDED</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_val</span></code></p></td>
+<td><p>optional</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_PLTRELSZ</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_val</span></code></p></td>
+<td><p>optional</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT_PLTGOT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">3</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_ptr</span></code></p></td>
+<td><p>optional</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_HASH</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">4</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_ptr</span></code></p></td>
+<td><p>mandatory†</p></td>
+<td><p>mandatory†</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT_STRTAB</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_ptr</span></code></p></td>
+<td><p>mandatory</p></td>
+<td><p>mandatory</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_SYMTAB</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">6</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_ptr</span></code></p></td>
+<td><p>mandatory</p></td>
+<td><p>mandatory</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT_RELA</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">7</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_ptr</span></code></p></td>
+<td><p>mandatory</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_RELASZ</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">8</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_val</span></code></p></td>
+<td><p>mandatory</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT_RELAENT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">9</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_val</span></code></p></td>
+<td><p>mandatory</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_STRSZ</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_val</span></code></p></td>
+<td><p>mandatory</p></td>
+<td><p>mandatory</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT_SYMENT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">11</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_val</span></code></p></td>
+<td><p>mandatory</p></td>
+<td><p>mandatory</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_INIT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">12</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_ptr</span></code></p></td>
+<td><p>optional</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT_FINI</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">13</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_ptr</span></code></p></td>
+<td><p>optional</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_SONAME</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">14</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_val</span></code></p></td>
+<td><p>ignored</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT_RPATH</span></code>*</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">15</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_val</span></code></p></td>
+<td><p>optional</p></td>
+<td><p>ignored</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_SYMBOLIC</span></code>*</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">16</span></code></p></td>
+<td><p>ignored</p></td>
+<td><p>ignored</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT_REL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">17</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_ptr</span></code></p></td>
+<td><p>mandatory</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_RELSZ</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">18</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_val</span></code></p></td>
+<td><p>mandatory</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT_RELENT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">19</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_val</span></code></p></td>
+<td><p>mandatory</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_PLTREL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">20</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_val</span></code></p></td>
+<td><p>optional</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT_DEBUG</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">21</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_ptr</span></code></p></td>
+<td><p>optional</p></td>
+<td><p>ignored</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_TEXTREL</span></code>*</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">22</span></code></p></td>
+<td><p>ignored</p></td>
+<td><p>optional</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT_JMPREL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">23</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_ptr</span></code></p></td>
+<td><p>optional</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_BIND_NOW</span></code>*</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">24</span></code></p></td>
+<td><p>ignored</p></td>
+<td><p>optional</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT_INIT_ARRAY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">25</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_ptr</span></code></p></td>
+<td><p>optional</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_FINI_ARRAY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">26</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_ptr</span></code></p></td>
+<td><p>optional</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT_INIT_ARRAYSZ</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">27</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_val</span></code></p></td>
+<td><p>optional</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_FINI_ARRAYSZ</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">28</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_val</span></code></p></td>
+<td><p>optional</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT_RUNPATH</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">29</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_val</span></code></p></td>
+<td><p>optional</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_FLAGS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">30</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_val</span></code></p></td>
+<td><p>optional</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT_ENCODING</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">32</span></code></p></td>
+<td><p>unspecified</p></td>
+<td><p>unspecified</p></td>
+<td><p>unspecified</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_PREINIT_ARRAY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">32</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_ptr</span></code></p></td>
+<td><p>optional</p></td>
+<td><p>ignored</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT_PREINIT_ARRAYSZ</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">33</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_val</span></code></p></td>
+<td><p>optional</p></td>
+<td><p>ignored</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_SYMTAB_SHNDX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">34</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_ptr</span></code></p></td>
+<td><p>optional</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT_RELRSZ</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">35</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_val</span></code></p></td>
+<td><p>optional</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_RELR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">36</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_ptr</span></code></p></td>
+<td><p>optional</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT_RELRENT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">37</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_val</span></code></p></td>
+<td><p>optional</p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_SYMTABSZ</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">39</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d_val</span></code></p></td>
+<td><p>optional†</p></td>
+<td><p>optional†</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT_LOOS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x6000000D</span></code></p></td>
+<td><p>unspecified</p></td>
+<td><p>unspecified</p></td>
+<td><p>unspecified</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_HIOS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x6ffff000</span></code></p></td>
+<td><p>unspecified</p></td>
+<td><p>unspecified</p></td>
+<td><p>unspecified</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT_LOPROC</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x70000000</span></code></p></td>
+<td><p>unspecified</p></td>
+<td><p>unspecified</p></td>
+<td><p>unspecified</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DT_HIPROC</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x7fffffff</span></code></p></td>
+<td><p>unspecified</p></td>
+<td><p>unspecified</p></td>
+<td><p>unspecified</p></td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line">* Signifies an entry that has been deprecated.</div>
+<div class="line">† <code class="docutils literal notranslate"><span class="pre">DT_HASH</span></code> is optional if <code class="docutils literal notranslate"><span class="pre">DT_SYMTABSZ</span></code> is provided.</div>
+</div>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_NULL</span></code></dt><dd><p>An entry with a <code class="docutils literal notranslate"><span class="pre">DT_NULL</span></code> tag marks the end of the
+<code class="docutils literal notranslate"><span class="pre">_DYNAMIC</span></code> array.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_NEEDED</span></code></dt><dd><p>This element holds the string table offset of a null-terminated string,
+giving the name of a needed library.
+The offset is an index into the table recorded in the <code class="docutils literal notranslate"><span class="pre">DT_STRTAB</span></code> code.
+See <a class="reference internal" href="#shared-object-dependencies"><span class="std std-ref">Shared Object Dependencies</span></a> for more
+information about these names.
+The dynamic array may contain multiple entries with
+this type.
+These entries’ relative order is significant, though their
+relation to entries of other types is not.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_PLTRELSZ</span></code></dt><dd><p>This element holds the total size, in bytes,
+of the relocation entries associated with the procedure linkage table.
+If an entry of type <code class="docutils literal notranslate"><span class="pre">DT_JMPREL</span></code> is present, a
+<code class="docutils literal notranslate"><span class="pre">DT_PLTRELSZ</span></code> must accompany it.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_PLTGOT</span></code></dt><dd><p>This element holds an address associated with the procedure linkage table
+and/or the global offset table.
+See the psABI supplement for details.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_HASH</span></code></dt><dd><p>This element holds the address of the symbol hash table,
+described in <a class="reference internal" href="#hash-table"><span class="std std-ref">Hash Table</span></a>.
+This hash table refers to the symbol table referenced by the <code class="docutils literal notranslate"><span class="pre">DT_SYMTAB</span></code>
+element.</p>
+<p><code class="docutils literal notranslate"><span class="pre">DT_HASH</span></code> is normally mandatory. The psABI supplement is allowed
+to override this requirement by providing an alternative hash
+mechanism. In such cases, DT_SYMTABSZ, which is normally optional,
+becomes mandatory.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_STRTAB</span></code></dt><dd><p>This element holds the address of the string table,
+described in <a class="reference internal" href="04-strtab.html#string-table"><span class="std std-ref">String Table</span></a>.
+Symbol names, library names, and other strings reside
+in this table.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_SYMTAB</span></code></dt><dd><p>This element holds the address of the dynamic linking symbol table,
+as described in <a class="reference internal" href="05-symtab.html#symbol-table"><span class="std std-ref">Symbol Table</span></a>,
+with <code class="docutils literal notranslate"><span class="pre">Elf32_Sym</span></code> entries for the 32-bit class of files and <code class="docutils literal notranslate"><span class="pre">Elf64_Sym</span></code>
+entries for the 64-bit class of files.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_RELA</span></code></dt><dd><p>This element holds the address of a relocation table,
+described in <a class="reference internal" href="06-reloc.html#relocation"><span class="std std-ref">Relocation</span></a>.
+Entries in the table have explicit addends
+(<code class="docutils literal notranslate"><span class="pre">Elf32_Rela</span></code> for the 32-bit file class
+or <code class="docutils literal notranslate"><span class="pre">Elf64_Rela</span></code> for the 64-bit file class).
+An object file may have multiple relocation sections.
+When building the relocation table for an
+executable or shared object file, the link editor
+concatenates those sections to form a single table.
+Although the sections remain independent in the object file,
+the dynamic linker sees a single table.
+When the dynamic linker creates the process image for
+an executable file or adds a shared object to the
+process image, it reads the relocation table and performs
+the associated actions.
+If this element is present, the dynamic structure must also have
+<code class="docutils literal notranslate"><span class="pre">DT_RELASZ</span></code> and <code class="docutils literal notranslate"><span class="pre">DT_RELAENT</span></code> elements.
+When relocation is “mandatory” for a file, either
+<code class="docutils literal notranslate"><span class="pre">DT_RELA</span></code> or <code class="docutils literal notranslate"><span class="pre">DT_REL</span></code> may occur (both are permitted but not required).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_RELASZ</span></code></dt><dd><p>This element holds the total size, in bytes, of the
+<code class="docutils literal notranslate"><span class="pre">DT_RELA</span></code> relocation table.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_RELAENT</span></code></dt><dd><p>This element holds the size, in bytes, of the
+<code class="docutils literal notranslate"><span class="pre">DT_RELA</span></code> relocation entry.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_STRSZ</span></code></dt><dd><p>This element holds the size, in bytes, of the string table.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_SYMENT</span></code></dt><dd><p>This element holds the size, in bytes, of a symbol table entry.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_INIT</span></code></dt><dd><p>This element holds the address of the initialization function,
+discussed in <a class="reference internal" href="#initialization-and-termination-functions"><span class="std std-ref">Initialization and Termination Functions</span></a>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_FINI</span></code></dt><dd><p>This element holds the address of the termination function,
+discussed in <a class="reference internal" href="#initialization-and-termination-functions"><span class="std std-ref">Initialization and Termination Functions</span></a>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_SONAME</span></code></dt><dd><p>This element holds the string table offset of a null-terminated string,
+giving the name of the shared object.
+The offset is an index into the table recorded in the <code class="docutils literal notranslate"><span class="pre">DT_STRTAB</span></code> entry.
+See <a class="reference internal" href="#shared-object-dependencies"><span class="std std-ref">Shared Object Dependencies</span></a> for more
+information about these names.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_RPATH</span></code></dt><dd><p>This element holds the string table offset of a null-terminated search
+library search path string discussed in <a class="reference internal" href="#shared-object-dependencies"><span class="std std-ref">Shared Object Dependencies</span></a>.
+The offset is an index into the table recorded in the
+<code class="docutils literal notranslate"><span class="pre">DT_STRTAB</span></code> entry.  This entry is deprecated; its
+use has been superseded by <code class="docutils literal notranslate"><span class="pre">DT_RUNPATH</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_SYMBOLIC</span></code></dt><dd><p>This element’s presence in a shared object library alters
+the dynamic linker’s symbol resolution algorithm for
+references within the library.
+Instead of starting a symbol search with the
+executable file, the dynamic linker starts from the
+shared object itself.
+If the shared object fails to supply the referenced
+symbol, the dynamic linker then searches the
+executable file and other shared objects as usual.
+This entry is deprecated; its use has been superseded
+by the <code class="docutils literal notranslate"><span class="pre">DF_SYMBOLIC</span></code> flag.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_REL</span></code></dt><dd><p>This element is similar to <code class="docutils literal notranslate"><span class="pre">DT_RELA</span></code>,
+except its table has implicit addends
+(<code class="docutils literal notranslate"><span class="pre">Elf32_Rel</span></code> for the 32-bit file class
+or <code class="docutils literal notranslate"><span class="pre">Elf64_Rel</span></code> for the 64-bit file class).
+If this element is present, the dynamic structure must also have
+<code class="docutils literal notranslate"><span class="pre">DT_RELSZ</span></code> and <code class="docutils literal notranslate"><span class="pre">DT_RELENT</span></code> elements.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_RELSZ</span></code></dt><dd><p>This element holds the total size, in bytes, of the
+<code class="docutils literal notranslate"><span class="pre">DT_REL</span></code> relocation table.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_RELENT</span></code></dt><dd><p>This element holds the size, in bytes, of the
+<code class="docutils literal notranslate"><span class="pre">DT_REL</span></code> relocation entry.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_PLTREL</span></code></dt><dd><p>This member specifies the type of relocation entry
+to which the procedure linkage table refers.
+The <code class="docutils literal notranslate"><span class="pre">d_val</span></code> member holds <code class="docutils literal notranslate"><span class="pre">DT_REL</span></code> or <code class="docutils literal notranslate"><span class="pre">DT_RELA</span></code>,
+as appropriate.
+All relocations in a procedure linkage table must use
+the same relocation.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_DEBUG</span></code></dt><dd><p>This member is used for debugging.  Its contents are not specified
+for the ABI; programs that access this entry are not
+ABI-conforming.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_TEXTREL</span></code></dt><dd><p>This member’s absence signifies that no
+relocation entry should cause a modification to a non-writable
+segment, as specified by the segment permissions in the program
+header table.
+If this member is present, one or more relocation entries might
+request modifications to a non-writable segment, and the dynamic
+linker can prepare accordingly.
+This entry is deprecated; its use has been superseded
+by the <code class="docutils literal notranslate"><span class="pre">DF_TEXTREL</span></code> flag.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_JMPREL</span></code></dt><dd><p>If present, this entry’s <code class="docutils literal notranslate"><span class="pre">d_ptr</span></code>
+member holds the address of relocation entries associated solely
+with the procedure linkage table.
+Separating these relocation entries lets the dynamic linker ignore
+them during process initialization, if lazy binding is enabled.
+If this entry is present, the related entries of types
+<code class="docutils literal notranslate"><span class="pre">DT_PLTRELSZ</span></code> and <code class="docutils literal notranslate"><span class="pre">DT_PLTREL</span></code>
+must also be present.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_BIND_NOW</span></code></dt><dd><p>If present in a shared object or executable, this entry
+instructs the dynamic linker to process all relocations
+for the object containing this entry before transferring
+control to the program.
+The presence of this entry takes
+precedence over a directive to use lazy binding for this object when
+specified through the environment or via <code class="docutils literal notranslate"><span class="pre">dlopen()</span></code>.
+This entry is deprecated; its use has been superseded
+by the <code class="docutils literal notranslate"><span class="pre">DF_BIND_NOW</span></code> flag.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_INIT_ARRAY</span></code></dt><dd><p>This element holds the address of the array of pointers to initialization
+functions, discussed in <a class="reference internal" href="#initialization-and-termination-functions"><span class="std std-ref">Initialization and Termination Functions</span></a>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_FINI_ARRAY</span></code></dt><dd><p>This element holds the address of the array of pointers to termination
+functions, discussed in <a class="reference internal" href="#initialization-and-termination-functions"><span class="std std-ref">Initialization and Termination Functions</span></a>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_INIT_ARRAYSZ</span></code></dt><dd><p>This element holds the size in bytes of the array of initialization
+functions pointed to by the <code class="docutils literal notranslate"><span class="pre">DT_INIT_ARRAY</span></code> entry.
+If an object has a <code class="docutils literal notranslate"><span class="pre">DT_INIT_ARRAY</span></code> entry, it must
+also have a <code class="docutils literal notranslate"><span class="pre">DT_INIT_ARRAYSZ</span></code> entry.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_FINI_ARRAYSZ</span></code></dt><dd><p>This element holds the size in bytes of the array of termination
+functions pointed to by the <code class="docutils literal notranslate"><span class="pre">DT_FINI_ARRAY</span></code> entry.
+If an object has a <code class="docutils literal notranslate"><span class="pre">DT_FINI_ARRAY</span></code> entry, it must
+also have a <code class="docutils literal notranslate"><span class="pre">DT_FINI_ARRAYSZ</span></code> entry.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_RUNPATH</span></code></dt><dd><p>This element holds the string table offset of a null-terminated
+library search path string discussed in
+<a class="reference internal" href="#shared-object-dependencies"><span class="std std-ref">Shared Object Dependencies</span></a>.
+The offset is an index into the table recorded in the
+<code class="docutils literal notranslate"><span class="pre">DT_STRTAB</span></code> entry.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_FLAGS</span></code></dt><dd><p>This element holds flag values specific to the object being
+loaded.  Each flag value will have the name <code class="docutils literal notranslate"><span class="pre">DF_</span></code><em>flag_name</em>.
+Defined values and their meanings are described below.
+All other values are reserved.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_PREINIT_ARRAY</span></code></dt><dd><p>This element holds the address of the array of pointers to pre-initialization
+functions, discussed in <a class="reference internal" href="#initialization-and-termination-functions"><span class="std std-ref">Initialization and Termination Functions</span></a>.
+The <code class="docutils literal notranslate"><span class="pre">DT_PREINIT_ARRAY</span></code> table is processed only
+in an executable file; it is ignored if contained in a shared object.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_PREINIT_ARRAYSZ</span></code></dt><dd><p>This element holds the size in bytes of the array of pre-initialization
+functions pointed to by the <code class="docutils literal notranslate"><span class="pre">DT_PREINIT_ARRAY</span></code> entry.
+If an object has a <code class="docutils literal notranslate"><span class="pre">DT_PREINIT_ARRAY</span></code> entry, it must
+also have a <code class="docutils literal notranslate"><span class="pre">DT_PREINIT_ARRAYSZ</span></code> entry.  As with
+<code class="docutils literal notranslate"><span class="pre">DT_PREINIT_ARRAY</span></code>, this entry is ignored if it appears
+in a shared object.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_SYMTAB_SHNDX</span></code></dt><dd><p>This element holds the address of the <code class="docutils literal notranslate"><span class="pre">SHT_SYMTAB_SHNDX</span></code>
+section associated with the dynamic symbol table referenced by the
+<code class="docutils literal notranslate"><span class="pre">DT_SYMTAB</span></code> element.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_RELR</span></code></dt><dd><p>This element holds the address of an <code class="docutils literal notranslate"><span class="pre">SHT_RELR</span></code> relocation table,
+described in <a class="reference internal" href="06-reloc.html#relocation"><span class="std std-ref">Relocation</span></a>. This table will hold entries of
+either <code class="docutils literal notranslate"><span class="pre">Elf32_Relr</span></code> for the 32-bit file class or <code class="docutils literal notranslate"><span class="pre">Elf64_Relr</span></code>
+for the 64-bit file class. If this element is present, the dynamic
+structure must also have <code class="docutils literal notranslate"><span class="pre">DT_RELRSZ</span></code> and <code class="docutils literal notranslate"><span class="pre">DT_RELRENT</span></code> elements.
+During dynamic linking, a <code class="docutils literal notranslate"><span class="pre">DT_RELR</span></code> element is processed before
+any <code class="docutils literal notranslate"><span class="pre">DT_REL</span></code> or <code class="docutils literal notranslate"><span class="pre">DT_RELA</span></code> elements in the same object file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_RELRSZ</span></code></dt><dd><p>This element holds the total size, in bytes, of the <code class="docutils literal notranslate"><span class="pre">DT_RELR</span></code>
+relocation table.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_RELRENT</span></code></dt><dd><p>This element holds the size, in bytes, of the <code class="docutils literal notranslate"><span class="pre">DT_RELR</span></code> relocation
+entry.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_SYMTABSZ</span></code></dt><dd><p>This element holds the size, in bytes, of the <code class="docutils literal notranslate"><span class="pre">DT_SYMTAB</span></code> dynamic
+linking symbol table. It must be provided if the <code class="docutils literal notranslate"><span class="pre">DT_HASH</span></code> symbol
+hash table is omitted.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_ENCODING</span></code></dt><dd><p>Values greater than or equal to <code class="docutils literal notranslate"><span class="pre">DT_ENCODING</span></code>
+and less than <code class="docutils literal notranslate"><span class="pre">DT_LOOS</span></code>
+follow the rules for the interpretation of the <code class="docutils literal notranslate"><span class="pre">d_un</span></code> union
+described above.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_LOOS</span></code> through <code class="docutils literal notranslate"><span class="pre">DT_HIOS</span></code></dt><dd><p>Values in this inclusive range
+are reserved for operating system-specific semantics.
+All such values follow the rules for the interpretation of the
+<code class="docutils literal notranslate"><span class="pre">d_un</span></code> union described above.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DT_LOPROC</span></code> through <code class="docutils literal notranslate"><span class="pre">DT_HIPROC</span></code></dt><dd><p>Values in this inclusive range
+are reserved for processor-specific semantics. If meanings
+are specified, the psABI supplement explains them.
+All such values follow the rules for the interpretation of the
+<code class="docutils literal notranslate"><span class="pre">d_un</span></code> union described above.</p>
+</dd>
+</dl>
+<p>Except for the <code class="docutils literal notranslate"><span class="pre">DT_NULL</span></code> element at the end of the array,
+and the relative order of <code class="docutils literal notranslate"><span class="pre">DT_NEEDED</span></code>
+elements, entries may appear in any order.
+Tag values not appearing in the table are reserved.</p>
+<table class="docutils align-default" id="id10">
+<caption><span class="caption-number">Table 8.2 </span><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">DT_FLAGS</span></code> values</span><a class="headerlink" href="#id10" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DF_ORIGIN</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x1</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DF_SYMBOLIC</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x2</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DF_TEXTREL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x4</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DF_BIND_NOW</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x8</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DF_STATIC_TLS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x10</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">DF_ORIGIN</span></code></dt><dd><p>This flag signifies that the object being loaded may make reference
+to the <code class="docutils literal notranslate"><span class="pre">$ORIGIN</span></code> substitution string (see <a class="reference internal" href="#substitution-sequences"><span class="std std-ref">Substitution Sequences</span></a>).
+The dynamic linker must determine the pathname of the object
+containing this entry when the object is loaded.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DF_SYMBOLIC</span></code></dt><dd><p>If this flag is set in a shared object library,
+the dynamic linker’s symbol resolution algorithm for
+references within the library is changed.
+Instead of starting a symbol search with the
+executable file, the dynamic linker starts from the
+shared object itself.
+If the shared object fails to supply the referenced
+symbol, the dynamic linker then searches the
+executable file and other shared objects as usual.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DF_TEXTREL</span></code></dt><dd><p>If this flag is not set, no
+relocation entry should cause a modification to a non-writable
+segment, as specified by the segment permissions in the program
+header table.
+If this flag is set, one or more relocation entries might
+request modifications to a non-writable segment, and the dynamic
+linker can prepare accordingly.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DF_BIND_NOW</span></code></dt><dd><p>If set in a shared object or executable, this flag
+instructs the dynamic linker to process all relocations
+for the object containing this entry before transferring
+control to the program.
+The presence of this entry takes
+precedence over a directive to use lazy binding for this object when
+specified through the environment or via <code class="docutils literal notranslate"><span class="pre">dlopen()</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DF_STATIC_TLS</span></code></dt><dd><p>If set in a shared object or executable,
+this flag instructs the dynamic linker to reject
+attempts to load this file dynamically.
+It indicates that the shared object or executable
+contains code using a <em>static thread-local storage</em> scheme.
+Implementations need not support any form of thread-local storage.</p>
+</dd>
+</dl>
+</section>
+<section id="shared-object-dependencies">
+<span id="id4"></span><h2><span class="section-number">8.4. </span>Shared Object Dependencies<a class="headerlink" href="#shared-object-dependencies" title="Link to this heading">¶</a></h2>
+<p>When the link editor processes an archive library,
+it extracts library members and copies them into
+the output object file.
+These statically linked services are available during
+execution without involving the dynamic linker.
+Shared objects also provide services, and
+the dynamic linker must attach the proper shared object files to
+the process image for execution.</p>
+<p>When the dynamic linker creates the memory segments for
+an object file, the dependencies (recorded in
+<code class="docutils literal notranslate"><span class="pre">DT_NEEDED</span></code> entries of the dynamic structure)
+tell what shared objects are needed to
+supply the program’s services.
+By repeatedly connecting referenced shared objects and
+their dependencies, the dynamic linker builds a complete process image.
+When resolving symbolic references, the dynamic linker
+examines the symbol tables with a breadth-first search.
+That is, it first looks at the symbol table of the
+executable program itself, then at the symbol tables
+of the <code class="docutils literal notranslate"><span class="pre">DT_NEEDED</span></code> entries (in order),
+and then at the second level <code class="docutils literal notranslate"><span class="pre">DT_NEEDED</span></code> entries, and
+so on.  Shared object files must be readable by the process;
+other permissions are not required.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Even when a shared object is referenced multiple
+times in the dependency list, the dynamic linker will
+connect the object only once to the process.</p>
+</div>
+<p>Names in the dependency list are copies either of the
+<code class="docutils literal notranslate"><span class="pre">DT_SONAME</span></code> strings or the path names of the shared objects used to build
+the object file.
+For example, if the link editor builds an executable
+file using one shared object with a
+<code class="docutils literal notranslate"><span class="pre">DT_SONAME</span></code> entry of <code class="docutils literal notranslate"><span class="pre">lib1</span></code>
+and another shared object library with the path name
+<code class="docutils literal notranslate"><span class="pre">/usr/lib/lib2</span></code>, the executable file will contain
+<code class="docutils literal notranslate"><span class="pre">lib1</span></code> and <code class="docutils literal notranslate"><span class="pre">/usr/lib/lib2</span></code> in its dependency list.</p>
+<p>If a shared object name has one or more slash (<code class="docutils literal notranslate"><span class="pre">/</span></code>)
+characters anywhere in the name, such as <code class="docutils literal notranslate"><span class="pre">/usr/lib/lib2</span></code>
+or <code class="docutils literal notranslate"><span class="pre">directory/file</span></code>, the dynamic linker uses that string directly
+as the path name.
+If the name has no slashes, such as <code class="docutils literal notranslate"><span class="pre">lib1</span></code>,
+three facilities specify shared object path searching.</p>
+<ul>
+<li><p>The dynamic array tag <code class="docutils literal notranslate"><span class="pre">DT_RUNPATH</span></code> gives a string that
+holds a list of directories, separated by colons (<code class="docutils literal notranslate"><span class="pre">:</span></code>).
+For example, the string
+<code class="docutils literal notranslate"><span class="pre">/home/dir/lib:/home/dir2/lib:</span></code>
+tells the dynamic linker to search first the directory
+<code class="docutils literal notranslate"><span class="pre">/home/dir/lib</span></code>, then <code class="docutils literal notranslate"><span class="pre">/home/dir2/lib</span></code>,
+and then the current directory to find dependencies.</p>
+<p>The set of directories specified by a given <code class="docutils literal notranslate"><span class="pre">DT_RUNPATH</span></code>
+entry is used to find only the immediate dependencies
+of the executable or shared object containing the <code class="docutils literal notranslate"><span class="pre">DT_RUNPATH</span></code>
+entry.  That is, it is used only for those dependencies contained in
+the <code class="docutils literal notranslate"><span class="pre">DT_NEEDED</span></code> entries of the dynamic structure containing
+the <code class="docutils literal notranslate"><span class="pre">DT_RUNPATH</span></code> entry, itself.
+One object’s <code class="docutils literal notranslate"><span class="pre">DT_RUNPATH</span></code> entry does not affect the search
+for any other object’s dependencies.</p>
+</li>
+<li><p>A variable called <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> in the process environment
+may hold a list of directories as above, optionally
+followed by a semicolon (<code class="docutils literal notranslate"><span class="pre">;</span></code>) and
+another directory list.
+The following values would be equivalent to the previous example:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH=/home/dir/usr/lib:/home/dir2/usr/lib:</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH=/home/dir/usr/lib;/home/dir2/usr/lib:</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH=/home/dir/usr/lib:/home/dir2/usr/lib:;</span></code></p></li>
+</ul>
+<p>Although some programs (such as the link editor) treat the lists
+before and after the semicolon differently,
+the dynamic linker does not.
+Nevertheless, the dynamic linker accepts the semicolon
+notation, with the semantics described previously.</p>
+<p>All <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> directories are searched before those from
+<code class="docutils literal notranslate"><span class="pre">DT_RUNPATH</span></code>.</p>
+</li>
+<li><p>Finally, if the other two groups of directories
+fail to locate the desired library, the dynamic linker searches
+the default directories, <code class="docutils literal notranslate"><span class="pre">/usr/lib</span></code> or such other
+directories as may be specified by the psABI supplement.</p></li>
+</ul>
+<p>When the dynamic linker is searching for shared objects, it is
+not a fatal error if an ELF file with the wrong attributes
+is encountered in the search.  Instead, the dynamic linker
+shall exhaust the search of all paths before determining
+that a matching object could not be found.  For this determination,
+the relevant attributes are contained in the following ELF header fields:
+<code class="docutils literal notranslate"><span class="pre">e_ident[EI_DATA]</span></code>,
+<code class="docutils literal notranslate"><span class="pre">e_ident[EI_CLASS]</span></code>,
+<code class="docutils literal notranslate"><span class="pre">e_ident[EI_OSABI]</span></code>,
+<code class="docutils literal notranslate"><span class="pre">e_ident[EI_ABIVERSION]</span></code>,
+<code class="docutils literal notranslate"><span class="pre">e_machine</span></code>,
+<code class="docutils literal notranslate"><span class="pre">e_type</span></code>, <code class="docutils literal notranslate"><span class="pre">e_flags</span></code>
+and <code class="docutils literal notranslate"><span class="pre">e_version</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For security, the dynamic linker ignores
+<code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> for set-user and
+set-group ID programs.
+It does, however, search <code class="docutils literal notranslate"><span class="pre">DT_RUNPATH</span></code> directories
+and the default directories.
+The same restriction may be applied to processes that have more than
+minimal privileges on systems with installed extended security
+mechanisms.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A fourth search facility, the dynamic array tag <code class="docutils literal notranslate"><span class="pre">DT_RPATH</span></code>,
+has been deprecated.
+It provides a colon-separated list of directories to search.
+Directories specified by <code class="docutils literal notranslate"><span class="pre">DT_RPATH</span></code> are searched
+before directories specified by <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code>.</p>
+<p>If both <code class="docutils literal notranslate"><span class="pre">DT_RPATH</span></code> and <code class="docutils literal notranslate"><span class="pre">DT_RUNPATH</span></code>
+entries appear in a single object’s dynamic array,
+the dynamic linker processes only the <code class="docutils literal notranslate"><span class="pre">DT_RUNPATH</span></code>
+entry.</p>
+</div>
+<section id="substitution-sequences">
+<span id="id5"></span><h3><span class="section-number">8.4.1. </span>Substitution Sequences<a class="headerlink" href="#substitution-sequences" title="Link to this heading">¶</a></h3>
+<p>Within a string provided by dynamic array entries with the
+<code class="docutils literal notranslate"><span class="pre">DT_NEEDED</span></code> or <code class="docutils literal notranslate"><span class="pre">DT_RUNPATH</span></code> tags and in
+pathnames passed as parameters to the <code class="docutils literal notranslate"><span class="pre">dlopen()</span></code> routine, a
+dollar sign (<code class="docutils literal notranslate"><span class="pre">$</span></code>) introduces a substitution sequence.
+This sequence consists of the dollar sign immediately followed
+by either the longest <em>name</em> sequence or a name contained
+within left and right braces (<code class="docutils literal notranslate"><span class="pre">{</span></code>) and (<code class="docutils literal notranslate"><span class="pre">}</span></code>).
+A name is a sequence of bytes that start with either a letter or
+an underscore followed by zero or more letters, digits or underscores.
+If a dollar sign is not immediately followed by a name or a
+brace-enclosed name, the behavior of the dynamic linker is unspecified.</p>
+<p>If the name is “<code class="docutils literal notranslate"><span class="pre">ORIGIN</span></code>”, then the substitution
+sequence is replaced by the dynamic linker with the absolute
+pathname of the directory in which the object containing the
+substitution sequence originated.  Moreover, the pathname will
+contain no symbolic links or use of “<code class="docutils literal notranslate"><span class="pre">.</span></code>” or
+“<code class="docutils literal notranslate"><span class="pre">..</span></code>” components.
+Otherwise (when the name is not “<code class="docutils literal notranslate"><span class="pre">ORIGIN</span></code>”)
+the behavior of the dynamic linker is unspecified.</p>
+<p>When the dynamic linker loads an object that uses <code class="docutils literal notranslate"><span class="pre">$ORIGIN</span></code>,
+it must calculate the pathname of the directory containing the object.
+Because this calculation can be computationally expensive,
+implementations may want to avoid the calculation for objects
+that do not use <code class="docutils literal notranslate"><span class="pre">$ORIGIN</span></code>.
+If an object calls <code class="docutils literal notranslate"><span class="pre">dlopen()</span></code> with a string
+containing <code class="docutils literal notranslate"><span class="pre">$ORIGIN</span></code> and does not use <code class="docutils literal notranslate"><span class="pre">$ORIGIN</span></code>
+in one if its dynamic array entries,
+the dynamic linker may not have calculated the
+pathname for the object until the <code class="docutils literal notranslate"><span class="pre">dlopen()</span></code> actually
+occurs.  Since the application may have changed its current
+working directory before the <code class="docutils literal notranslate"><span class="pre">dlopen()</span></code> call,
+the calculation may not yield the correct result.
+To avoid this possibility, an object may signal its intention
+to reference <code class="docutils literal notranslate"><span class="pre">$ORIGIN</span></code> by setting the
+<code class="docutils literal notranslate"><span class="pre">DF_ORIGIN</span></code> flag.
+An implementation may reject an attempt to use <code class="docutils literal notranslate"><span class="pre">$ORIGIN</span></code>
+within a <code class="docutils literal notranslate"><span class="pre">dlopen()</span></code> call from an object that
+did not set the <code class="docutils literal notranslate"><span class="pre">DF_ORIGIN</span></code> flag and did not
+use <code class="docutils literal notranslate"><span class="pre">$ORIGIN</span></code> within its dynamic array.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For security, the dynamic linker does not allow use of
+<code class="docutils literal notranslate"><span class="pre">$ORIGIN</span></code> substitution sequences for set-user and
+set-group ID programs.  For such sequences that appear
+within strings specified by <code class="docutils literal notranslate"><span class="pre">DT_RUNPATH</span></code> dynamic
+array entries, the specific search path containing the
+<code class="docutils literal notranslate"><span class="pre">$ORIGIN</span></code> sequence is ignored (though other
+search paths in the same string are processed).
+<code class="docutils literal notranslate"><span class="pre">$ORIGIN</span></code> sequences within a <code class="docutils literal notranslate"><span class="pre">DT_NEEDED</span></code>
+entry or path passed as a parameter to <code class="docutils literal notranslate"><span class="pre">dlopen()</span></code>
+are treated as errors.
+The same restrictions may be applied to processes that have more than
+minimal privileges on systems with installed extended security
+mechanisms.</p>
+</div>
+</section>
+</section>
+<section id="hash-table">
+<span id="id6"></span><h2><span class="section-number">8.5. </span>Hash Table<a class="headerlink" href="#hash-table" title="Link to this heading">¶</a></h2>
+<p>A hash table of <code class="docutils literal notranslate"><span class="pre">Elf32_Word</span></code>
+objects supports symbol table access.  The same table
+layout is used for both the 32-bit and 64-bit file class.
+Labels appear below
+to help explain the hash table organization,
+but they are not part of the specification.</p>
+<figure class="align-default" id="id11">
+<img alt="Hash Table" src="../_images/figure-6.svg" style="width: 270pt;" />
+<figcaption>
+<p><span class="caption-number">Figure 8.1 </span><span class="caption-text">Hash Table</span><a class="headerlink" href="#id11" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The <code class="docutils literal notranslate"><span class="pre">bucket</span></code> array contains <code class="docutils literal notranslate"><span class="pre">nbucket</span></code>
+entries, and the <code class="docutils literal notranslate"><span class="pre">chain</span></code> array contains <code class="docutils literal notranslate"><span class="pre">nchain</span></code>
+entries; indexes start at 0.
+Both <code class="docutils literal notranslate"><span class="pre">bucket</span></code> and <code class="docutils literal notranslate"><span class="pre">chain</span></code>
+hold symbol table indexes.
+Chain table entries parallel the symbol table.
+The number of symbol table entries should equal
+<code class="docutils literal notranslate"><span class="pre">nchain</span></code>;
+so symbol table indexes also select chain table entries.
+A hashing function (shown below) accepts a symbol name and returns a
+value that may be used to compute a <code class="docutils literal notranslate"><span class="pre">bucket</span></code> index.
+Consequently, if the hashing function returns the value
+<em>x</em> for some name, <code class="docutils literal notranslate"><span class="pre">bucket[</span></code><em>x</em><code class="docutils literal notranslate"><span class="pre">%nbucket]</span></code> gives
+an index, <em>y</em>,
+into both the symbol table and the chain table.
+If the symbol table entry is not the one desired,
+<code class="docutils literal notranslate"><span class="pre">chain[</span></code><em>y</em><code class="docutils literal notranslate"><span class="pre">]</span></code> gives the next symbol table entry
+with the same hash value.
+One can follow the <code class="docutils literal notranslate"><span class="pre">chain</span></code>
+links until either the selected symbol table entry
+holds the desired name or the <code class="docutils literal notranslate"><span class="pre">chain</span></code> entry contains the value
+<code class="docutils literal notranslate"><span class="pre">STN_UNDEF</span></code>.</p>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-number">Listing 8.2 </span><span class="caption-text">Hashing Function</span><a class="headerlink" href="#id12" title="Link to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span>
+<span class="nf">elf_hash</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w">   </span><span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">;</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">name</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">h</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="o">++</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">h</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0xf0000000</span><span class="p">)</span>
+<span class="w">            </span><span class="n">h</span><span class="w"> </span><span class="o">^=</span><span class="w"> </span><span class="n">g</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">24</span><span class="p">;</span>
+<span class="w">        </span><span class="n">h</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">~</span><span class="n">g</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">h</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="initialization-and-termination-functions">
+<span id="id7"></span><h2><span class="section-number">8.6. </span>Initialization and Termination Functions<a class="headerlink" href="#initialization-and-termination-functions" title="Link to this heading">¶</a></h2>
+<p>After the dynamic linker has built the process image
+and performed the relocations, each shared object and the executable
+file get the opportunity to execute some initialization functions.
+All shared object initializations happen before the executable
+file gains control.</p>
+<p>Before the initialization functions for any object A is called, the initialization
+functions for any other objects that object A depends on are called.
+For these purposes, an object A depends on another object B,
+if B appears in A’s list of needed objects (recorded in the <code class="docutils literal notranslate"><span class="pre">DT_NEEDED</span></code>
+entries of the dynamic structure).
+The order of initialization for circular dependencies is undefined.</p>
+<p>The initialization of objects occurs by recursing through the needed
+entries of each object.
+The initialization functions for an object are invoked after the needed
+entries for that object have been processed.
+The order of processing among the entries of a particular list of
+needed objects is unspecified.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each psABI supplement may optionally further restrict
+the algorithm used to determine the order of initialization.
+Any such restriction, however, may not conflict with
+the rules described by this specification.</p>
+</div>
+<p>The following example illustrates two of the possible correct orderings
+which can be generated for the example NEEDED lists.
+In this example the <em>a.out</em> is dependent on <code class="docutils literal notranslate"><span class="pre">b</span></code>, <code class="docutils literal notranslate"><span class="pre">d</span></code>, and <code class="docutils literal notranslate"><span class="pre">e</span></code>.
+<code class="docutils literal notranslate"><span class="pre">b</span></code> is dependent on <code class="docutils literal notranslate"><span class="pre">d</span></code> and <code class="docutils literal notranslate"><span class="pre">f</span></code>, while <code class="docutils literal notranslate"><span class="pre">d</span></code> is dependent on <code class="docutils literal notranslate"><span class="pre">e</span></code> and <code class="docutils literal notranslate"><span class="pre">g</span></code>.
+From this information a dependency graph can be drawn.
+The above algorithm on initialization will then allow the following
+specified initialization orderings (among others).</p>
+<figure class="align-default">
+<img alt="../_images/init-term.dot.svg" src="../_images/init-term.dot.svg" style="width: 654pt;" />
+</figure>
+<figure class="align-default" id="id13">
+<img alt="../_images/init-term.dot.2.svg" src="../_images/init-term.dot.2.svg" style="width: 639pt;" />
+<figcaption>
+<p><span class="caption-number">Figure 8.2 </span><span class="caption-text">Initialization Ordering Example</span><a class="headerlink" href="#id13" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Similarly, shared objects and executable files may have termination
+functions, which are executed with the <code class="docutils literal notranslate"><span class="pre">atexit()</span></code> mechanism after
+the base process begins its termination sequence.
+The termination functions for any object A must be called before
+the termination functions for any other objects that object A depends
+on.  For these purposes, an object A depends on another object B,
+if B appears in A’s list of needed objects (recorded in the <code class="docutils literal notranslate"><span class="pre">DT_NEEDED</span></code>
+entries of the dynamic structure).
+The order of termination for circular dependencies is undefined.</p>
+<p>Finally, an executable file may have pre-initialization functions.
+These functions are executed after the dynamic linker has built
+the process image and performed relocations but before any shared
+object initialization functions.  Pre-initialization functions are
+not permitted in shared objects.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Complete initialization of system libraries may not have occurred when
+pre-initializations are executed, so some features of the system
+may not be available to pre-initialization code.  In general,
+use of pre-initialization code can be considered portable only
+if it has no dependencies on system libraries.</p>
+</div>
+<p>The dynamic linker ensures that it will not execute any initialization,
+pre-initialization, or termination functions more than once.</p>
+<p>Shared objects designate their
+initialization and termination code in one of two ways.
+First, they may specify the address of a function to execute
+via the <code class="docutils literal notranslate"><span class="pre">DT_INIT</span></code> and <code class="docutils literal notranslate"><span class="pre">DT_FINI</span></code> entries in the dynamic structure,
+described in <a class="reference internal" href="#dynamic-section"><span class="std std-ref">Dynamic Section</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that the address of a function
+need not be the same as a pointer to a function
+as defined by the psABI supplement.</p>
+</div>
+<p>Shared objects may also (or instead) specify the address and size of
+an array of function pointers.  Each element of this
+array is a pointer to a function to be executed by the dynamic linker.
+Each array element is the size of a pointer in the
+programming model followed by the object containing
+the array.  The address of the array of initialization
+function pointers is specified by the <code class="docutils literal notranslate"><span class="pre">DT_INIT_ARRAY</span></code>
+entry in the dynamic structure.  Similarly, the address of
+the array of pre-initialization functions is specified by
+<code class="docutils literal notranslate"><span class="pre">DT_PREINIT_ARRAY</span></code> and the address of the array
+of termination functions is specified by <code class="docutils literal notranslate"><span class="pre">DT_FINI_ARRAY</span></code>.
+The size of each array is specified by the <code class="docutils literal notranslate"><span class="pre">DT_INIT_ARRAYSZ</span></code>,
+<code class="docutils literal notranslate"><span class="pre">DT_PREINIT_ARRAYSZ</span></code>, and <code class="docutils literal notranslate"><span class="pre">DT_FINI_ARRAYSZ</span></code>
+entries.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The addresses contained in the initialization and termination arrays
+are function pointers as defined by the psABI supplement for
+each processor.  On some architectures, a function pointer may not
+contain the actual address of the function.</p>
+</div>
+<p>The functions pointed to in the arrays
+specified by <code class="docutils literal notranslate"><span class="pre">DT_INIT_ARRAY</span></code> and by <code class="docutils literal notranslate"><span class="pre">DT_PREINIT_ARRAY</span></code>
+are executed by the dynamic
+linker in the same order in which their addresses appear in
+the array; those specified by <code class="docutils literal notranslate"><span class="pre">DT_FINI_ARRAY</span></code>
+are executed in reverse order.</p>
+<p>If an object contains both <code class="docutils literal notranslate"><span class="pre">DT_INIT</span></code>
+and <code class="docutils literal notranslate"><span class="pre">DT_INIT_ARRAY</span></code> entries, the function referenced
+by the <code class="docutils literal notranslate"><span class="pre">DT_INIT</span></code> entry is processed before those
+referenced by the <code class="docutils literal notranslate"><span class="pre">DT_INIT_ARRAY</span></code> entry for that object.
+If an object contains both <code class="docutils literal notranslate"><span class="pre">DT_FINI</span></code>
+and <code class="docutils literal notranslate"><span class="pre">DT_FINI_ARRAY</span></code> entries, the functions referenced
+by the <code class="docutils literal notranslate"><span class="pre">DT_FINI_ARRAY</span></code> entry are processed before the one
+referenced by the <code class="docutils literal notranslate"><span class="pre">DT_FINI</span></code> entry for that object.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the <code class="docutils literal notranslate"><span class="pre">atexit()</span></code> termination processing normally will be done,
+it is not guaranteed to have executed upon process death.
+In particular, the process will not execute the termination processing
+if it calls <code class="docutils literal notranslate"><span class="pre">_exit()</span></code> or if the process dies because it received a signal
+that it neither caught nor ignored.</p>
+</div>
+<p>The psABI supplement for each processor specifies whether the
+dynamic linker is responsible for calling the executable file’s
+initialization function or registering the executable file’s
+termination function with <code class="docutils literal notranslate"><span class="pre">atexit()</span></code>.
+Termination functions specified by users via the <code class="docutils literal notranslate"><span class="pre">atexit()</span></code> mechanism
+must be executed before any termination functions of shared objects.</p>
+</section>
+</section>
+
+
+      </div>
+      <div class="related bottom">
+	&nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="07-pheader.html" title="Previous document"><span class="section-number">7. </span>Program Loading</a>
+        </li>
+        <li>
+          <a href="a-emachine.html" title="Next document">Appendix A: Assigned Machine Values</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+      </div>
+    </div>
+  </div>
+  <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+    <div class="sphinxsidebarwrapper">
+      <div class="sphinxsidebar-navigation__pages">
+	<h3><a href="../index.html">Contents</a></h3>
+	<ul>
+<li class="toctree-l1"><a class="reference internal" href="00-foreword.html">Foreword</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="01-intro.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02-eheader.html">2. ELF Header</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03-sheader.html">3. Sections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04-strtab.html">4. String Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05-symtab.html">5. Symbol Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06-reloc.html">6. Relocation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07-pheader.html">7. Program Loading</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">8. Dynamic Linking</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="a-emachine.html">Appendix A: Assigned Machine Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="b-osabi.html">Appendix B: Assigned OSABI Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="c-history.html">Appendix C: Revision History</a></li>
+</ul>
+
+      </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+    </div>
+  </div>
+  <div class="clearer"></div>
+</div>
+<div class="footer">
+<p>© 1997, 1998, 1999, 2000, 2001 The Santa Cruz Operation, Inc.  All rights reserved.
+<br>© 2002 Caldera International.  All rights reserved.
+<br>© 2003-2010 The SCO Group.  All rights reserved.
+<br>© 2011-2014, 2023–2025 Xinuos Inc.  All rights reserved.</p>
+<p>Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.1</a>
+&amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</p>
+</div>  
+
+  </body>
+</html>

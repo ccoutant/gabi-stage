@@ -251,7 +251,7 @@ but is not required.
    ``DT_NEEDED``           ``1``           ``d_val``    optional        optional
    ``DT_PLTRELSZ``         ``2``           ``d_val``    optional        optional
    ``DT_PLTGOT``           ``3``           ``d_ptr``    optional        optional
-   ``DT_HASH``             ``4``           ``d_ptr``    mandatory       mandatory
+   ``DT_HASH``             ``4``           ``d_ptr``    mandatory†      mandatory†
    ``DT_STRTAB``           ``5``           ``d_ptr``    mandatory       mandatory
    ``DT_SYMTAB``           ``6``           ``d_ptr``    mandatory       mandatory
    ``DT_RELA``             ``7``           ``d_ptr``    mandatory       optional
@@ -282,13 +282,18 @@ but is not required.
    ``DT_PREINIT_ARRAY``    ``32``          ``d_ptr``    optional        ignored
    ``DT_PREINIT_ARRAYSZ``  ``33``          ``d_val``    optional        ignored
    ``DT_SYMTAB_SHNDX``     ``34``          ``d_ptr``    optional        optional
+   ``DT_RELRSZ``           ``35``          ``d_val``    optional        optional
+   ``DT_RELR``             ``36``          ``d_ptr``    optional        optional
+   ``DT_RELRENT``          ``37``          ``d_val``    optional        optional
+   ``DT_SYMTABSZ``         ``39``          ``d_val``    optional†       optional†
    ``DT_LOOS``             ``0x6000000D``  unspecified  unspecified     unspecified
    ``DT_HIOS``             ``0x6ffff000``  unspecified  unspecified     unspecified
    ``DT_LOPROC``           ``0x70000000``  unspecified  unspecified     unspecified
    ``DT_HIPROC``           ``0x7fffffff``  unspecified  unspecified     unspecified
    ======================  ==============  ===========  ==============  =================
 
-\* Signifies an entry that has been deprecated.
+| \* Signifies an entry that has been deprecated.
+| † ``DT_HASH`` is optional if ``DT_SYMTABSZ`` is provided.
 
 ``DT_NULL``
     An entry with a ``DT_NULL`` tag marks the end of the
@@ -321,6 +326,11 @@ but is not required.
     described in :ref:`Hash-Table`.
     This hash table refers to the symbol table referenced by the ``DT_SYMTAB``
     element.
+
+    ``DT_HASH`` is normally mandatory. The psABI supplement is allowed
+    to override this requirement by providing an alternative hash
+    mechanism. In such cases, DT_SYMTABSZ, which is normally optional,
+    becomes mandatory.
 
 ``DT_STRTAB``
     This element holds the address of the string table,
@@ -516,6 +526,28 @@ but is not required.
     This element holds the address of the ``SHT_SYMTAB_SHNDX``
     section associated with the dynamic symbol table referenced by the
     ``DT_SYMTAB`` element.
+
+``DT_RELR``
+    This element holds the address of an ``SHT_RELR`` relocation table,
+    described in :ref:`Relocation`. This table will hold entries of
+    either ``Elf32_Relr`` for the 32-bit file class or ``Elf64_Relr``
+    for the 64-bit file class. If this element is present, the dynamic
+    structure must also have ``DT_RELRSZ`` and ``DT_RELRENT`` elements.
+    During dynamic linking, a ``DT_RELR`` element is processed before
+    any ``DT_REL`` or ``DT_RELA`` elements in the same object file.
+
+``DT_RELRSZ``
+    This element holds the total size, in bytes, of the ``DT_RELR``
+    relocation table.
+
+``DT_RELRENT``
+    This element holds the size, in bytes, of the ``DT_RELR`` relocation
+    entry.
+
+``DT_SYMTABSZ``
+    This element holds the size, in bytes, of the ``DT_SYMTAB`` dynamic
+    linking symbol table. It must be provided if the ``DT_HASH`` symbol
+    hash table is omitted.
 
 ``DT_ENCODING``
     Values greater than or equal to ``DT_ENCODING``
