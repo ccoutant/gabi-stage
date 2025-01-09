@@ -1,5 +1,9 @@
+.. |appendixc| raw:: html
+
+   Appendix C:
+
 ############################
-Revision History
+|appendixc| Revision History
 ############################
 
 First Draft (Published May 14, 1998)

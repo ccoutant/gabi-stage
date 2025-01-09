@@ -2,8 +2,12 @@
 
    \elfappendices
 
+.. |appendixa| raw:: html
+
+   Appendix A:
+
 ###################################
-Assigned Machine Values
+|appendixa| Assigned Machine Values
 ###################################
 
 The table below lists all assigned ``e_machine`` values.
