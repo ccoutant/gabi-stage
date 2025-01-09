@@ -83,7 +83,7 @@ latex_table_style = ['booktabs', 'nocolorrows']
 latex_elements = {
     'releasename': 'Version',
     'fontpkg': r"""
-\usepackage[default]{opensans}
+\usepackage[default,defaultsans]{opensans}
 \usepackage{inconsolata}
 \usepackage[T1]{fontenc}
 """,
