@@ -404,8 +404,8 @@ A section header’s ``sh_type`` member specifies the section’s semantics.
    ``ELFCLASS32`` objects, and ``Elf64_Relr`` for ``ELFCLASS64``
    objects. ``SHT_RELR`` sections are for dynamic linking, and may only
    appear in object files of type ``ET_EXEC`` or ``ET_DYN``. An object
-   file may have multiple relocation sections. See :ref:`Relocation` for
-   details.
+   file may have multiple relocation sections.
+   See :numref:`Chapter {number}, {name} <Relocation>` for details.
 
 ``SHT_LOOS`` through \ ``SHT_HIOS``
     Values in this inclusive range
@@ -558,8 +558,8 @@ Undefined attributes are set to zero.
     This flag identifies a section containing compressed data. In
     ET_EXEC and ET_DYN files, SHF_COMPRESSED cannot be used in
     conjunction with SHF_ALLOC.  In addition, SHF_COMPRESSED cannot be
-    applied to sections of type SHT_NOBITS. See
-    :ref:`Compressed-Sections`, below.
+    applied to sections of type SHT_NOBITS.
+    See :numref:`Section {number}, {name} <Compressed-Sections>`, below.
 
 ``SHF_MASKOS``
     All bits included in this mask
@@ -1050,8 +1050,9 @@ and have the indicated types and attributes.
 
 ``.relr.dyn``
     This section holds relative relocation information for dynamic
-    linking, compactly encoded as described in :ref:`Relocation`. The
-    relocations in this section are processed before other relocations
+    linking, compactly encoded as described in
+    :numref:`Section {number}, {name} <relative-relocation-table>`.
+    The relocations in this section are processed before other relocations
     in any ``SHT_REL`` or ``SHT_RELA`` section.
 
 ``.rodata`` and \ ``.rodata1``

@@ -530,7 +530,8 @@ but is not required.
 
 ``DT_RELR``
     This element holds the address of an ``SHT_RELR`` relocation table,
-    described in :ref:`Relocation`. This table will hold entries of
+    described in :numref:`Section {number}, {name} <relative-relocation-table>`.
+    This table will hold entries of
     either ``Elf32_Relr`` for the 32-bit file class or ``Elf64_Relr``
     for the 64-bit file class. If this element is present, the dynamic
     structure must also have ``DT_RELRSZ`` and ``DT_RELRENT`` elements.

@@ -173,6 +173,8 @@ sequence, the location specified is ignored.
 A psABI supplement may specify individual relocation types
 that always stop a composition sequence, or always start a new one.
 
+.. _relative-relocation-table:
+
 Relative Relocation Table
 =========================
 
