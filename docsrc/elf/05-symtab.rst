@@ -9,8 +9,9 @@ needed to locate and relocate a program’s symbolic
 definitions and references.
 A symbol table index is a subscript into this array.
 Index 0 both designates the first entry in the table
-and serves as the undefined symbol index.  The contents of the
-initial entry are specified in :ref:`first-symbol-table-entry`.
+and serves as the undefined symbol index.
+The contents of the initial entry are specified in
+:numref:`Section {number}, {name} <first-symbol-table-entry>`.
 
 .. tabularcolumns:: l r
 
@@ -104,7 +105,7 @@ A symbol table entry has the following format.
     Every symbol table entry is *defined* in relation
     to some section. This member holds the relevant
     section header table index.
-    As described in :ref:`special-section-indexes`,
+    As described in :numref:`Section {number}, {name} <special-section-indexes>`,
     some section indexes indicate special meanings.
 
     If this member contains ``SHN_XINDEX``,
@@ -195,7 +196,7 @@ Global and weak symbols differ in two major ways.
 
 In each symbol table, all symbols with ``STB_LOCAL``
 binding precede the weak and global symbols.
-As described in :ref:`Sections`,
+As described in :numref:`Chapter {number}, {name} <Sections>`,
 a symbol table section’s ``sh_info``
 section header member holds the symbol table index
 for the first non-local symbol.

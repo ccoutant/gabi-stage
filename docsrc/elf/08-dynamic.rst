@@ -110,8 +110,9 @@ the following actions:
 The link editor also constructs various data
 that assist the dynamic linker
 for executable and shared object files.
-As shown in :ref:`Program-Header`, this data resides
-in loadable segments, making them available during execution.
+As shown in :numref:`Chapter {number}, {name} <Program-Header>`,
+this data resides in loadable segments,
+making them available during execution.
 (Once again, recall the exact segment contents are processor-specific.
 See the psABI supplement for complete information).
 
@@ -298,10 +299,9 @@ but is not required.
     This element holds the string table offset of a null-terminated string,
     giving the name of a needed library.
     The offset is an index into the table recorded in the ``DT_STRTAB`` code.
-    See :ref:`Shared-Object-Dependencies` for more
-    information about these names.
-    The dynamic array may contain multiple entries with
-    this type.
+    See :numref:`Section {number}, {name} <Shared-Object-Dependencies>`,
+    for more information about these names.
+    The dynamic array may contain multiple entries with this type.
     These entries’ relative order is significant, though their
     relation to entries of other types is not.
 
@@ -318,25 +318,25 @@ but is not required.
 
 ``DT_HASH``
     This element holds the address of the symbol hash table,
-    described in :ref:`Hash-Table`.
+    described in :numref:`Section {number}, {name} <Hash-Table>`.
     This hash table refers to the symbol table referenced by the ``DT_SYMTAB``
     element.
 
 ``DT_STRTAB``
     This element holds the address of the string table,
-    described in :ref:`String-Table`.
+    described in :numref:`Chapter {number}, {name} <String-Table>`.
     Symbol names, library names, and other strings reside
     in this table.
 
 ``DT_SYMTAB``
     This element holds the address of the dynamic linking symbol table,
-    as described in :ref:`Symbol-Table`,
+    as described in :numref:`Chapter {number}, {name} <Symbol-Table>`,
     with ``Elf32_Sym`` entries for the 32-bit class of files and ``Elf64_Sym``
     entries for the 64-bit class of files.
 
 ``DT_RELA``
     This element holds the address of a relocation table,
-    described in :ref:`Relocation`.
+    described in :numref:`Chapter {number}, {name} <Relocation>`.
     Entries in the table have explicit addends
     (``Elf32_Rela`` for the 32-bit file class
     or ``Elf64_Rela`` for the 64-bit file class).
@@ -371,22 +371,23 @@ but is not required.
 
 ``DT_INIT``
     This element holds the address of the initialization function,
-    discussed in :ref:`Initialization-and-Termination-Functions`.
+    discussed in :numref:`Section {number}, {name} <Initialization-and-Termination-Functions>`.
 
 ``DT_FINI``
     This element holds the address of the termination function,
-    discussed in :ref:`Initialization-and-Termination-Functions`.
+    discussed in :numref:`Section {number}, {name} <Initialization-and-Termination-Functions>`.
 
 ``DT_SONAME``
     This element holds the string table offset of a null-terminated string,
     giving the name of the shared object.
     The offset is an index into the table recorded in the ``DT_STRTAB`` entry.
-    See :ref:`Shared-Object-Dependencies` for more
-    information about these names.
+    See :numref:`Section {number}, {name} <Shared-Object-Dependencies>`
+    for more information about these names.
 
 ``DT_RPATH``
     This element holds the string table offset of a null-terminated search
-    library search path string discussed in :ref:`Shared-Object-Dependencies`.
+    library search path string discussed in
+    :numref:`Section {number}, {name} <Shared-Object-Dependencies>`.
     The offset is an index into the table recorded in the
     ``DT_STRTAB`` entry.  This entry is deprecated; its
     use has been superseded by ``DT_RUNPATH``.
@@ -467,11 +468,11 @@ but is not required.
 
 ``DT_INIT_ARRAY``
     This element holds the address of the array of pointers to initialization
-    functions, discussed in :ref:`Initialization-and-Termination-Functions`.
+    functions, discussed in :numref:`Section {number}, {name} <Initialization-and-Termination-Functions>`.
 
 ``DT_FINI_ARRAY``
     This element holds the address of the array of pointers to termination
-    functions, discussed in :ref:`Initialization-and-Termination-Functions`.
+    functions, discussed in :numref:`Section {number}, {name} <Initialization-and-Termination-Functions>`.
 
 ``DT_INIT_ARRAYSZ``
     This element holds the size in bytes of the array of initialization
@@ -488,7 +489,7 @@ but is not required.
 ``DT_RUNPATH``
     This element holds the string table offset of a null-terminated
     library search path string discussed in
-    :ref:`Shared-Object-Dependencies`.
+    :numref:`Section {number}, {name} <Shared-Object-Dependencies>`.
     The offset is an index into the table recorded in the
     ``DT_STRTAB`` entry.
 
@@ -500,7 +501,7 @@ but is not required.
 
 ``DT_PREINIT_ARRAY``
     This element holds the address of the array of pointers to pre-initialization
-    functions, discussed in :ref:`Initialization-and-Termination-Functions`.
+    functions, discussed in :numref:`Section {number}, {name} <Initialization-and-Termination-Functions>`.
     The ``DT_PREINIT_ARRAY`` table is processed only
     in an executable file; it is ignored if contained in a shared object.
 
@@ -557,7 +558,8 @@ Tag values not appearing in the table are reserved.
 
 ``DF_ORIGIN``
     This flag signifies that the object being loaded may make reference
-    to the ``$ORIGIN`` substitution string (see :ref:`Substitution-Sequences`\ ).
+    to the ``$ORIGIN`` substitution string
+    (see :numref:`Section {number}, {name} <Substitution-Sequences>`).
     The dynamic linker must determine the pathname of the object
     containing this entry when the object is loaded.
 
@@ -932,7 +934,7 @@ Shared objects designate their
 initialization and termination code in one of two ways.
 First, they may specify the address of a function to execute
 via the ``DT_INIT`` and ``DT_FINI`` entries in the dynamic structure,
-described in :ref:`Dynamic-Section`.
+described in :numref:`Section {number}, {name} <Dynamic-Section>`.
 
 .. note::
 

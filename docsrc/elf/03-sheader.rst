@@ -99,7 +99,7 @@ index is to be found elsewhere, in a larger field.
        member of the ELF header says a file has 6 entries
        in the section header table, they have the indexes 0 through 5.
        The contents of the initial entry are specified in
-       :ref:`first-section-header-table-entry`.
+       :numref:`Section {number}, {name} <first-section-header-table-entry>`.
 
 ``SHN_LORESERVE``
     This value specifies the lower bound of the
@@ -175,8 +175,8 @@ A section header has the following structure.
 
 ``sh_name``
     This member specifies the name of the section.
-    Its value is an index into the section header
-    string table section (see :ref:`String-Table`),
+    Its value is an index into the section header string table section
+    (see :numref:`Chapter {number}, {name} <String-Table>`),
     giving the location of a null-terminated string.
 
 ``sh_type``
@@ -305,7 +305,7 @@ A section header’s ``sh_type`` member specifies the section’s semantics.
 ``SHT_STRTAB``
     The section holds a string table.
     An object file may have multiple string table sections.
-    See :ref:`String-Table` for details.
+    See :numref:`Chapter {number}, {name} <String-Table>`, for details.
 
 ``SHT_RELA``
     The section holds relocation entries
@@ -313,23 +313,23 @@ A section header’s ``sh_type`` member specifies the section’s semantics.
     ``Elf32_Rela`` for the 32-bit class of object files
     or type ``Elf64_Rela`` for the 64-bit class of object files.
     An object file may have multiple relocation sections.
-    See :ref:`Relocation` for details.
+    See :numref:`Chapter {number}, {name} <Relocation>`, for details.
 
 ``SHT_HASH``
     The section holds a symbol hash table.
     Currently, an object file may have only one hash table,
     but this restriction may be relaxed in the future.
-    See :ref:`Hash-Table` for details.
+    See :numref:`Section {number}, {name} <Hash-Table>`, for details.
 
 ``SHT_DYNAMIC``
     The section holds information for dynamic linking.
     Currently, an object file may have only one dynamic section,
     but this restriction may be relaxed in the future.
-    See :ref:`Dynamic-Section` for details.
+    See :numref:`Section {number}, {name} <Dynamic-Section>`, for details.
 
 ``SHT_NOTE``
     The section holds information that marks the file in some way.
-    See :ref:`Note-Sections` for details.
+    See :numref:`Section {number}, {name} <Note-Sections>`, for details.
 
 ``SHT_NOBITS``
     A section of this type occupies no space in the file but
@@ -344,29 +344,32 @@ A section header’s ``sh_type`` member specifies the section’s semantics.
     ``Elf32_Rel`` for the 32-bit class of object files or
     type ``Elf64_Rel`` for the 64-bit class of object files.
     An object file may have multiple relocation sections.
-    See :ref:`Relocation` for details.
+    See :numref:`Chapter {number}, {name} <Relocation>`, for details.
 
 ``SHT_SHLIB``
     This section type is reserved but has unspecified semantics.
 
 ``SHT_INIT_ARRAY``
     This section contains an array of pointers to initialization functions,
-    as described in :ref:`Initialization-and-Termination-Functions`.
-    Each pointer in the array
-    is taken as a parameterless procedure with a void return.
+    as described in
+    :numref:`Section {number}, {name} <Initialization-and-Termination-Functions>`.
+    Each pointer in the array is taken as a parameterless procedure
+    with a void return.
 
 ``SHT_FINI_ARRAY``
     This section contains an array of pointers to termination functions,
-    as described in :ref:`Initialization-and-Termination-Functions`.
-    Each pointer in the array
-    is taken as a parameterless procedure with a void return.
+    as described in
+    :numref:`Section {number}, {name} <Initialization-and-Termination-Functions>`.
+    Each pointer in the array is taken as a parameterless procedure
+    with a void return.
 
 ``SHT_PREINIT_ARRAY``
     This section contains an array of pointers to functions that are
     invoked before all other initialization functions,
-    as described in :ref:`Initialization-and-Termination-Functions`.
-    Each pointer in the array
-    is taken as a parameterless procedure with a void return.
+    as described in
+    :numref:`Section {number}, {name} <Initialization-and-Termination-Functions>`.
+    Each pointer in the array is taken as a parameterless procedure
+    with a void return.
 
 ``SHT_GROUP``
     This section defines a section group.  A section group
@@ -939,17 +942,18 @@ and have the indicated types and attributes.
     This section holds dynamic linking information.
     The section’s attributes will include the ``SHF_ALLOC`` bit.
     Whether the ``SHF_WRITE`` bit is set is processor specific.
-    See :ref:`Dynamic-Section` for more information.
+    See :numref:`Section {number}, {name} <Dynamic-Section>`, for more information.
 
 ``.dynstr``
     This section holds strings needed for dynamic linking,
     most commonly the strings
     that represent the names associated with symbol table entries.
-    See :ref:`Dynamic-Section` for more information.
+    See :numref:`Section {number}, {name} <Dynamic-Section>`, for more information.
 
 ``.dynsym``
     This section holds the dynamic linking symbol table,
-    as described in :ref:`Symbol-Table` and :ref:`Dynamic-Linking`.
+    as described in :numref:`Chapter {number}, {name} <Symbol-Table>`,
+    and :numref:`Chapter {number}, {name} <Dynamic-Linking>`.
 
 ``.fini``
     This section holds executable instructions that contribute
@@ -968,7 +972,7 @@ and have the indicated types and attributes.
 
 ``.hash``
     This section holds a symbol hash table.
-    See :ref:`Hash-Table` for more information.
+    See :numref:`Section {number}, {name} <Hash-Table>`, for more information.
 
 ``.init``
     This section holds executable instructions that contribute
@@ -987,7 +991,7 @@ and have the indicated types and attributes.
     If the file has a loadable segment that includes
     relocation, the sections’ attributes will include the
     ``SHF_ALLOC`` bit; otherwise, that bit will be off.
-    See :ref:`Program-Interpreter` for more information.
+    See :numref:`Section {number}, {name} <Program-Interpreter>`, for more information.
 
 ``.line``
     This section holds line number information for symbolic
@@ -997,7 +1001,8 @@ and have the indicated types and attributes.
     The contents are unspecified.
 
 ``.note``
-    This section holds information as described in :ref:`Note-Sections`.
+    This section holds information as described in
+    :numref:`Section {number}, {name} <Note-Sections>`.
 
 ``.plt``
     This section holds the procedure linkage table.
@@ -1010,7 +1015,7 @@ and have the indicated types and attributes.
 
 ``.rel``\ *name* and \ ``.rela``\ *name*
     These sections hold relocation information, as described in
-    :ref:`Relocation`.
+    :numref:`Chapter {number}, {name} <Relocation>`.
     If the file has a loadable segment that includes
     relocation, the sections’ attributes will include the
     ``SHF_ALLOC`` bit; otherwise, that bit will be off.
@@ -1023,7 +1028,7 @@ and have the indicated types and attributes.
     These sections hold read-only data that
     typically contribute to a non-writable segment
     in the process image.
-    See :ref:`Program-Header` for more information.
+    See :numref:`Chapter {number}, {name} <Program-Header>` for more information.
 
 ``.shstrtab``
     This section holds section names.
@@ -1038,7 +1043,7 @@ and have the indicated types and attributes.
 
 ``.symtab``
     This section holds a symbol table, as described in
-    :ref:`Symbol-Table`.
+    :numref:`Chapter {number}, {name} <Symbol-Table>`.
     If the file has a loadable segment that includes the
     symbol table, the section’s attributes will include the
     ``SHF_ALLOC`` bit; otherwise, that bit will be off.
