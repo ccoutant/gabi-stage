@@ -711,6 +711,7 @@ compression algorithm employed, as shown in the following table.
    Name                    Value
    ======================  ==============
    ``ELFCOMPRESS_ZLIB``    ``1``
+   ``ELFCOMPRESS_ZSTD``    ``2``
    ``ELFCOMPRESS_LOOS``    ``0x60000000``
    ``ELFCOMPRESS_HIOS``    ``0x6fffffff``
    ``ELFCOMPRESS_LOPROC``  ``0x70000000``
@@ -722,6 +723,13 @@ compression algorithm employed, as shown in the following table.
     ZLIB data bytes begin with the byte immediately following the compression
     header, and extend to the end of the section.  Additional documentation
     for ZLIB may be found at http://zlib.net.
+
+``ELFCOMPRESS_ZSTD``
+    The section data is compressed with the Zstandard algorithm. The
+    compressed Zstandard data bytes begin with the byte immediately
+    following the compression header, and extend to the end of the
+    section. Additional documentation for Zstandard may be found at
+    http://www.zstandard.org.
 
 ``ELFCOMPRESS_LOOS - ELFCOMPRESS_HIOS``
     Values in this inclusive range are reserved for operating system-specific
