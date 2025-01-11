@@ -58,7 +58,7 @@ Contents of the ELF Header
     provide machine-independent
     data with which to decode and interpret the file’s contents.
     Complete descriptions
-    appear below in :ref:`ELF-Identification`.
+    appear below in :numref:`Section {number}, {name} <ELF-Identification>`.
 
 ``e_type``
     This member identifies the object file type.
@@ -187,7 +187,9 @@ Contents of the ELF Header
     entry associated with the section name string table.
     If the file has no section name string
     table, this member holds the value ``SHN_UNDEF``.
-    See :ref:`Sections` and :ref:`String-Table` for more information.
+    See :numref:`Chapter {number}, {name} <Sections>`,
+    and :numref:`Chapter {number}, {name} <String-Table>`,
+    for more information.
 
     If the section name string table section index is greater than or equal to
     ``SHN_LORESERVE`` (\ ``0xff00``\ ), this member
@@ -278,13 +280,14 @@ These indexes access bytes that hold the following values.
     supplement describes the model used.
 
     Class ``ELFCLASS32`` supports machines with
-    32-bit architectures. It
-    uses the basic types defined in :numref:`32-bit-data-types`,
-    “32-Bit Data Types.”
+    32-bit architectures. It uses the basic types defined in
+    :numref:`thirty-two-bit-data-types`
+    in :numref:`Section {number}, {name} <data-representation>`.
 
     Class ``ELFCLASS64`` supports machines with 64-bit
-    architectures.  It uses the basic types defined in :numref:`64-bit-data-types`,
-    “64-Bit Data Types.”
+    architectures.  It uses the basic types defined in
+    :numref:`sixty-four-bit-data-types`
+    in :numref:`Section {number}, {name} <data-representation>`.
 
     Other classes will be defined as necessary, with different basic types
     and sizes for object file data.

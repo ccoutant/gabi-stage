@@ -108,7 +108,7 @@ the other components of the file.</p>
 provide machine-independent
 data with which to decode and interpret the file’s contents.
 Complete descriptions
-appear below in <a class="reference internal" href="#elf-identification"><span class="std std-ref">ELF Identification</span></a>.</p>
+appear below in <a class="reference internal" href="#elf-identification"><span class="std std-numref">Section 2.2, ELF Identification</span></a>.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">e_type</span></code></dt><dd><p>This member identifies the object file type.</p>
 <table class="docutils align-default" id="id6">
@@ -256,7 +256,9 @@ contains <code class="docutils literal notranslate"><span class="pre">0</span></
 entry associated with the section name string table.
 If the file has no section name string
 table, this member holds the value <code class="docutils literal notranslate"><span class="pre">SHN_UNDEF</span></code>.
-See <a class="reference internal" href="03-sheader.html#sections"><span class="std std-ref">Sections</span></a> and <a class="reference internal" href="04-strtab.html#string-table"><span class="std std-ref">String Table</span></a> for more information.</p>
+See <a class="reference internal" href="03-sheader.html#sections"><span class="std std-numref">Chapter 3, Sections</span></a>,
+and <a class="reference internal" href="04-strtab.html#string-table"><span class="std std-numref">Chapter 4, String Table</span></a>,
+for more information.</p>
 <p>If the section name string table section index is greater than or equal to
 <code class="docutils literal notranslate"><span class="pre">SHN_LORESERVE</span></code> (<code class="docutils literal notranslate"><span class="pre">0xff00</span></code>), this member
 has the value <code class="docutils literal notranslate"><span class="pre">SHN_XINDEX</span></code> (<code class="docutils literal notranslate"><span class="pre">0xffff</span></code>) and the
@@ -399,12 +401,13 @@ of the object file container itself. The data contained in object file
 sections may follow a different programming model. If so, the psABI
 supplement describes the model used.</p>
 <p>Class <code class="docutils literal notranslate"><span class="pre">ELFCLASS32</span></code> supports machines with
-32-bit architectures. It
-uses the basic types defined in <a class="reference internal" href="01-intro.html#bit-data-types"><span class="std std-numref">Table 1.1</span></a>,
-“32-Bit Data Types.”</p>
+32-bit architectures. It uses the basic types defined in
+<a class="reference internal" href="01-intro.html#thirty-two-bit-data-types"><span class="std std-numref">Table 1.1</span></a>
+in <a class="reference internal" href="01-intro.html#data-representation"><span class="std std-numref">Section 1.2, Data Representation</span></a>.</p>
 <p>Class <code class="docutils literal notranslate"><span class="pre">ELFCLASS64</span></code> supports machines with 64-bit
-architectures.  It uses the basic types defined in <a class="reference internal" href="01-intro.html#id1"><span class="std std-numref">Table 1.2</span></a>,
-“64-Bit Data Types.”</p>
+architectures.  It uses the basic types defined in
+<a class="reference internal" href="01-intro.html#sixty-four-bit-data-types"><span class="std std-numref">Table 1.2</span></a>
+in <a class="reference internal" href="01-intro.html#data-representation"><span class="std std-numref">Section 1.2, Data Representation</span></a>.</p>
 <p>Other classes will be defined as necessary, with different basic types
 and sizes for object file data.</p>
 </dd>

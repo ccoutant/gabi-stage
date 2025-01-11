@@ -62,8 +62,9 @@ needed to locate and relocate a program’s symbolic
 definitions and references.
 A symbol table index is a subscript into this array.
 Index 0 both designates the first entry in the table
-and serves as the undefined symbol index.  The contents of the
-initial entry are specified in <a class="reference internal" href="#first-symbol-table-entry"><span class="std std-ref">First Symbol Table Entry</span></a>.</p>
+and serves as the undefined symbol index.
+The contents of the initial entry are specified in
+<a class="reference internal" href="#first-symbol-table-entry"><span class="std std-numref">Section 5.6, First Symbol Table Entry</span></a>.</p>
 <table class="docutils align-default" id="id3">
 <caption><span class="caption-number">Table 5.1 </span><span class="caption-text">Special Symbol Table Index</span><a class="headerlink" href="#id3" title="Link to this table">¶</a></caption>
 <thead>
@@ -151,7 +152,7 @@ no defined meaning.</p>
 <dt><code class="docutils literal notranslate"><span class="pre">st_shndx</span></code></dt><dd><p>Every symbol table entry is <em>defined</em> in relation
 to some section. This member holds the relevant
 section header table index.
-As described in <a class="reference internal" href="03-sheader.html#special-section-indexes"><span class="std std-ref">Special Section Indexes</span></a>,
+As described in <a class="reference internal" href="03-sheader.html#special-section-indexes"><span class="std std-numref">Section 3.1, Special Section Indexes</span></a>,
 some section indexes indicate special meanings.</p>
 <p>If this member contains <code class="docutils literal notranslate"><span class="pre">SHN_XINDEX</span></code>,
 then the actual section header index is too large to fit in this field.
@@ -252,7 +253,7 @@ might cause the execution to fail.</p>
 </div>
 <p>In each symbol table, all symbols with <code class="docutils literal notranslate"><span class="pre">STB_LOCAL</span></code>
 binding precede the weak and global symbols.
-As described in <a class="reference internal" href="03-sheader.html#sections"><span class="std std-ref">Sections</span></a>,
+As described in <a class="reference internal" href="03-sheader.html#sections"><span class="std std-numref">Chapter 3, Sections</span></a>,
 a symbol table section’s <code class="docutils literal notranslate"><span class="pre">sh_info</span></code>
 section header member holds the symbol table index
 for the first non-local symbol.</p>

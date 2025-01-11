@@ -53,8 +53,8 @@ describing the file’s organization. *Sections* hold the bulk
 of object file information for the linking view: instructions,
 data, symbol table, relocation information, and so on.
 Descriptions of special sections appear later.
-:ref:`Program-Header` discusses *segments* and the program execution
-view of the file.
+:numref:`Chapter {number}, {name} <Program-Header>`,
+discusses *segments* and the program execution view of the file.
 
 A *program header table* tells the system how to create a process image.
 Files used to build a process image (execute a program)
@@ -79,6 +79,8 @@ other object files may or may not have one.
    Moreover, sections and segments have no specified order.
    Only the ELF header has a fixed position in the file.
 
+.. _data-representation:
+
 Data Representation
 ===================
 
@@ -97,7 +99,7 @@ the machine on which the file was created.
 
 .. tabularcolumns:: l c c l
 
-.. _32-bit-data-types:
+.. _thirty-two-bit-data-types:
 
 .. table:: 32-Bit Data Types
 
@@ -114,7 +116,7 @@ the machine on which the file was created.
 
 .. tabularcolumns:: l c c l
 
-.. _64-bit-data-types:
+.. _sixty-four-bit-data-types:
 
 .. table:: 64-Bit Data Types
 
@@ -153,7 +155,8 @@ so that such major changes are rare, and the file format can be extended
 in several ways that do not require a version number change.
 
 Most object file structures are contained within sections
-(see :ref:`sections`), and are designated with special section types.
+(see :numref:`Section {number}, {name} <sections>`),
+and are designated with special section types.
 Additional control structures can be defined by defining new section types.
 
 Many control structures have fields with enumerated values, and the
@@ -161,9 +164,10 @@ standard sets aside certain ranges of values for these fields for
 implementation-specific uses. These extensions can fall into one of two
 classes: processor-specific extensions, which depend on the machine
 architecture (see ``e_machine`` in
-:ref:`Contents-of-the-ELF-Header`); and OSABI-specific extensions,
-which depend on the operating system and psABI (see ``EI_OSABI`` in
-:ref:`elf-identification`).
+:numref:`Section {number}, {name} <Contents-of-the-ELF-Header>`);
+and OSABI-specific extensions, which depend on the operating system
+and psABI (see ``EI_OSABI`` in
+:numref:`Section {number}, {name} <elf-identification>`).
 
 ELF assigns meaning to fields and constant values, throughout the
 specification. Any unassigned bits or values not explicitly delegated to

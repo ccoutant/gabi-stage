@@ -19,7 +19,8 @@ This is described by the psABI supplement for the specific machine.
 This chapter discusses the following:
 
 * Program Header.
-  This section complements the :ref:`Section Header Table <Sections>`,
+  The program header complements the Section Header Table
+  (:numref:`Chapter {number}, {name} <Sections>`),
   describing object file structures that relate directly to program execution.
   The primary data structure, a program header table, locates
   segment images within the file and contains other information
@@ -33,12 +34,12 @@ An executable or shared object file’s program header table
 is an array of structures, each describing a segment or
 other information the system needs to prepare the program for execution.
 An object file *segment* contains one or more *sections*,
-as described in :ref:`Segment-Contents`.
+as described in :numref:`Section {number}, {name} <Segment-Contents>`.
 Program headers are meaningful only for executable
 and shared object files.
 A file specifies its own program header size with the ELF header’s
 ``e_phentsize`` and ``e_phnum`` members.
-See :ref:`ELF-Header` for more information.
+See :numref:`Chapter {number}, {name} <ELF-Header>` for more information.
 
 Segment entries may appear in any order, except as explicitly noted below.
 
@@ -166,7 +167,7 @@ other values are reserved for future use.
 
 ``PT_DYNAMIC``
     The array element specifies dynamic linking information.
-    See :ref:`Dynamic-Section` for more information.
+    See :numref:`Section {number}, {name} <Dynamic-Section>`, for more information.
 
 ``PT_INTERP``
     The array element specifies the location and size of
@@ -175,12 +176,12 @@ other values are reserved for future use.
     (though it may occur for shared objects);
     it may not occur more than once in a file.
     If it is present, it must precede any loadable segment entry.
-    See :ref:`Program-Interpreter` for more information.
+    See :numref:`Section {number}, {name} <Program-Interpreter>`, for more information.
 
 ``PT_NOTE``
     The array element specifies the location and size of
     auxiliary information.
-    See :ref:`Note-Sections` for more information.
+    See :numref:`Section {number}, {name} <Note-Sections>`, for more information.
 
 ``PT_SHLIB``
     This segment type is reserved but has unspecified semantics.
@@ -195,12 +196,11 @@ other values are reserved for future use.
     Moreover, it may occur only if the program header table is
     part of the memory image of the program.
     If it is present, it must precede any loadable segment entry.
-    See :ref:`Program-Interpreter` for more information.
 
 ``PT_TLS``
     The array element specifies the *Thread-Local Storage* template.
     Implementations need not support this program table entry.
-    See :ref:`Thread-Local-Storage` for more information.
+    See :numref:`Section {number}, {name} <Thread-Local-Storage>`, for more information.
 
 ``PT_LOOS`` through ``PT_HIOS``
     Values in this inclusive range
@@ -338,7 +338,8 @@ moreover, processor-specific constraints may alter the
 examples below.  See the psABI supplement for details.
 
 Text segments contain read-only instructions and data,
-typically including the following sections (see :ref:`Special-Sections`\ ):
+typically including the following sections
+(see :numref:`Section {number}, {name} <Special-Sections>`):
 
 * ``.text``
 * ``.rodata``
@@ -361,7 +362,7 @@ typically including the following sections.
 * ``.bss``
 
 A ``PT_DYNAMIC`` program header element points at the ``.dynamic``
-section, explained in :ref:`Dynamic-Section`.
+section, explained in :numref:`Section {number}, {name} <Dynamic-Section>`.
 The ``.got`` and ``.plt``
 sections also hold information related to position-independent
 code and dynamic linking.
@@ -373,7 +374,7 @@ depending on the processor.
 See “Global Offset Table” and “Procedure Linkage Table”
 in the psABI supplement for details.
 
-As :ref:`Sections` describes,
+As :numref:`Chapter {number}, {name} <Sections>` describes,
 the ``.bss`` section has the type ``SHT_NOBITS``.
 Although it occupies no space in the file, it contributes
 to the segment’s memory image.
@@ -452,7 +453,8 @@ The first has a ``type`` field of 1 and no descriptor,
 and the second has a ``type`` field of 3 with 8 bytes of descriptor
 data (with no null terminator).
 Note that the word-size fields ``namesz``, ``descsz`` and ``type`` are stored
-with the byte order specified in the ELF Header (see :ref:`ei-data`).
+with the byte order specified in the ELF Header
+(see `EI_DATA` in :numref:`Section {number}, {name} <ELF-Identification>`).
 
 .. figure:: /svg/figure-5.*
    :alt: Example ELFCLASS32 Note Segment

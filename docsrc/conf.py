@@ -60,7 +60,9 @@ html_scaled_image_link = False;
 html_static_path = ['_static']
 
 numfig = True
-numfig_format = { 'figure' : 'Figure %s'}
+numfig_format = {
+    'figure' : 'Figure %s'
+}
 
 highlight_language = 'c';
 

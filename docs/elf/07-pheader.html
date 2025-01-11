@@ -70,7 +70,8 @@ This is described by the psABI supplement for the specific machine.</p>
 <p>This chapter discusses the following:</p>
 <ul class="simple">
 <li><p>Program Header.
-This section complements the <a class="reference internal" href="03-sheader.html#sections"><span class="std std-ref">Section Header Table</span></a>,
+The program header complements the Section Header Table
+(<a class="reference internal" href="03-sheader.html#sections"><span class="std std-numref">Chapter 3, Sections</span></a>),
 describing object file structures that relate directly to program execution.
 The primary data structure, a program header table, locates
 segment images within the file and contains other information
@@ -83,12 +84,12 @@ it into memory for the program to run.</p></li>
 is an array of structures, each describing a segment or
 other information the system needs to prepare the program for execution.
 An object file <em>segment</em> contains one or more <em>sections</em>,
-as described in <a class="reference internal" href="#segment-contents"><span class="std std-ref">Segment Contents</span></a>.
+as described in <a class="reference internal" href="#segment-contents"><span class="std std-numref">Section 7.5, Segment Contents</span></a>.
 Program headers are meaningful only for executable
 and shared object files.
 A file specifies its own program header size with the ELF header’s
 <code class="docutils literal notranslate"><span class="pre">e_phentsize</span></code> and <code class="docutils literal notranslate"><span class="pre">e_phnum</span></code> members.
-See <a class="reference internal" href="02-eheader.html#elf-header"><span class="std std-ref">ELF Header</span></a> for more information.</p>
+See <a class="reference internal" href="02-eheader.html#elf-header"><span class="std std-numref">Chapter 2, ELF Header</span></a> for more information.</p>
 <p>Segment entries may appear in any order, except as explicitly noted below.</p>
 <section id="program-header-entry">
 <h2><span class="section-number">7.1. </span>Program Header Entry<a class="headerlink" href="#program-header-entry" title="Link to this heading">¶</a></h2>
@@ -227,7 +228,7 @@ Loadable segment entries in the program header table
 appear in ascending order, sorted on the <code class="docutils literal notranslate"><span class="pre">p_vaddr</span></code> member.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">PT_DYNAMIC</span></code></dt><dd><p>The array element specifies dynamic linking information.
-See <a class="reference internal" href="08-dynamic.html#dynamic-section"><span class="std std-ref">Dynamic Section</span></a> for more information.</p>
+See <a class="reference internal" href="08-dynamic.html#dynamic-section"><span class="std std-numref">Section 8.3, Dynamic Section</span></a>, for more information.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">PT_INTERP</span></code></dt><dd><p>The array element specifies the location and size of
 a null-terminated path name to invoke as an interpreter.
@@ -235,11 +236,11 @@ This segment type is meaningful only for executable files
 (though it may occur for shared objects);
 it may not occur more than once in a file.
 If it is present, it must precede any loadable segment entry.
-See <a class="reference internal" href="08-dynamic.html#program-interpreter"><span class="std std-ref">Program Interpreter</span></a> for more information.</p>
+See <a class="reference internal" href="08-dynamic.html#program-interpreter"><span class="std std-numref">Section 8.1, Program Interpreter</span></a>, for more information.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">PT_NOTE</span></code></dt><dd><p>The array element specifies the location and size of
 auxiliary information.
-See <a class="reference internal" href="#note-sections"><span class="std std-ref">Note Sections</span></a> for more information.</p>
+See <a class="reference internal" href="#note-sections"><span class="std std-numref">Section 7.6, Note Sections</span></a>, for more information.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">PT_SHLIB</span></code></dt><dd><p>This segment type is reserved but has unspecified semantics.
 Programs that contain an array element of this type do not
@@ -251,12 +252,11 @@ in the memory image of the program.
 This segment type may not occur more than once in a file.
 Moreover, it may occur only if the program header table is
 part of the memory image of the program.
-If it is present, it must precede any loadable segment entry.
-See <a class="reference internal" href="08-dynamic.html#program-interpreter"><span class="std std-ref">Program Interpreter</span></a> for more information.</p>
+If it is present, it must precede any loadable segment entry.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">PT_TLS</span></code></dt><dd><p>The array element specifies the <em>Thread-Local Storage</em> template.
 Implementations need not support this program table entry.
-See <a class="reference internal" href="#thread-local-storage"><span class="std std-ref">Thread-Local Storage</span></a> for more information.</p>
+See <a class="reference internal" href="#thread-local-storage"><span class="std std-numref">Section 7.7, Thread-Local Storage</span></a>, for more information.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">PT_LOOS</span></code> through <code class="docutils literal notranslate"><span class="pre">PT_HIOS</span></code></dt><dd><p>Values in this inclusive range
 are reserved for operating system-specific semantics.</p>
@@ -434,7 +434,8 @@ The order and membership of sections within a segment may vary;
 moreover, processor-specific constraints may alter the
 examples below.  See the psABI supplement for details.</p>
 <p>Text segments contain read-only instructions and data,
-typically including the following sections (see <a class="reference internal" href="03-sheader.html#special-sections"><span class="std std-ref">Special Sections</span></a>):</p>
+typically including the following sections
+(see <a class="reference internal" href="03-sheader.html#special-sections"><span class="std std-numref">Section 3.10, Special Sections</span></a>):</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">.text</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">.rodata</span></code></p></li>
@@ -456,7 +457,7 @@ typically including the following sections.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">.bss</span></code></p></li>
 </ul>
 <p>A <code class="docutils literal notranslate"><span class="pre">PT_DYNAMIC</span></code> program header element points at the <code class="docutils literal notranslate"><span class="pre">.dynamic</span></code>
-section, explained in <a class="reference internal" href="08-dynamic.html#dynamic-section"><span class="std std-ref">Dynamic Section</span></a>.
+section, explained in <a class="reference internal" href="08-dynamic.html#dynamic-section"><span class="std std-numref">Section 8.3, Dynamic Section</span></a>.
 The <code class="docutils literal notranslate"><span class="pre">.got</span></code> and <code class="docutils literal notranslate"><span class="pre">.plt</span></code>
 sections also hold information related to position-independent
 code and dynamic linking.
@@ -467,7 +468,7 @@ may reside in a text or a data segment,
 depending on the processor.
 See “Global Offset Table” and “Procedure Linkage Table”
 in the psABI supplement for details.</p>
-<p>As <a class="reference internal" href="03-sheader.html#sections"><span class="std std-ref">Sections</span></a> describes,
+<p>As <a class="reference internal" href="03-sheader.html#sections"><span class="std std-numref">Chapter 3, Sections</span></a> describes,
 the <code class="docutils literal notranslate"><span class="pre">.bss</span></code> section has the type <code class="docutils literal notranslate"><span class="pre">SHT_NOBITS</span></code>.
 Although it occupies no space in the file, it contributes
 to the segment’s memory image.
@@ -541,7 +542,8 @@ The first has a <code class="docutils literal notranslate"><span class="pre">typ
 and the second has a <code class="docutils literal notranslate"><span class="pre">type</span></code> field of 3 with 8 bytes of descriptor
 data (with no null terminator).
 Note that the word-size fields <code class="docutils literal notranslate"><span class="pre">namesz</span></code>, <code class="docutils literal notranslate"><span class="pre">descsz</span></code> and <code class="docutils literal notranslate"><span class="pre">type</span></code> are stored
-with the byte order specified in the ELF Header (see <a class="reference internal" href="02-eheader.html#ei-data"><span class="std std-ref">EI_DATA</span></a>).</p>
+with the byte order specified in the ELF Header
+(see <cite>EI_DATA</cite> in <a class="reference internal" href="02-eheader.html#elf-identification"><span class="std std-numref">Section 2.2, ELF Identification</span></a>).</p>
 <figure class="align-default" id="id10">
 <img alt="Example ELFCLASS32 Note Segment" src="../_images/figure-5.svg" style="width: 392pt;" />
 <figcaption>

@@ -152,8 +152,9 @@ the program had received control directly from the system loader.</p></li>
 <p>The link editor also constructs various data
 that assist the dynamic linker
 for executable and shared object files.
-As shown in <a class="reference internal" href="07-pheader.html#program-header"><span class="std std-ref">Program Loading</span></a>, this data resides
-in loadable segments, making them available during execution.
+As shown in <a class="reference internal" href="07-pheader.html#program-header"><span class="std std-numref">Chapter 7, Program Loading</span></a>,
+this data resides in loadable segments,
+making them available during execution.
 (Once again, recall the exact segment contents are processor-specific.
 See the psABI supplement for complete information).</p>
 <ul class="simple">
@@ -552,10 +553,9 @@ but is not required.</p>
 <dt><code class="docutils literal notranslate"><span class="pre">DT_NEEDED</span></code></dt><dd><p>This element holds the string table offset of a null-terminated string,
 giving the name of a needed library.
 The offset is an index into the table recorded in the <code class="docutils literal notranslate"><span class="pre">DT_STRTAB</span></code> code.
-See <a class="reference internal" href="#shared-object-dependencies"><span class="std std-ref">Shared Object Dependencies</span></a> for more
-information about these names.
-The dynamic array may contain multiple entries with
-this type.
+See <a class="reference internal" href="#shared-object-dependencies"><span class="std std-numref">Section 8.4, Shared Object Dependencies</span></a>,
+for more information about these names.
+The dynamic array may contain multiple entries with this type.
 These entries’ relative order is significant, though their
 relation to entries of other types is not.</p>
 </dd>
@@ -569,7 +569,7 @@ and/or the global offset table.
 See the psABI supplement for details.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">DT_HASH</span></code></dt><dd><p>This element holds the address of the symbol hash table,
-described in <a class="reference internal" href="#hash-table"><span class="std std-ref">Hash Table</span></a>.
+described in <a class="reference internal" href="#hash-table"><span class="std std-numref">Section 8.5, Hash Table</span></a>.
 This hash table refers to the symbol table referenced by the <code class="docutils literal notranslate"><span class="pre">DT_SYMTAB</span></code>
 element.</p>
 <p><code class="docutils literal notranslate"><span class="pre">DT_HASH</span></code> is normally mandatory. The psABI supplement is allowed
@@ -578,17 +578,17 @@ mechanism. In such cases, DT_SYMTABSZ, which is normally optional,
 becomes mandatory.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">DT_STRTAB</span></code></dt><dd><p>This element holds the address of the string table,
-described in <a class="reference internal" href="04-strtab.html#string-table"><span class="std std-ref">String Table</span></a>.
+described in <a class="reference internal" href="04-strtab.html#string-table"><span class="std std-numref">Chapter 4, String Table</span></a>.
 Symbol names, library names, and other strings reside
 in this table.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">DT_SYMTAB</span></code></dt><dd><p>This element holds the address of the dynamic linking symbol table,
-as described in <a class="reference internal" href="05-symtab.html#symbol-table"><span class="std std-ref">Symbol Table</span></a>,
+as described in <a class="reference internal" href="05-symtab.html#symbol-table"><span class="std std-numref">Chapter 5, Symbol Table</span></a>,
 with <code class="docutils literal notranslate"><span class="pre">Elf32_Sym</span></code> entries for the 32-bit class of files and <code class="docutils literal notranslate"><span class="pre">Elf64_Sym</span></code>
 entries for the 64-bit class of files.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">DT_RELA</span></code></dt><dd><p>This element holds the address of a relocation table,
-described in <a class="reference internal" href="06-reloc.html#relocation"><span class="std std-ref">Relocation</span></a>.
+described in <a class="reference internal" href="06-reloc.html#relocation"><span class="std std-numref">Chapter 6, Relocation</span></a>.
 Entries in the table have explicit addends
 (<code class="docutils literal notranslate"><span class="pre">Elf32_Rela</span></code> for the 32-bit file class
 or <code class="docutils literal notranslate"><span class="pre">Elf64_Rela</span></code> for the 64-bit file class).
@@ -618,19 +618,20 @@ When relocation is “mandatory” for a file, either
 <dt><code class="docutils literal notranslate"><span class="pre">DT_SYMENT</span></code></dt><dd><p>This element holds the size, in bytes, of a symbol table entry.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">DT_INIT</span></code></dt><dd><p>This element holds the address of the initialization function,
-discussed in <a class="reference internal" href="#initialization-and-termination-functions"><span class="std std-ref">Initialization and Termination Functions</span></a>.</p>
+discussed in <a class="reference internal" href="#initialization-and-termination-functions"><span class="std std-numref">Section 8.6, Initialization and Termination Functions</span></a>.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">DT_FINI</span></code></dt><dd><p>This element holds the address of the termination function,
-discussed in <a class="reference internal" href="#initialization-and-termination-functions"><span class="std std-ref">Initialization and Termination Functions</span></a>.</p>
+discussed in <a class="reference internal" href="#initialization-and-termination-functions"><span class="std std-numref">Section 8.6, Initialization and Termination Functions</span></a>.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">DT_SONAME</span></code></dt><dd><p>This element holds the string table offset of a null-terminated string,
 giving the name of the shared object.
 The offset is an index into the table recorded in the <code class="docutils literal notranslate"><span class="pre">DT_STRTAB</span></code> entry.
-See <a class="reference internal" href="#shared-object-dependencies"><span class="std std-ref">Shared Object Dependencies</span></a> for more
-information about these names.</p>
+See <a class="reference internal" href="#shared-object-dependencies"><span class="std std-numref">Section 8.4, Shared Object Dependencies</span></a>
+for more information about these names.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">DT_RPATH</span></code></dt><dd><p>This element holds the string table offset of a null-terminated search
-library search path string discussed in <a class="reference internal" href="#shared-object-dependencies"><span class="std std-ref">Shared Object Dependencies</span></a>.
+library search path string discussed in
+<a class="reference internal" href="#shared-object-dependencies"><span class="std std-numref">Section 8.4, Shared Object Dependencies</span></a>.
 The offset is an index into the table recorded in the
 <code class="docutils literal notranslate"><span class="pre">DT_STRTAB</span></code> entry.  This entry is deprecated; its
 use has been superseded by <code class="docutils literal notranslate"><span class="pre">DT_RUNPATH</span></code>.</p>
@@ -701,10 +702,10 @@ This entry is deprecated; its use has been superseded
 by the <code class="docutils literal notranslate"><span class="pre">DF_BIND_NOW</span></code> flag.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">DT_INIT_ARRAY</span></code></dt><dd><p>This element holds the address of the array of pointers to initialization
-functions, discussed in <a class="reference internal" href="#initialization-and-termination-functions"><span class="std std-ref">Initialization and Termination Functions</span></a>.</p>
+functions, discussed in <a class="reference internal" href="#initialization-and-termination-functions"><span class="std std-numref">Section 8.6, Initialization and Termination Functions</span></a>.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">DT_FINI_ARRAY</span></code></dt><dd><p>This element holds the address of the array of pointers to termination
-functions, discussed in <a class="reference internal" href="#initialization-and-termination-functions"><span class="std std-ref">Initialization and Termination Functions</span></a>.</p>
+functions, discussed in <a class="reference internal" href="#initialization-and-termination-functions"><span class="std std-numref">Section 8.6, Initialization and Termination Functions</span></a>.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">DT_INIT_ARRAYSZ</span></code></dt><dd><p>This element holds the size in bytes of the array of initialization
 functions pointed to by the <code class="docutils literal notranslate"><span class="pre">DT_INIT_ARRAY</span></code> entry.
@@ -718,7 +719,7 @@ also have a <code class="docutils literal notranslate"><span class="pre">DT_FINI
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">DT_RUNPATH</span></code></dt><dd><p>This element holds the string table offset of a null-terminated
 library search path string discussed in
-<a class="reference internal" href="#shared-object-dependencies"><span class="std std-ref">Shared Object Dependencies</span></a>.
+<a class="reference internal" href="#shared-object-dependencies"><span class="std std-numref">Section 8.4, Shared Object Dependencies</span></a>.
 The offset is an index into the table recorded in the
 <code class="docutils literal notranslate"><span class="pre">DT_STRTAB</span></code> entry.</p>
 </dd>
@@ -728,7 +729,7 @@ Defined values and their meanings are described below.
 All other values are reserved.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">DT_PREINIT_ARRAY</span></code></dt><dd><p>This element holds the address of the array of pointers to pre-initialization
-functions, discussed in <a class="reference internal" href="#initialization-and-termination-functions"><span class="std std-ref">Initialization and Termination Functions</span></a>.
+functions, discussed in <a class="reference internal" href="#initialization-and-termination-functions"><span class="std std-numref">Section 8.6, Initialization and Termination Functions</span></a>.
 The <code class="docutils literal notranslate"><span class="pre">DT_PREINIT_ARRAY</span></code> table is processed only
 in an executable file; it is ignored if contained in a shared object.</p>
 </dd>
@@ -744,7 +745,8 @@ section associated with the dynamic symbol table referenced by the
 <code class="docutils literal notranslate"><span class="pre">DT_SYMTAB</span></code> element.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">DT_RELR</span></code></dt><dd><p>This element holds the address of an <code class="docutils literal notranslate"><span class="pre">SHT_RELR</span></code> relocation table,
-described in <a class="reference internal" href="06-reloc.html#relocation"><span class="std std-ref">Relocation</span></a>. This table will hold entries of
+described in <a class="reference internal" href="06-reloc.html#relative-relocation-table"><span class="std std-numref">Section 6.2, Relative Relocation Table</span></a>.
+This table will hold entries of
 either <code class="docutils literal notranslate"><span class="pre">Elf32_Relr</span></code> for the 32-bit file class or <code class="docutils literal notranslate"><span class="pre">Elf64_Relr</span></code>
 for the 64-bit file class. If this element is present, the dynamic
 structure must also have <code class="docutils literal notranslate"><span class="pre">DT_RELRSZ</span></code> and <code class="docutils literal notranslate"><span class="pre">DT_RELRENT</span></code> elements.
@@ -809,7 +811,8 @@ Tag values not appearing in the table are reserved.</p>
 </table>
 <dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">DF_ORIGIN</span></code></dt><dd><p>This flag signifies that the object being loaded may make reference
-to the <code class="docutils literal notranslate"><span class="pre">$ORIGIN</span></code> substitution string (see <a class="reference internal" href="#substitution-sequences"><span class="std std-ref">Substitution Sequences</span></a>).
+to the <code class="docutils literal notranslate"><span class="pre">$ORIGIN</span></code> substitution string
+(see <a class="reference internal" href="#substitution-sequences"><span class="std std-numref">Section 8.4.1, Substitution Sequences</span></a>).
 The dynamic linker must determine the pathname of the object
 containing this entry when the object is loaded.</p>
 </dd>
@@ -1154,7 +1157,7 @@ pre-initialization, or termination functions more than once.</p>
 initialization and termination code in one of two ways.
 First, they may specify the address of a function to execute
 via the <code class="docutils literal notranslate"><span class="pre">DT_INIT</span></code> and <code class="docutils literal notranslate"><span class="pre">DT_FINI</span></code> entries in the dynamic structure,
-described in <a class="reference internal" href="#dynamic-section"><span class="std std-ref">Dynamic Section</span></a>.</p>
+described in <a class="reference internal" href="#dynamic-section"><span class="std std-numref">Section 8.3, Dynamic Section</span></a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Note that the address of a function

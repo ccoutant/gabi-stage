@@ -97,8 +97,8 @@ describing the file’s organization. <em>Sections</em> hold the bulk
 of object file information for the linking view: instructions,
 data, symbol table, relocation information, and so on.
 Descriptions of special sections appear later.
-<a class="reference internal" href="07-pheader.html#program-header"><span class="std std-ref">Program Loading</span></a> discusses <em>segments</em> and the program execution
-view of the file.</p>
+<a class="reference internal" href="07-pheader.html#program-header"><span class="std std-numref">Chapter 7, Program Loading</span></a>,
+discusses <em>segments</em> and the program execution view of the file.</p>
 <p>A <em>program header table</em> tells the system how to create a process image.
 Files used to build a process image (execute a program)
 must have a program header table; relocatable files do not need one.
@@ -119,7 +119,7 @@ Only the ELF header has a fixed position in the file.</p>
 </div>
 </section>
 <section id="data-representation">
-<h2><span class="section-number">1.2. </span>Data Representation<a class="headerlink" href="#data-representation" title="Link to this heading">¶</a></h2>
+<span id="id1"></span><h2><span class="section-number">1.2. </span>Data Representation<a class="headerlink" href="#data-representation" title="Link to this heading">¶</a></h2>
 <p>As described here, the object file format
 supports various processors with 8-bit bytes
 and either 32-bit or 64-bit architectures.
@@ -132,7 +132,7 @@ interpret their contents in a common way.
 Remaining data in an object file
 use the encoding of the target processor, regardless of
 the machine on which the file was created.</p>
-<span id="bit-data-types"></span><table class="docutils align-default" id="id3">
+<span id="thirty-two-bit-data-types"></span><table class="docutils align-default" id="id3">
 <caption><span class="caption-number">Table 1.1 </span><span class="caption-text">32-Bit Data Types</span><a class="headerlink" href="#id3" title="Link to this table">¶</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Name</p></th>
@@ -174,7 +174,7 @@ the machine on which the file was created.</p>
 </tr>
 </tbody>
 </table>
-<span id="id1"></span><table class="docutils align-default" id="id4">
+<span id="sixty-four-bit-data-types"></span><table class="docutils align-default" id="id4">
 <caption><span class="caption-number">Table 1.2 </span><span class="caption-text">64-Bit Data Types</span><a class="headerlink" href="#id4" title="Link to this table">¶</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Name</p></th>
@@ -245,16 +245,18 @@ major changes to the object file format. ELF has been designed, however,
 so that such major changes are rare, and the file format can be extended
 in several ways that do not require a version number change.</p>
 <p>Most object file structures are contained within sections
-(see <a class="reference internal" href="03-sheader.html#sections"><span class="std std-ref">Sections</span></a>), and are designated with special section types.
+(see <a class="reference internal" href="03-sheader.html#sections"><span class="std std-numref">Section 3, Sections</span></a>),
+and are designated with special section types.
 Additional control structures can be defined by defining new section types.</p>
 <p>Many control structures have fields with enumerated values, and the
 standard sets aside certain ranges of values for these fields for
 implementation-specific uses. These extensions can fall into one of two
 classes: processor-specific extensions, which depend on the machine
 architecture (see <code class="docutils literal notranslate"><span class="pre">e_machine</span></code> in
-<a class="reference internal" href="02-eheader.html#contents-of-the-elf-header"><span class="std std-ref">Contents of the ELF Header</span></a>); and OSABI-specific extensions,
-which depend on the operating system and psABI (see <code class="docutils literal notranslate"><span class="pre">EI_OSABI</span></code> in
-<a class="reference internal" href="02-eheader.html#elf-identification"><span class="std std-ref">ELF Identification</span></a>).</p>
+<a class="reference internal" href="02-eheader.html#contents-of-the-elf-header"><span class="std std-numref">Section 2.1, Contents of the ELF Header</span></a>);
+and OSABI-specific extensions, which depend on the operating system
+and psABI (see <code class="docutils literal notranslate"><span class="pre">EI_OSABI</span></code> in
+<a class="reference internal" href="02-eheader.html#elf-identification"><span class="std std-numref">Section 2.2, ELF Identification</span></a>).</p>
 <p>ELF assigns meaning to fields and constant values, throughout the
 specification. Any unassigned bits or values not explicitly delegated to
 the psABI or OSABI are reserved to the ELF standard for potential future

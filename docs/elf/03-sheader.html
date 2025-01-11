@@ -163,7 +163,7 @@ If the <code class="docutils literal notranslate"><span class="pre">e_shnum</spa
 member of the ELF header says a file has 6 entries
 in the section header table, they have the indexes 0 through 5.
 The contents of the initial entry are specified in
-<a class="reference internal" href="#first-section-header-table-entry"><span class="std std-ref">First Section Header Table Entry</span></a>.</p>
+<a class="reference internal" href="#first-section-header-table-entry"><span class="std std-numref">Section 3.6, First Section Header Table Entry</span></a>.</p>
 </div>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">SHN_LORESERVE</span></code></dt><dd><p>This value specifies the lower bound of the
@@ -234,8 +234,8 @@ contain entries for the reserved indexes.</p>
 </div>
 <dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">sh_name</span></code></dt><dd><p>This member specifies the name of the section.
-Its value is an index into the section header
-string table section (see <a class="reference internal" href="04-strtab.html#string-table"><span class="std std-ref">String Table</span></a>),
+Its value is an index into the section header string table section
+(see <a class="reference internal" href="04-strtab.html#string-table"><span class="std std-numref">Chapter 4, String Table</span></a>),
 giving the location of a null-terminated string.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">sh_type</span></code></dt><dd><p>This member categorizes the section’s contents and semantics.
@@ -402,27 +402,27 @@ for details.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">SHT_STRTAB</span></code></dt><dd><p>The section holds a string table.
 An object file may have multiple string table sections.
-See <a class="reference internal" href="04-strtab.html#string-table"><span class="std std-ref">String Table</span></a> for details.</p>
+See <a class="reference internal" href="04-strtab.html#string-table"><span class="std std-numref">Chapter 4, String Table</span></a>, for details.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">SHT_RELA</span></code></dt><dd><p>The section holds relocation entries
 with explicit addends, such as type
 <code class="docutils literal notranslate"><span class="pre">Elf32_Rela</span></code> for the 32-bit class of object files
 or type <code class="docutils literal notranslate"><span class="pre">Elf64_Rela</span></code> for the 64-bit class of object files.
 An object file may have multiple relocation sections.
-See <a class="reference internal" href="06-reloc.html#relocation"><span class="std std-ref">Relocation</span></a> for details.</p>
+See <a class="reference internal" href="06-reloc.html#relocation"><span class="std std-numref">Chapter 6, Relocation</span></a>, for details.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">SHT_HASH</span></code></dt><dd><p>The section holds a symbol hash table.
 Currently, an object file may have only one hash table,
 but this restriction may be relaxed in the future.
-See <a class="reference internal" href="08-dynamic.html#hash-table"><span class="std std-ref">Hash Table</span></a> for details.</p>
+See <a class="reference internal" href="08-dynamic.html#hash-table"><span class="std std-numref">Section 8.5, Hash Table</span></a>, for details.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">SHT_DYNAMIC</span></code></dt><dd><p>The section holds information for dynamic linking.
 Currently, an object file may have only one dynamic section,
 but this restriction may be relaxed in the future.
-See <a class="reference internal" href="08-dynamic.html#dynamic-section"><span class="std std-ref">Dynamic Section</span></a> for details.</p>
+See <a class="reference internal" href="08-dynamic.html#dynamic-section"><span class="std std-numref">Section 8.3, Dynamic Section</span></a>, for details.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">SHT_NOTE</span></code></dt><dd><p>The section holds information that marks the file in some way.
-See <a class="reference internal" href="07-pheader.html#note-sections"><span class="std std-ref">Note Sections</span></a> for details.</p>
+See <a class="reference internal" href="07-pheader.html#note-sections"><span class="std std-numref">Section 7.6, Note Sections</span></a>, for details.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">SHT_NOBITS</span></code></dt><dd><p>A section of this type occupies no space in the file but
 otherwise resembles
@@ -435,25 +435,28 @@ without explicit addends, such as type
 <code class="docutils literal notranslate"><span class="pre">Elf32_Rel</span></code> for the 32-bit class of object files or
 type <code class="docutils literal notranslate"><span class="pre">Elf64_Rel</span></code> for the 64-bit class of object files.
 An object file may have multiple relocation sections.
-See <a class="reference internal" href="06-reloc.html#relocation"><span class="std std-ref">Relocation</span></a> for details.</p>
+See <a class="reference internal" href="06-reloc.html#relocation"><span class="std std-numref">Chapter 6, Relocation</span></a>, for details.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">SHT_SHLIB</span></code></dt><dd><p>This section type is reserved but has unspecified semantics.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">SHT_INIT_ARRAY</span></code></dt><dd><p>This section contains an array of pointers to initialization functions,
-as described in <a class="reference internal" href="08-dynamic.html#initialization-and-termination-functions"><span class="std std-ref">Initialization and Termination Functions</span></a>.
-Each pointer in the array
-is taken as a parameterless procedure with a void return.</p>
+as described in
+<a class="reference internal" href="08-dynamic.html#initialization-and-termination-functions"><span class="std std-numref">Section 8.6, Initialization and Termination Functions</span></a>.
+Each pointer in the array is taken as a parameterless procedure
+with a void return.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">SHT_FINI_ARRAY</span></code></dt><dd><p>This section contains an array of pointers to termination functions,
-as described in <a class="reference internal" href="08-dynamic.html#initialization-and-termination-functions"><span class="std std-ref">Initialization and Termination Functions</span></a>.
-Each pointer in the array
-is taken as a parameterless procedure with a void return.</p>
+as described in
+<a class="reference internal" href="08-dynamic.html#initialization-and-termination-functions"><span class="std std-numref">Section 8.6, Initialization and Termination Functions</span></a>.
+Each pointer in the array is taken as a parameterless procedure
+with a void return.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">SHT_PREINIT_ARRAY</span></code></dt><dd><p>This section contains an array of pointers to functions that are
 invoked before all other initialization functions,
-as described in <a class="reference internal" href="08-dynamic.html#initialization-and-termination-functions"><span class="std std-ref">Initialization and Termination Functions</span></a>.
-Each pointer in the array
-is taken as a parameterless procedure with a void return.</p>
+as described in
+<a class="reference internal" href="08-dynamic.html#initialization-and-termination-functions"><span class="std std-numref">Section 8.6, Initialization and Termination Functions</span></a>.
+Each pointer in the array is taken as a parameterless procedure
+with a void return.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">SHT_GROUP</span></code></dt><dd><p>This section defines a section group.  A section group
 is a set of sections that are related and that must be treated
@@ -484,8 +487,8 @@ information. Array elements are of type <code class="docutils literal notranslat
 <code class="docutils literal notranslate"><span class="pre">ELFCLASS32</span></code> objects, and <code class="docutils literal notranslate"><span class="pre">Elf64_Relr</span></code> for <code class="docutils literal notranslate"><span class="pre">ELFCLASS64</span></code>
 objects. <code class="docutils literal notranslate"><span class="pre">SHT_RELR</span></code> sections are for dynamic linking, and may only
 appear in object files of type <code class="docutils literal notranslate"><span class="pre">ET_EXEC</span></code> or <code class="docutils literal notranslate"><span class="pre">ET_DYN</span></code>. An object
-file may have multiple relocation sections. See <a class="reference internal" href="06-reloc.html#relocation"><span class="std std-ref">Relocation</span></a> for
-details.</p>
+file may have multiple relocation sections.
+See <a class="reference internal" href="06-reloc.html#relocation"><span class="std std-numref">Chapter 6, Relocation</span></a> for details.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">SHT_LOOS</span></code> through <code class="docutils literal notranslate"><span class="pre">SHT_HIOS</span></code></dt><dd><p>Values in this inclusive range
 are reserved for operating system-specific semantics.</p>
@@ -647,8 +650,8 @@ Implementations need not support this flag.</p>
 <dt><code class="docutils literal notranslate"><span class="pre">SHF_COMPRESSED</span></code></dt><dd><p>This flag identifies a section containing compressed data. In
 ET_EXEC and ET_DYN files, SHF_COMPRESSED cannot be used in
 conjunction with SHF_ALLOC.  In addition, SHF_COMPRESSED cannot be
-applied to sections of type SHT_NOBITS. See
-<a class="reference internal" href="#compressed-sections"><span class="std std-ref">Compressed Sections</span></a>, below.</p>
+applied to sections of type SHT_NOBITS.
+See <a class="reference internal" href="#compressed-sections"><span class="std std-numref">Section 3.7, Compressed Sections</span></a>, below.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">SHF_MASKOS</span></code></dt><dd><p>All bits included in this mask
 are reserved for operating system-specific semantics.</p>
@@ -840,16 +843,19 @@ compression algorithm employed, as shown in the following table.</p>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_ZLIB</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_LOOS</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_ZSTD</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_LOOS</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0x60000000</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_HIOS</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_HIOS</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0x6fffffff</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_LOPROC</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_LOPROC</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0x70000000</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_HIPROC</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_HIPROC</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0x7fffffff</span></code></p></td>
 </tr>
 </tbody>
@@ -859,6 +865,12 @@ compression algorithm employed, as shown in the following table.</p>
 ZLIB data bytes begin with the byte immediately following the compression
 header, and extend to the end of the section.  Additional documentation
 for ZLIB may be found at <a class="reference external" href="http://zlib.net">http://zlib.net</a>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_ZSTD</span></code></dt><dd><p>The section data is compressed with the Zstandard algorithm. The
+compressed Zstandard data bytes begin with the byte immediately
+following the compression header, and extend to the end of the
+section. Additional documentation for Zstandard may be found at
+<a class="reference external" href="http://www.zstandard.org">http://www.zstandard.org</a>.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">ELFCOMPRESS_LOOS</span> <span class="pre">-</span> <span class="pre">ELFCOMPRESS_HIOS</span></code></dt><dd><p>Values in this inclusive range are reserved for operating system-specific
 semantics.</p>
@@ -1185,15 +1197,16 @@ ABI.</p>
 <dt><code class="docutils literal notranslate"><span class="pre">.dynamic</span></code></dt><dd><p>This section holds dynamic linking information.
 The section’s attributes will include the <code class="docutils literal notranslate"><span class="pre">SHF_ALLOC</span></code> bit.
 Whether the <code class="docutils literal notranslate"><span class="pre">SHF_WRITE</span></code> bit is set is processor specific.
-See <a class="reference internal" href="08-dynamic.html#dynamic-section"><span class="std std-ref">Dynamic Section</span></a> for more information.</p>
+See <a class="reference internal" href="08-dynamic.html#dynamic-section"><span class="std std-numref">Section 8.3, Dynamic Section</span></a>, for more information.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">.dynstr</span></code></dt><dd><p>This section holds strings needed for dynamic linking,
 most commonly the strings
 that represent the names associated with symbol table entries.
-See <a class="reference internal" href="08-dynamic.html#dynamic-section"><span class="std std-ref">Dynamic Section</span></a> for more information.</p>
+See <a class="reference internal" href="08-dynamic.html#dynamic-section"><span class="std std-numref">Section 8.3, Dynamic Section</span></a>, for more information.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">.dynsym</span></code></dt><dd><p>This section holds the dynamic linking symbol table,
-as described in <a class="reference internal" href="05-symtab.html#symbol-table"><span class="std std-ref">Symbol Table</span></a> and <a class="reference internal" href="08-dynamic.html#dynamic-linking"><span class="std std-ref">Dynamic Linking</span></a>.</p>
+as described in <a class="reference internal" href="05-symtab.html#symbol-table"><span class="std std-numref">Chapter 5, Symbol Table</span></a>,
+and <a class="reference internal" href="08-dynamic.html#dynamic-linking"><span class="std std-numref">Chapter 8, Dynamic Linking</span></a>.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">.fini</span></code></dt><dd><p>This section holds executable instructions that contribute
 to the process termination code.
@@ -1208,7 +1221,7 @@ object containing the section.</p>
 See the psABI supplement for more information.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">.hash</span></code></dt><dd><p>This section holds a symbol hash table.
-See <a class="reference internal" href="08-dynamic.html#hash-table"><span class="std std-ref">Hash Table</span></a> for more information.</p>
+See <a class="reference internal" href="08-dynamic.html#hash-table"><span class="std std-numref">Section 8.5, Hash Table</span></a>, for more information.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">.init</span></code></dt><dd><p>This section holds executable instructions that contribute
 to the process initialization code.
@@ -1224,7 +1237,7 @@ object containing the section.</p>
 If the file has a loadable segment that includes
 relocation, the sections’ attributes will include the
 <code class="docutils literal notranslate"><span class="pre">SHF_ALLOC</span></code> bit; otherwise, that bit will be off.
-See <a class="reference internal" href="08-dynamic.html#program-interpreter"><span class="std std-ref">Program Interpreter</span></a> for more information.</p>
+See <a class="reference internal" href="08-dynamic.html#program-interpreter"><span class="std std-numref">Section 8.1, Program Interpreter</span></a>, for more information.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">.line</span></code></dt><dd><p>This section holds line number information for symbolic
 debugging, which describes
@@ -1232,7 +1245,8 @@ the correspondence between the source program and the
 machine code.
 The contents are unspecified.</p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">.note</span></code></dt><dd><p>This section holds information as described in <a class="reference internal" href="07-pheader.html#note-sections"><span class="std std-ref">Note Sections</span></a>.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">.note</span></code></dt><dd><p>This section holds information as described in
+<a class="reference internal" href="07-pheader.html#note-sections"><span class="std std-numref">Section 7.6, Note Sections</span></a>.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">.plt</span></code></dt><dd><p>This section holds the procedure linkage table.
 See the psABI supplement for more information.</p>
@@ -1242,7 +1256,7 @@ to a single pre-initialization array for the executable or shared
 object containing the section.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">.rel</span></code><em>name</em> and <code class="docutils literal notranslate"><span class="pre">.rela</span></code><em>name</em></dt><dd><p>These sections hold relocation information, as described in
-<a class="reference internal" href="06-reloc.html#relocation"><span class="std std-ref">Relocation</span></a>.
+<a class="reference internal" href="06-reloc.html#relocation"><span class="std std-numref">Chapter 6, Relocation</span></a>.
 If the file has a loadable segment that includes
 relocation, the sections’ attributes will include the
 <code class="docutils literal notranslate"><span class="pre">SHF_ALLOC</span></code> bit; otherwise, that bit will be off.
@@ -1252,14 +1266,15 @@ Thus a relocation section for <code class="docutils literal notranslate"><span c
 normally would have the name <code class="docutils literal notranslate"><span class="pre">.rel.text</span></code> or <code class="docutils literal notranslate"><span class="pre">.rela.text</span></code>.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">.relr.dyn</span></code></dt><dd><p>This section holds relative relocation information for dynamic
-linking, compactly encoded as described in <a class="reference internal" href="06-reloc.html#relocation"><span class="std std-ref">Relocation</span></a>. The
-relocations in this section are processed before other relocations
+linking, compactly encoded as described in
+<a class="reference internal" href="06-reloc.html#relative-relocation-table"><span class="std std-numref">Section 6.2, Relative Relocation Table</span></a>.
+The relocations in this section are processed before other relocations
 in any <code class="docutils literal notranslate"><span class="pre">SHT_REL</span></code> or <code class="docutils literal notranslate"><span class="pre">SHT_RELA</span></code> section.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">.rodata</span></code> and <code class="docutils literal notranslate"><span class="pre">.rodata1</span></code></dt><dd><p>These sections hold read-only data that
 typically contribute to a non-writable segment
 in the process image.
-See <a class="reference internal" href="07-pheader.html#program-header"><span class="std std-ref">Program Loading</span></a> for more information.</p>
+See <a class="reference internal" href="07-pheader.html#program-header"><span class="std std-numref">Chapter 7, Program Loading</span></a> for more information.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">.shstrtab</span></code></dt><dd><p>This section holds section names.</p>
 </dd>
@@ -1271,7 +1286,7 @@ symbol string table, the section’s attributes will include the
 bit; otherwise, that bit will be off.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">.symtab</span></code></dt><dd><p>This section holds a symbol table, as described in
-<a class="reference internal" href="05-symtab.html#symbol-table"><span class="std std-ref">Symbol Table</span></a>.
+<a class="reference internal" href="05-symtab.html#symbol-table"><span class="std std-numref">Chapter 5, Symbol Table</span></a>.
 If the file has a loadable segment that includes the
 symbol table, the section’s attributes will include the
 <code class="docutils literal notranslate"><span class="pre">SHF_ALLOC</span></code> bit; otherwise, that bit will be off.</p>

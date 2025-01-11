@@ -82,8 +82,8 @@ These relocations do not require a symbol or an addend.</p>
 <section id="relocation-entry">
 <h2><span class="section-number">6.1. </span>Relocation Entry<a class="headerlink" href="#relocation-entry" title="Link to this heading">¶</a></h2>
 <p>Relocation entries have the following formats.</p>
-<div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-number">Listing 6.1 </span><span class="caption-text">Relocation Entries</span><a class="headerlink" href="#id2" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-number">Listing 6.1 </span><span class="caption-text">Relocation Entries</span><a class="headerlink" href="#id3" title="Link to this code">¶</a></div>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">Elf32_Addr</span><span class="w">   </span><span class="n">r_offset</span><span class="p">;</span>
 <span class="w">    </span><span class="n">Elf32_Word</span><span class="w">   </span><span class="n">r_info</span><span class="p">;</span>
@@ -156,8 +156,9 @@ Consequently, an implementation for a particular machine
 may use one form exclusively or either form depending on context.</p>
 <p>A relocation section references two other sections:
 a symbol table and a section to modify.
-The section header’s <code class="docutils literal notranslate"><span class="pre">sh_info</span></code> and <code class="docutils literal notranslate"><span class="pre">sh_link</span></code>
-members, described in <a class="reference internal" href="03-sheader.html#shlink-shinfo-fields"><span class="std std-ref">The sh_link and sh_info Fields</span></a>, specify these relationships.
+The section header’s <code class="docutils literal notranslate"><span class="pre">sh_info</span></code> and <code class="docutils literal notranslate"><span class="pre">sh_link</span></code> members,
+described in <a class="reference internal" href="03-sheader.html#shlink-shinfo-fields"><span class="std std-numref">Section 3.5, The sh_link and sh_info Fields</span></a>,
+specify these relationships.
 Relocation entries for different object files have
 slightly different interpretations for the
 <code class="docutils literal notranslate"><span class="pre">r_offset</span></code> member.</p>
@@ -213,9 +214,9 @@ sequence, the location specified is ignored.</p>
 that always stop a composition sequence, or always start a new one.</p>
 </section>
 <section id="relative-relocation-table">
-<h2><span class="section-number">6.2. </span>Relative Relocation Table<a class="headerlink" href="#relative-relocation-table" title="Link to this heading">¶</a></h2>
-<div class="literal-block-wrapper docutils container" id="id3">
-<div class="code-block-caption"><span class="caption-number">Listing 6.2 </span><span class="caption-text">Relative Relocation Table Entries</span><a class="headerlink" href="#id3" title="Link to this code">¶</a></div>
+<span id="id2"></span><h2><span class="section-number">6.2. </span>Relative Relocation Table<a class="headerlink" href="#relative-relocation-table" title="Link to this heading">¶</a></h2>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-number">Listing 6.2 </span><span class="caption-text">Relative Relocation Table Entries</span><a class="headerlink" href="#id4" title="Link to this code">¶</a></div>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="n">Elf32_Word</span><span class="w"> </span><span class="n">Elf32_Relr</span><span class="p">;</span>
 <span class="k">typedef</span><span class="w"> </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">Elf64_Relr</span><span class="p">;</span>
 </pre></div>

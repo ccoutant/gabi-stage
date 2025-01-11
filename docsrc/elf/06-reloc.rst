@@ -111,8 +111,9 @@ may use one form exclusively or either form depending on context.
 
 A relocation section references two other sections:
 a symbol table and a section to modify.
-The section header’s ``sh_info`` and ``sh_link``
-members, described in :ref:`shlink-shinfo-fields`, specify these relationships.
+The section header’s ``sh_info`` and ``sh_link`` members,
+described in :numref:`Section {number}, {name} <shlink-shinfo-fields>`,
+specify these relationships.
 Relocation entries for different object files have
 slightly different interpretations for the
 ``r_offset`` member.
@@ -171,6 +172,8 @@ sequence, the location specified is ignored.
 
 A psABI supplement may specify individual relocation types
 that always stop a composition sequence, or always start a new one.
+
+.. _relative-relocation-table:
 
 Relative Relocation Table
 =========================
