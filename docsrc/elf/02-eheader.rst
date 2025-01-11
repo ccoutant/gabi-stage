@@ -281,11 +281,13 @@ These indexes access bytes that hold the following values.
 
     Class ``ELFCLASS32`` supports machines with
     32-bit architectures. It uses the basic types defined in
-    :numref:`Table {number}, {name} <32-bit-data-types>`.
+    :numref:`thirty-two-bit-data-types`
+    in :numref:`Section {number}, {name} <data-representation>`.
 
     Class ``ELFCLASS64`` supports machines with 64-bit
     architectures.  It uses the basic types defined in
-    :numref:`Table {number}, {name} <64-bit-data-types>`.
+    :numref:`sixty-four-bit-data-types`
+    in :numref:`Section {number}, {name} <data-representation>`.
 
     Other classes will be defined as necessary, with different basic types
     and sizes for object file data.

@@ -79,6 +79,8 @@ other object files may or may not have one.
    Moreover, sections and segments have no specified order.
    Only the ELF header has a fixed position in the file.
 
+.. _data-representation:
+
 Data Representation
 ===================
 
@@ -97,7 +99,7 @@ the machine on which the file was created.
 
 .. tabularcolumns:: l c c l
 
-.. _32-bit-data-types:
+.. _thirty-two-bit-data-types:
 
 .. table:: 32-Bit Data Types
 
@@ -114,7 +116,7 @@ the machine on which the file was created.
 
 .. tabularcolumns:: l c c l
 
-.. _64-bit-data-types:
+.. _sixty-four-bit-data-types:
 
 .. table:: 64-Bit Data Types
 
