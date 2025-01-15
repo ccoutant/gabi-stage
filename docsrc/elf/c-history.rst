@@ -140,3 +140,4 @@ Version 4.3 (DRAFT)
   ``DT_SYMTABSZ`` is provided.
 * Changed ``SHF_COMPRESSED`` to allow with ``SHF_ALLOC`` sections
   in ``ET_REL`` objects.
+* Added ELFCOMPRESS_ZSTD compression algorithm.
